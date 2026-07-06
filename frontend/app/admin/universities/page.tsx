@@ -39,14 +39,15 @@ export default function AdminUniversitiesPage() {
     } catch (err) {
       console.warn("Failed retrieving universities. Utilizing fallback database.");
       setCountries([
-        { _id: "c-1", name: "Georgia" } as any,
-        { _id: "c-2", name: "Russia" } as any,
+        { _id: "c-1", name: "Georgia", slug: "georgia" } as any,
+        { _id: "c-2", name: "Russia", slug: "russia" } as any,
       ]);
       setUnis([
         {
           _id: "uni-1",
           name: "Tbilisi State Medical University",
-          country: { name: "Georgia" } as any,
+          slug: "tbilisi-state-medical-university",
+          country: { name: "Georgia", slug: "georgia" } as any,
           tuitionFee: "$5,000 / Year",
           hostelFee: "$1,000 / Year",
           ranking: "Country Rank: 4",
