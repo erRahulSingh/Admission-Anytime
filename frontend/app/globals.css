@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary-50: #f0f7fc;
+  --color-primary-100: #e0eff8;
+  --color-primary-200: #b9daf0;
+  --color-primary-500: #0F4C81;
+  --color-primary-600: #0b3961;
+  --color-primary-700: #082845;
+  --color-secondary-500: #FFC107;
+  --color-secondary-600: #dca600;
+  --color-accent-500: #16A34A;
+  --color-accent-600: #117f39;
+  --color-bg-base: #F8FAFC;
+  --color-text-dark: #0F172A;
+  --color-text-muted: #475569;
+  --radius-premium: 20px;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-bg-base);
+    color: var(--color-text-dark);
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  }
+}
+
+/* Glassmorphism Classes */
+.glass-nav {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Animations */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float 6s ease-in-out infinite;
+  animation-delay: 3s;
+}
+
+/* Swiper overrides for premium visual style */
+.swiper-pagination-bullet-active {
+  background: var(--color-primary-500) !important;
+  width: 24px !important;
+  border-radius: 4px !important;
+  transition: all 0.3s ease;
+}
