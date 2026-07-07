@@ -80,12 +80,12 @@ export const getLeads = async (req, res, next) => {
   }
 };
 
-// @desc    Update lead status / notes
+// @desc    Update lead details / status / notes
 // @route   PUT /api/admissions/:id
 // @access  Private (Admin)
 export const updateLead = async (req, res, next) => {
   try {
-    const { status, notes } = req.body;
+    const { fullName, phone, email, neetScore, interestedIn, country, status, notes } = req.body;
 
     let lead = await AdmissionForm.findById(req.params.id);
 
@@ -96,7 +96,7 @@ export const updateLead = async (req, res, next) => {
 
     lead = await AdmissionForm.findByIdAndUpdate(
       req.params.id,
-      { status, notes },
+      { fullName, phone, email, neetScore, interestedIn, country, status, notes },
       { new: true, runValidators: true }
     );
 

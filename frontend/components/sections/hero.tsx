@@ -47,8 +47,10 @@ const flagCountries = [
   { code: "kz", name: "KAZAKHSTAN" },
   { code: "uz", name: "UZBEKISTAN" },
   { code: "kg", name: "KYRGYZSTAN" },
-  { code: "np", name: "np" }, // Nepal has a custom shape, we'll keep code np
-  { code: "cn", name: "CHINA" },
+  { code: "np", name: "NEPAL" },
+  { code: "am", name: "ARMENIA" },
+  { code: "ph", name: "PHILIPPINES" },
+  { code: "eg", name: "EGYPT" },
 ];
 
 const stats = [
@@ -125,12 +127,12 @@ export default function HeroSection() {
 
               {/* Gold ribbon */}
               <span className="inline-block bg-[#f9a825] text-white font-extrabold text-[10px] sm:text-[12px] md:text-[13px] px-3 sm:px-4 py-1.5 sm:py-2 tracking-wide italic rounded-md shadow-sm">
-                YOUR DREAM TO BECOME A DOCTOR STARTS HERE
+                YOUR DREAM OF BECOMING A DOCTOR STARTS HERE
               </span>
 
               {/* College tags */}
               <p className="text-[12px] sm:text-[14px] md:text-[16px] font-black text-[#0c2e60] tracking-wide">
-                AIIMS <span className="text-slate-300 font-normal mx-0.5">|</span> BHU <span className="text-slate-300 font-normal mx-0.5">|</span> JIPMER <span className="text-slate-300 font-normal mx-0.5">|</span> AMU <span className="text-slate-300 font-normal mx-0.5">|</span> Top Medical Colleges
+                AIIMS <span className="text-slate-300 font-normal mx-0.5">|</span> BHU <span className="text-slate-300 font-normal mx-0.5">|</span> JIPMER <span className="text-slate-300 font-normal mx-0.5">|</span> AMU <span className="text-slate-300 font-normal mx-0.5">|</span> NMC Approved Universities Abroad
               </p>
 
               {/* Flags */}
@@ -138,9 +140,9 @@ export default function HeroSection() {
                 {flagCountries.map((c) => (
                   <span key={c.name} className="flex items-center gap-1.5">
                     <div className="w-4 h-4 rounded-full overflow-hidden border border-slate-200 flex-shrink-0 flex items-center justify-center">
-                      <img src={`https://flagcdn.com/w80/${c.code}.png`} alt={`${c.name} Flag`} className="w-full h-full object-cover" />
+                      <img src={`https://flagcdn.com/w80/${c.code === "NEPAL" ? "np" : c.code}.png`} alt={`${c.name} Flag`} className="w-full h-full object-cover" />
                     </div>
-                    <span>{c.name === "np" ? "NEPAL" : c.name}</span>
+                    <span>{c.name}</span>
                   </span>
                 ))}
               </div>
@@ -171,7 +173,16 @@ export default function HeroSection() {
 
             {/* ──── DOCTOR (XL only) ──── */}
             <div className="hidden xl:block absolute bottom-0 right-[26%] w-[440px] h-[105%] pointer-events-none z-[5]">
-              <img src="/hero_doctor.png" alt="Smiling Doctor" className="w-full h-full object-contain object-bottom drop-shadow-2xl" />
+              <style>{`
+                @keyframes floatHeroDoctor {
+                  0%, 100% { transform: translateY(0); }
+                  50% { transform: translateY(-8px); }
+                }
+                .hero-doc-float {
+                  animation: floatHeroDoctor 6s ease-in-out infinite;
+                }
+              `}</style>
+              <img src="/hero_doctor.png" alt="Smiling Doctor" className="w-full h-full object-contain object-bottom drop-shadow-2xl hero-doc-float" />
             </div>
 
             {/* ──── RIGHT: Form ──── */}
@@ -239,13 +250,15 @@ export default function HeroSection() {
                           <select {...register("country")} className={`w-full bg-slate-50 border rounded-lg px-3 py-2.5 text-[12px] text-[#1a1a2e] outline-none appearance-none focus:border-[#0F4C81] ${errors.country ? "border-red-400" : "border-slate-200"}`}>
                             <option value="">Select</option>
                             <option value="India">India</option>
-                            <option value="Georgia">Georgia</option>
                             <option value="Russia">Russia</option>
+                            <option value="Georgia">Georgia</option>
                             <option value="Kazakhstan">Kazakhstan</option>
                             <option value="Uzbekistan">Uzbekistan</option>
                             <option value="Kyrgyzstan">Kyrgyzstan</option>
                             <option value="Nepal">Nepal</option>
-                            <option value="China">China</option>
+                            <option value="Armenia">Armenia</option>
+                            <option value="Philippines">Philippines</option>
+                            <option value="Egypt">Egypt</option>
                           </select>
                           <FaChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-[9px] text-slate-400 pointer-events-none" />
                         </div>

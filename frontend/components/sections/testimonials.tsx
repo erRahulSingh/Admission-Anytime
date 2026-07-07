@@ -1,37 +1,89 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaStar, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 const testimonials = [
   {
-    name: "Ananya Sharma",
+    name: "MBBS Student, Russia",
     rating: 5,
     review:
-      "Admission Anytime helped me get admission in AIIMS through proper guidance. The team is very supportive and professional.",
-    image: "https://uploads.onecompiler.io/43k3a6e7q/1783323963436/4-removebg-preview.png", // ← PASTE STUDENT IMAGE LINK HERE
+      "The counseling team helped me understand every step of the admission process. They answered all my questions, guided me in choosing the right university, and supported me until I reached campus. I truly appreciate their professionalism and dedication.",
+    image: "https://uploads.onecompiler.io/43k3a6e7q/1783323963436/4-removebg-preview.png",
   },
   {
-    name: "Rohan Mehta",
+    name: "MBBS Student, Georgia",
     rating: 5,
     review:
-      "I got admission in Kazakh National Medical University. The whole process was smooth from admission to visa and travel.",
-    image: "https://uploads.onecompiler.io/43k3a6e7q/1783323963436/4-removebg-preview.png", // ← PASTE STUDENT IMAGE LINK HERE
+      "Admission Anytime made my admission journey smooth and stress-free. The documentation and visa guidance were handled professionally, and my parents felt confident throughout the process.",
+    image: "https://uploads.onecompiler.io/43k3a6e7q/1783324025279/cheerful-curly-business-girl-wearing-glasses.jpg",
   },
   {
-    name: "Riya Singh",
+    name: "MBBS Student, Kazakhstan",
     rating: 5,
     review:
-      "Excellent support and transparent process. My daughter is now studying MBBS in Georgia. Thank you Admission Anytime!",
-    image: "https://uploads.onecompiler.io/43k3a6e7q/1783324025279/cheerful-curly-business-girl-wearing-glasses.jpg", // ← PASTE STUDENT IMAGE LINK HERE
+      "I was confused about choosing between several universities. Their counselors explained the advantages of each option without pushing me toward a specific college. That honesty helped me make the right decision.",
+    image: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=200&auto=format&fit=crop",
+  },
+  {
+    name: "MBBS Student, Uzbekistan",
+    rating: 5,
+    review:
+      "From career counseling to university joining, the team remained available whenever I needed assistance. Their support didn't end after admission, which made a big difference.",
+    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop",
   },
 ];
 
 export default function TestimonialsSection() {
-  const [page, setPage] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [visibleCount, setVisibleCount] = useState(3);
+  const [isPaused, setIsPaused] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 640) {
+        setVisibleCount(1);
+      } else if (window.innerWidth < 1024) {
+        setVisibleCount(2);
+      } else {
+        setVisibleCount(3);
+      }
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const handlePrev = () => {
+    setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+  };
+
+  const handleNext = () => {
+    setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+  };
+
+  // Autoplay functionality
+  useEffect(() => {
+    if (isPaused) return;
+    const timer = setInterval(() => {
+      handleNext();
+    }, 4000); // Slide every 4 seconds
+    return () => clearInterval(timer);
+  }, [currentIndex, isPaused]);
+
+  const getVisibleTestimonials = () => {
+    const list = [];
+    for (let i = 0; i < visibleCount; i++) {
+      const idx = (currentIndex + i) % testimonials.length;
+      list.push(testimonials[idx]);
+    }
+    return list;
+  };
+
+  const visibleTestimonials = getVisibleTestimonials();
 
   return (
-    <section className="pt-0 pb-10 sm:pb-14 bg-white">
+    <section className="pt-0 pb-10 sm:pb-14 bg-white select-none">
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6 space-y-8">
 
         {/* Title */}
@@ -44,23 +96,27 @@ export default function TestimonialsSection() {
         </div>
 
         {/* Cards with side arrows */}
-        <div className="relative flex items-center">
+        <div 
+          className="relative flex items-center px-4 sm:px-8"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
 
           {/* Left Arrow */}
           <button
-            onClick={() => setPage((p) => Math.max(0, p - 1))}
-            className="absolute -left-3 sm:-left-5 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-slate-200 hover:border-[#0c2e60] bg-white flex items-center justify-center text-slate-400 hover:text-[#0c2e60] transition-colors shadow-sm z-20"
+            onClick={handlePrev}
+            className="absolute left-0 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-slate-200 hover:border-[#0c2e60] bg-white flex items-center justify-center text-slate-400 hover:text-[#0c2e60] transition-all shadow-sm z-20 cursor-pointer hover:scale-105 active:scale-95"
             aria-label="Previous"
           >
             <FaChevronLeft size={11} />
           </button>
 
-          {/* Testimonial Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 w-full px-2">
-            {testimonials.map((t, i) => (
+          {/* Testimonial Cards Slider */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 w-full transition-all duration-500 ease-in-out">
+            {visibleTestimonials.map((t, i) => (
               <div
-                key={i}
-                className="bg-white border border-slate-100 rounded-2xl p-5 sm:p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col gap-4"
+                key={`${t.name}-${i}`}
+                className="bg-white border border-slate-100 rounded-2xl p-5 sm:p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col gap-4 min-h-[170px]"
               >
                 {/* Profile row */}
                 <div className="flex items-center gap-3">
@@ -86,7 +142,7 @@ export default function TestimonialsSection() {
                 </div>
 
                 {/* Review */}
-                <p className="text-[11px] sm:text-[12px] text-slate-500 font-medium leading-relaxed">
+                <p className="text-[11px] sm:text-[12px] text-slate-500 font-medium leading-relaxed italic">
                   &ldquo;{t.review}&rdquo;
                 </p>
               </div>
@@ -95,8 +151,8 @@ export default function TestimonialsSection() {
 
           {/* Right Arrow */}
           <button
-            onClick={() => setPage((p) => p + 1)}
-            className="absolute -right-3 sm:-right-5 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-slate-200 hover:border-[#0c2e60] bg-white flex items-center justify-center text-slate-400 hover:text-[#0c2e60] transition-colors shadow-sm z-20"
+            onClick={handleNext}
+            className="absolute right-0 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-slate-200 hover:border-[#0c2e60] bg-white flex items-center justify-center text-slate-400 hover:text-[#0c2e60] transition-all shadow-sm z-20 cursor-pointer hover:scale-105 active:scale-95"
             aria-label="Next"
           >
             <FaChevronRight size={11} />

@@ -23,7 +23,7 @@ export const createContact = async (req, res, next) => {
 
     // Notify admin
     sendEmail({
-      to: process.env.ADMIN_EMAIL || 'admin@mbbsconsultancy.com',
+      to: process.env.ADMIN_EMAIL || 'admin@admissionanytime.com',
       subject: `New Contact Request: ${subject}`,
       text: `From: ${name} (${email}, ${phone})\nMessage:\n${message}`,
     }).catch((err) => console.error('Failed to notify admin of contact:', err.message));

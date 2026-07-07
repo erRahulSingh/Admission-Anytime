@@ -4,31 +4,31 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "MBBS Admission 2026-27 | Study MBBS in India & Abroad | MBBS Advisor",
+  title: "Admission Anytime | Higher Education Admission & Counselling Platform 2026",
   description:
-    "ISO 9001:2015 Certified MBBS Admission Consultancy. Explore NMC & WHO approved medical colleges in Georgia, Russia, Kazakhstan, Kyrgyzstan, Uzbekistan, and India. Get free counseling and 100% admission support.",
+    "Admissions Open 2026. Get expert counselling and admission guidance for MBBS, Engineering, Management, Computer Science, Nursing, Pharmacy, Law, and Study Abroad programs in India and internationally.",
   keywords:
-    "MBBS admission 2026, study MBBS abroad, MBBS in Georgia, MBBS in Russia, MBBS in Kazakhstan, NMC approved medical colleges, NEET score MBBS, MBBS consultants",
+    "Admission in India, Study Abroad, MBBS Abroad, MBBS Admission, Engineering Admission, Direct Admission, University Admission, College Admission, Career Counselling, Education Consultant, Overseas Education, Medical Admission, B.Tech Admission, MBA Admission, BCA Admission, MCA Admission, Nursing Admission, Pharmacy Admission, Scholarship Guidance, Visa Assistance, Best Education Consultant, Admission Consultant India, Higher Education Admission, International University Admission, Apply for College Admission, Admissions Open 2026",
   openGraph: {
-    title: "MBBS Admission 2026-27 | India & Abroad | MBBS Advisor",
+    title: "Admission Anytime | Higher Education Admission & Counselling Platform",
     description:
-      "ISO 9001:2015 Certified MBBS Consultancy. Secure your medical seat in top universities globally. Get 100% direct admission support.",
+      "Your Future Starts Here. Expert counselling and admission guidance for top universities in India & Abroad. Secure your seat today.",
     type: "website",
     locale: "en_IN",
-    url: "https://www.mbbsadvisor.com",
-    siteName: "MBBS Advisor",
+    url: "https://www.admissionanytime.com",
+    siteName: "Admission Anytime",
     images: [
       {
         url: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=1200",
         width: 1200,
         height: 630,
-        alt: "MBBS Admission Consultancy",
+        alt: "Admission Anytime Consultancy",
       },
     ],
   },
   robots: "index, follow",
   alternates: {
-    canonical: "https://www.mbbsadvisor.com",
+    canonical: "https://www.admissionanytime.com",
   },
 };
 

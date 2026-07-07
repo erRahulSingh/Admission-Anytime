@@ -81,18 +81,32 @@ const countries = [
     bullets: ["Affordable Fees", "NMC Approved", "Good Clinical Exposure"],
   },
   {
+    name: "ARMENIA",
+    code: "am",
+    slug: "armenia",
+    color: "border-t-orange-500",
+    bullets: ["Top Quality Education", "NMC/WHO Approved", "Affordable Fees", "Safe Environment"],
+  },
+  {
+    name: "PHILIPPINES",
+    code: "ph",
+    slug: "philippines",
+    color: "border-t-yellow-500",
+    bullets: ["US Education Pattern", "English Speaking Country", "High FMGE Pass Rate"],
+  },
+  {
+    name: "EGYPT",
+    code: "eg",
+    slug: "egypt",
+    color: "border-t-red-600",
+    bullets: ["Top Government Universities", "WHO Listed", "Clinical Rotations", "Affordable Fees"],
+  },
+  {
     name: "NEPAL",
     code: "np",
     slug: "nepal",
     color: "border-t-blue-700",
     bullets: ["NMC Approved", "Indian Curriculum", "Near India"],
-  },
-  {
-    name: "CHINA",
-    code: "cn",
-    slug: "china",
-    color: "border-t-red-600",
-    bullets: ["Top Medical Universities", "Modern Hospitals", "WHO Listed"],
   },
 ];
 
@@ -194,11 +208,11 @@ export default function StudyIndiaSection() {
             {/* Top Row: Georgia, Russia, Kazakhstan */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {countries.slice(0, 3).map((c) => (
-                <div key={c.slug} className={`bg-white border border-slate-100 ${c.color} border-t-[3px] rounded-xl p-4 flex flex-col justify-between min-h-[180px] hover:shadow-md transition-shadow`}>
+                <div key={c.slug} className={`bg-white border border-slate-100 ${c.color} border-t-[3px] rounded-xl p-4 flex flex-col justify-between min-h-[180px] hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group`}>
                   <div>
                     <div className="flex items-center gap-2 mb-3">
                       <div className="w-6 h-6 rounded-full overflow-hidden border border-slate-200 flex-shrink-0 flex items-center justify-center">
-                        <img src={`https://flagcdn.com/w80/${c.code}.png`} alt={`${c.name} Flag`} className="w-full h-full object-cover" />
+                        <img src={`https://flagcdn.com/w80/${c.code}.png`} alt={`${c.name} Flag`} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
                       </div>
                       <span className="text-[11px] sm:text-[12px] font-black text-[#0c2e60] tracking-wide">{c.name}</span>
                     </div>
@@ -221,11 +235,11 @@ export default function StudyIndiaSection() {
             {/* Bottom Row: Uzbekistan, Kyrgyzstan, Nepal, China */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {countries.slice(3).map((c) => (
-                <div key={c.slug} className={`bg-white border border-slate-100 ${c.color} border-t-[3px] rounded-xl p-3 sm:p-4 flex flex-col justify-between min-h-[160px] hover:shadow-md transition-shadow`}>
+                <div key={c.slug} className={`bg-white border border-slate-100 ${c.color} border-t-[3px] rounded-xl p-3 sm:p-4 flex flex-col justify-between min-h-[160px] hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group`}>
                   <div>
                     <div className="flex items-center gap-2 mb-2">
                       <div className="w-5.5 h-5.5 rounded-full overflow-hidden border border-slate-200 flex-shrink-0 flex items-center justify-center">
-                        <img src={`https://flagcdn.com/w80/${c.code}.png`} alt={`${c.name} Flag`} className="w-full h-full object-cover" />
+                        <img src={`https://flagcdn.com/w80/${c.code}.png`} alt={`${c.name} Flag`} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
                       </div>
                       <span className="text-[10px] sm:text-[11px] font-black text-[#0c2e60] tracking-wide">{c.name}</span>
                     </div>

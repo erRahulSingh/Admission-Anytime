@@ -71,12 +71,12 @@ export const sendNotificationEmails = async (formData) => {
     <p>We have received your request for MBBS admission counseling for <strong>${formData.country}</strong>.</p>
     <p>Our senior counselor will contact you shortly on <strong>${formData.phone}</strong>.</p>
     <br/>
-    <p>Best Regards,<br/>MBBS Consultancy Team</p>
+    <p>Best Regards,<br/>Admission Anytime Team</p>
   `;
 
   await Promise.all([
     sendEmail({
-      to: process.env.ADMIN_EMAIL || 'admin@mbbsconsultancy.com',
+      to: process.env.ADMIN_EMAIL || 'admin@admissionanytime.com',
       subject: adminSubject,
       html: adminHtml,
       text: `New Lead: ${formData.fullName}, Phone: ${formData.phone}, Country: ${formData.country}`

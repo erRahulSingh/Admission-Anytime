@@ -39,6 +39,54 @@ const fallbackUnis: Partial<University>[] = [
     ranking: "Country Rank: 8",
     courseDuration: "6 Years",
     logo: "",
+  },
+  {
+    name: "Tashkent Medical Academy",
+    country: { name: "Uzbekistan", slug: "uzbekistan" } as any,
+    tuitionFee: "$4,000 / Year",
+    ranking: "Country Rank: 2",
+    courseDuration: "5 Years",
+    logo: "",
+  },
+  {
+    name: "Osh State University",
+    country: { name: "Kyrgyzstan", slug: "kyrgyzstan" } as any,
+    tuitionFee: "$3,200 / Year",
+    ranking: "Country Rank: 5",
+    courseDuration: "5 Years",
+    logo: "",
+  },
+  {
+    name: "Yerevan State Medical University",
+    country: { name: "Armenia", slug: "armenia" } as any,
+    tuitionFee: "$5,500 / Year",
+    ranking: "Country Rank: 3",
+    courseDuration: "6 Years",
+    logo: "",
+  },
+  {
+    name: "University of Santo Tomas",
+    country: { name: "Philippines", slug: "philippines" } as any,
+    tuitionFee: "$4,800 / Year",
+    ranking: "World Rank: 801",
+    courseDuration: "5 Years",
+    logo: "",
+  },
+  {
+    name: "Cairo University",
+    country: { name: "Egypt", slug: "egypt" } as any,
+    tuitionFee: "$6,000 / Year",
+    ranking: "Country Rank: 1",
+    courseDuration: "5 Years",
+    logo: "",
+  },
+  {
+    name: "Kathmandu University School of Medical Sciences",
+    country: { name: "Nepal", slug: "nepal" } as any,
+    tuitionFee: "$8,000 / Year",
+    ranking: "Country Rank: 2",
+    courseDuration: "5.5 Years",
+    logo: "",
   }
 ];
 
@@ -131,13 +179,15 @@ export default function UniversitiesFinderPage() {
             >
               <option value="">All Countries</option>
               <option value="India">India</option>
-              <option value="Georgia">Georgia</option>
               <option value="Russia">Russia</option>
+              <option value="Georgia">Georgia</option>
               <option value="Kazakhstan">Kazakhstan</option>
               <option value="Uzbekistan">Uzbekistan</option>
               <option value="Kyrgyzstan">Kyrgyzstan</option>
               <option value="Nepal">Nepal</option>
-              <option value="China">China</option>
+              <option value="Armenia">Armenia</option>
+              <option value="Philippines">Philippines</option>
+              <option value="Egypt">Egypt</option>
             </select>
           </div>
 

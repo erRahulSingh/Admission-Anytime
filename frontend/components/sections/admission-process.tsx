@@ -2,29 +2,25 @@
 
 import React from "react";
 import {
-  FaUser,
-  FaFileContract,
-  FaFileAlt,
-  FaEnvelopeOpenText,
-  FaPassport,
-  FaPlane,
+  FaClipboardList,
+  FaHeadset,
   FaUniversity,
+  FaFileContract,
+  FaCheckCircle,
   FaArrowRight,
 } from "react-icons/fa";
 
 const steps = [
-  { step: 1, title: "Free Counseling", icon: <FaUser />, bg: "bg-[#16a34a]" },
-  { step: 2, title: "College Selection", icon: <FaFileContract />, bg: "bg-[#14b8a6]" },
-  { step: 3, title: "Documentation", icon: <FaFileAlt />, bg: "bg-[#0c2e60]" },
-  { step: 4, title: "Admission Letter", icon: <FaEnvelopeOpenText />, bg: "bg-[#7c3aed]" },
-  { step: 5, title: "Visa", icon: <FaPassport />, bg: "bg-[#f59e0b]" },
-  { step: 6, title: "Travel", icon: <FaPlane />, bg: "bg-[#ef4444]" },
-  { step: 7, title: "University Joining", icon: <FaUniversity />, bg: "bg-[#16a34a]" },
+  { step: 1, title: "Submit Your Enquiry", icon: <FaClipboardList />, bg: "bg-[#0c2e60]" },
+  { step: 2, title: "Free Career Counselling", icon: <FaHeadset />, bg: "bg-[#16a34a]" },
+  { step: 3, title: "University Selection", icon: <FaUniversity />, bg: "bg-[#14b8a6]" },
+  { step: 4, title: "Documentation & Admission", icon: <FaFileContract />, bg: "bg-[#7c3aed]" },
+  { step: 5, title: "Admission Confirmation", icon: <FaCheckCircle />, bg: "bg-[#f9a825]" },
 ];
 
 export default function AdmissionProcessSection() {
   return (
-    <section className="py-5 sm:py-7 bg-white">
+    <section className="py-4 sm:py-6 bg-white">
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6 space-y-6">
 
         {/* Title */}
@@ -37,9 +33,9 @@ export default function AdmissionProcessSection() {
         </div>
 
         {/* Steps Row */}
-        <div className="max-w-[1100px] mx-auto flex flex-wrap justify-between items-start gap-y-6 w-full">
+        <div className="max-w-[900px] mx-auto flex flex-wrap justify-between items-start gap-y-6 w-full">
           {steps.map((s, i) => (
-            <div key={i} className="flex flex-col items-center text-center w-[90px] sm:w-[110px] md:w-[130px] relative">
+            <div key={i} className="flex flex-col items-center text-center w-[95px] sm:w-[115px] md:w-[135px] relative">
               {/* Circle */}
               <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full ${s.bg} text-white flex items-center justify-center text-xl sm:text-2xl shadow-lg`}>
                 {s.icon}
@@ -53,7 +49,7 @@ export default function AdmissionProcessSection() {
               </span>
 
               {/* Arrow absolute-positioned to the right of each step (except the last one) */}
-              {i < 6 && (
+              {i < 4 && (
                 <div className="hidden lg:block absolute top-8 left-[calc(50%+45px)] xl:left-[calc(50%+55px)] -translate-y-1/2 text-slate-300">
                   <FaArrowRight size={14} />
                 </div>

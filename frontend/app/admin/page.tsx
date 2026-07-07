@@ -2,7 +2,15 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { FaUserPlus, FaEnvelopeOpen, FaUniversity, FaGlobe, FaChevronRight, FaPlus } from "react-icons/fa";
+import {
+  FaUserPlus,
+  FaEnvelopeOpen,
+  FaUniversity,
+  FaGlobe,
+  FaChevronRight,
+  FaUserCheck,
+  FaCheckCircle,
+} from "react-icons/fa";
 import api from "@/services/api";
 import { AdmissionFormLead, ContactRequestLead, DashboardStats } from "@/types";
 
@@ -24,7 +32,6 @@ export default function AdminDashboardPage() {
         }
       } catch (err) {
         console.warn("Failed fetching live stats, falling back to mock dashboard stats.");
-        // Set mock display metrics
         setStats({
           totalLeads: 24,
           pendingLeads: 12,
@@ -33,9 +40,9 @@ export default function AdminDashboardPage() {
           admittedLeads: 1,
           totalContacts: 9,
           unreadContacts: 5,
-          totalCountries: 3,
-          totalUniversities: 4,
-          totalStudents: 15,
+          totalCountries: 9,
+          totalUniversities: 10,
+          totalStudents: 25000,
         });
         setRecentLeads([
           {
@@ -88,74 +95,129 @@ export default function AdminDashboardPage() {
     );
   }
 
+  // Calculate processing rates
+  const totalLeads = stats?.totalLeads || 0;
+  const pendingLeads = stats?.pendingLeads || 0;
+  const leadRate = totalLeads > 0 ? Math.round(((totalLeads - pendingLeads) / totalLeads) * 100) : 0;
+
+  const totalContacts = stats?.totalContacts || 0;
+  const unreadContacts = stats?.unreadContacts || 0;
+  const contactRate = totalContacts > 0 ? Math.round(((totalContacts - unreadContacts) / totalContacts) * 100) : 0;
+
+  const analyticsCards = [
+    {
+      label: "Total Leads",
+      value: totalLeads,
+      rate: leadRate,
+      rateLabel: "Follow-up Rate",
+      badge: `${pendingLeads} Pending`,
+      badgeColor: "bg-amber-50 text-amber-600 border border-amber-100",
+      icon: <FaUserPlus />,
+      iconBg: "bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-blue-500/20",
+      barColor: "bg-blue-500",
+    },
+    {
+      label: "Contact Inquiries",
+      value: totalContacts,
+      rate: contactRate,
+      rateLabel: "Response Rate",
+      badge: `${unreadContacts} Unread`,
+      badgeColor: "bg-rose-50 text-rose-600 border border-rose-100",
+      icon: <FaEnvelopeOpen />,
+      iconBg: "bg-gradient-to-br from-[#f9a825] to-[#f57f17] text-white shadow-yellow-500/20",
+      barColor: "bg-[#f9a825]",
+    },
+    {
+      label: "Associated Colleges",
+      value: stats?.totalUniversities || 0,
+      rate: 100,
+      rateLabel: "Active System",
+      badge: "Verified List",
+      badgeColor: "bg-emerald-50 text-emerald-600 border border-emerald-100",
+      icon: <FaUniversity />,
+      iconBg: "bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-emerald-500/20",
+      barColor: "bg-emerald-500",
+    },
+    {
+      label: "Supported Countries",
+      value: stats?.totalCountries || 0,
+      rate: 100,
+      rateLabel: "Network Scope",
+      badge: "Global Targets",
+      badgeColor: "bg-purple-50 text-purple-600 border border-purple-100",
+      icon: <FaGlobe />,
+      iconBg: "bg-gradient-to-br from-purple-500 to-indigo-600 text-white shadow-purple-500/20",
+      barColor: "bg-purple-500",
+    },
+  ];
+
   return (
     <div className="space-y-8">
       
       {/* Welcome Banner */}
-      <div className="bg-[#0b1c2c] text-white p-6 md:p-8 rounded-premium flex justify-between items-center shadow-lg">
-        <div>
-          <h1 className="text-xl md:text-2xl font-black">Welcome Back, Counselor!</h1>
-          <p className="text-slate-400 text-xs mt-1">
-            Check recent registration activities, student inquiries, and university databases.
+      <div className="bg-gradient-to-r from-[#0b1c2c] to-[#0c2e60] text-white p-6 md:p-8 rounded-2xl flex justify-between items-center shadow-lg relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-48 h-48 bg-white/5 rounded-bl-full pointer-events-none" />
+        <div className="space-y-1.5 relative z-10">
+          <span className="inline-block bg-[#f9a825] text-[#0c2e60] font-extrabold text-[9px] px-2.5 py-1 uppercase tracking-wider rounded">
+            Live Counseling Dashboard
+          </span>
+          <h1 className="text-xl md:text-2xl font-black tracking-wide">Welcome Back, Counselor!</h1>
+          <p className="text-slate-300 text-xs font-medium">
+            Monitor real-time student registrations, inbound contact queries, and university allocations.
           </p>
         </div>
       </div>
 
       {/* Analytics Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {[
-          {
-            label: "Total Leads",
-            val: stats?.totalLeads || 0,
-            sub: `${stats?.pendingLeads || 0} Pending`,
-            icon: <FaUserPlus />,
-            bg: "bg-primary-50 text-primary-500",
-          },
-          {
-            label: "Contact Messages",
-            val: stats?.totalContacts || 0,
-            sub: `${stats?.unreadContacts || 0} Unread`,
-            icon: <FaEnvelopeOpen />,
-            bg: "bg-secondary-50 text-secondary-600",
-          },
-          {
-            label: "Associated Unis",
-            val: stats?.totalUniversities || 0,
-            sub: "Active database",
-            icon: <FaUniversity />,
-            bg: "bg-accent-50 text-accent-500",
-          },
-          {
-            label: "Countries Supported",
-            val: stats?.totalCountries || 0,
-            sub: "Active locations",
-            icon: <FaGlobe />,
-            bg: "bg-purple-50 text-purple-500",
-          },
-        ].map((item, i) => (
-          <div key={i} className="bg-white p-6 rounded-premium border border-slate-100 shadow-md flex items-center justify-between">
-            <div className="space-y-2">
-              <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">{item.label}</span>
-              <p className="text-3xl font-black text-text-dark">{item.val}</p>
-              <span className="text-[10px] text-slate-500 font-medium block">{item.sub}</span>
+        {analyticsCards.map((card, i) => (
+          <div
+            key={i}
+            className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-lg shadow-slate-100/50 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between"
+          >
+            {/* Top row */}
+            <div className="flex justify-between items-start">
+              <div className="space-y-1">
+                <span className="text-[10px] text-slate-400 uppercase font-black tracking-wider block">
+                  {card.label}
+                </span>
+                <p className="text-3xl font-black text-[#0c2e60] tracking-tight">{card.value}</p>
+              </div>
+              <div className={`w-11 h-11 rounded-xl ${card.iconBg} flex items-center justify-center text-base flex-shrink-0 shadow-md`}>
+                {card.icon}
+              </div>
             </div>
-            <div className={`w-12 h-12 rounded-xl ${item.bg} flex items-center justify-center text-lg flex-shrink-0`}>
-              {item.icon}
+
+            {/* Bottom details with progress bar */}
+            <div className="mt-5 space-y-2.5">
+              <div className="flex justify-between items-center text-[10px] font-bold text-slate-500">
+                <span className="flex items-center gap-1">
+                  {card.rateLabel}: <strong className="text-[#0c2e60]">{card.rate}%</strong>
+                </span>
+                <span className={`px-2 py-0.5 rounded text-[9px] font-black uppercase ${card.badgeColor}`}>
+                  {card.badge}
+                </span>
+              </div>
+              <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                <div className={`h-full ${card.barColor} rounded-full transition-all duration-500`} style={{ width: `${card.rate}%` }} />
+              </div>
             </div>
           </div>
         ))}
       </div>
 
       {/* Lists row */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         
         {/* Recent leads table card */}
-        <div className="lg:col-span-8 bg-white p-6 rounded-premium border border-slate-100 shadow-md space-y-4">
-          <div className="flex justify-between items-center pb-2 border-b">
-            <h3 className="font-extrabold text-sm text-text-dark">Recent Lead Registrations</h3>
+        <div className="lg:col-span-8 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-lg shadow-slate-100/50 space-y-5">
+          <div className="flex justify-between items-center pb-2 border-b border-slate-100">
+            <h3 className="font-black text-sm text-[#0c2e60] tracking-wide uppercase flex items-center gap-2">
+              <FaUserCheck className="text-blue-500" /> Recent Leads
+            </h3>
             <Link
               href="/admin/admission-forms"
-              className="text-xs text-primary-500 font-bold hover:underline flex items-center gap-1"
+              className="text-xs text-primary-500 font-extrabold hover:underline flex items-center gap-1"
             >
               See All Leads <FaChevronRight className="text-[9px]" />
             </Link>
@@ -167,21 +229,21 @@ export default function AdminDashboardPage() {
                 <tr className="border-b border-slate-100 text-slate-400 font-bold uppercase">
                   <th className="py-2.5">Student</th>
                   <th className="py-2.5">Mobile</th>
-                  <th className="py-2.5">NEET</th>
+                  <th className="py-2.5 text-center">NEET</th>
                   <th className="py-2.5">Country</th>
-                  <th className="py-2.5">Status</th>
+                  <th className="py-2.5 text-right">Status</th>
                 </tr>
               </thead>
-              <tbody className="text-text-dark font-medium divide-y divide-slate-50">
+              <tbody className="text-text-dark font-semibold divide-y divide-slate-50">
                 {recentLeads.map((lead) => (
-                  <tr key={lead._id}>
-                    <td className="py-3 font-bold">{lead.fullName}</td>
-                    <td className="py-3 text-slate-500">{lead.phone}</td>
-                    <td className="py-3 text-primary-500 font-extrabold">{lead.neetScore}</td>
-                    <td className="py-3 font-semibold">{lead.country}</td>
-                    <td className="py-3">
-                      <span className={`px-2 py-0.5 rounded text-[9px] font-bold ${
-                        lead.status === "Pending" ? "bg-yellow-50 text-yellow-600" : "bg-green-50 text-green-600"
+                  <tr key={lead._id} className="hover:bg-slate-50/50 transition-colors">
+                    <td className="py-3.5 font-black text-[#0c2e60]">{lead.fullName}</td>
+                    <td className="py-3.5 text-slate-500">{lead.phone}</td>
+                    <td className="py-3.5 text-center text-primary-500 font-extrabold">{lead.neetScore}</td>
+                    <td className="py-3.5 font-bold">{lead.country}</td>
+                    <td className="py-3.5 text-right">
+                      <span className={`px-2.5 py-0.5 rounded text-[9px] font-black uppercase ${
+                        lead.status === "Pending" ? "bg-amber-50 text-amber-600 border border-amber-100" : "bg-emerald-50 text-emerald-600 border border-emerald-100"
                       }`}>
                         {lead.status}
                       </span>
@@ -194,12 +256,14 @@ export default function AdminDashboardPage() {
         </div>
 
         {/* Recent contact requests */}
-        <div className="lg:col-span-4 bg-white p-6 rounded-premium border border-slate-100 shadow-md space-y-4">
-          <div className="flex justify-between items-center pb-2 border-b">
-            <h3 className="font-extrabold text-sm text-text-dark">Recent Inquiries</h3>
+        <div className="lg:col-span-4 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-lg shadow-slate-100/50 space-y-5">
+          <div className="flex justify-between items-center pb-2 border-b border-slate-100">
+            <h3 className="font-black text-sm text-[#0c2e60] tracking-wide uppercase flex items-center gap-2">
+              <FaCheckCircle className="text-amber-500" /> Recent Inquiries
+            </h3>
             <Link
               href="/admin/contact-requests"
-              className="text-xs text-primary-500 font-bold hover:underline flex items-center gap-1"
+              className="text-xs text-primary-500 font-extrabold hover:underline flex items-center gap-1"
             >
               Inbox <FaChevronRight className="text-[9px]" />
             </Link>
@@ -207,13 +271,13 @@ export default function AdminDashboardPage() {
 
           <div className="space-y-4">
             {recentContacts.map((contact) => (
-              <div key={contact._id} className="p-3 bg-slate-50 rounded-xl space-y-1.5 border border-slate-100">
+              <div key={contact._id} className="p-4 bg-slate-50 rounded-xl space-y-2 border border-slate-100 hover:border-slate-200 transition-colors">
                 <div className="flex justify-between items-center">
-                  <h4 className="font-bold text-xs text-text-dark leading-none">{contact.name}</h4>
-                  <span className="text-[9px] bg-yellow-100 text-yellow-700 px-1.5 py-0.5 rounded font-bold uppercase">{contact.status}</span>
+                  <h4 className="font-black text-xs text-[#0c2e60] leading-none">{contact.name}</h4>
+                  <span className="text-[9px] bg-rose-50 text-rose-600 border border-rose-100 px-2 py-0.5 rounded font-black uppercase">{contact.status}</span>
                 </div>
-                <p className="text-[10px] font-extrabold text-primary-500">{contact.subject}</p>
-                <p className="text-[10px] text-text-muted leading-relaxed line-clamp-2">
+                <p className="text-[10px] font-extrabold text-[#f9a825] uppercase tracking-wide">{contact.subject}</p>
+                <p className="text-[10px] text-slate-500 font-medium leading-relaxed italic">
                   "{contact.message}"
                 </p>
               </div>

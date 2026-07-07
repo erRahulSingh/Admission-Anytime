@@ -2,27 +2,21 @@
 
 import React from "react";
 import {
-  FaShieldAlt,
-  FaEyeSlash,
+  FaUserTie,
+  FaEye,
+  FaUniversity,
   FaFileAlt,
   FaPassport,
-  FaHotel,
-  FaPlaneArrival,
-  FaBookReader,
-  FaGlobe,
-  FaUsers,
+  FaUserShield,
 } from "react-icons/fa";
 
 const benefits = [
-  { title: "Official\nAdmission", icon: <FaShieldAlt /> },
-  { title: "No Hidden\nCharges", icon: <FaEyeSlash /> },
-  { title: "Complete\nDocumentation", icon: <FaFileAlt /> },
-  { title: "Visa\nAssistance", icon: <FaPassport /> },
-  { title: "Hostel\nAssistance", icon: <FaHotel /> },
-  { title: "Airport\nPickup", icon: <FaPlaneArrival /> },
-  { title: "FMGE / NExT\nGuidance", icon: <FaBookReader /> },
-  { title: "Education\nLoan", icon: <FaGlobe /> },
-  { title: "Parents\nSupport", icon: <FaUsers /> },
+  { title: "Personalized\nCareer Counseling", icon: <FaUserTie /> },
+  { title: "Transparent\nAdmission Process", icon: <FaEye /> },
+  { title: "Access to\nTop Medical Colleges", icon: <FaUniversity /> },
+  { title: "Complete\nDocumentation Assistance", icon: <FaFileAlt /> },
+  { title: "Visa &\nTravel Support", icon: <FaPassport /> },
+  { title: "Continued Support\nAfter Admission", icon: <FaUserShield /> },
 ];
 
 export default function WhyChooseUsSection() {
@@ -40,13 +34,13 @@ export default function WhyChooseUsSection() {
         </div>
 
         {/* ─── Benefits Grid ─── */}
-        <div className="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-9 gap-3 sm:gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-6">
           {benefits.map((b, i) => (
             <div
               key={i}
-              className="bg-white border border-slate-200 rounded-xl p-3 sm:p-4 flex flex-col items-center justify-center text-center gap-4 hover:shadow-md hover:border-slate-300 transition-all duration-300 min-h-[110px] sm:min-h-[130px]"
+              className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 flex flex-col items-center justify-center text-center gap-4 hover:shadow-lg hover:border-slate-300 hover:-translate-y-1 transition-all duration-300 min-h-[120px] sm:min-h-[140px] group cursor-default"
             >
-              <div className="text-[#0c2e60] text-3xl sm:text-4xl flex items-center justify-center">
+              <div className="text-[#0c2e60] text-3xl sm:text-4xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                 {b.icon}
               </div>
               <h3 className="text-[10px] sm:text-[11px] font-black text-[#0c2e60] leading-snug whitespace-pre-line tracking-wide">

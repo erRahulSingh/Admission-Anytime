@@ -15,6 +15,7 @@ import {
   FaHome,
   FaChevronDown,
 } from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -82,10 +83,10 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           {/* Header */}
           <div className="p-6 border-b border-slate-800 flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-primary-500 flex items-center justify-center font-black text-white text-sm">
-              M
+              A
             </div>
             <div>
-              <span className="font-extrabold text-sm block">MBBS Panel</span>
+              <span className="font-extrabold text-sm block">Admission Anytime</span>
               <span className="text-[9px] uppercase tracking-wider text-slate-400">Control center</span>
             </div>
           </div>
@@ -155,8 +156,20 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           </div>
         </header>
 
-        {/* Nested Page Wrapper */}
-        <main className="p-6 md:p-8 flex-1">{children}</main>
+        {/* Nested Page Wrapper with Framer Motion Transition */}
+        <main className="p-6 md:p-8 flex-1 overflow-y-auto">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={pathname}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.25, ease: "easeInOut" }}
+            >
+              {children}
+            </motion.div>
+          </AnimatePresence>
+        </main>
       </div>
     </div>
   );

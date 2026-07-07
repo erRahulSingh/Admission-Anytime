@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { FaLock, FaEnvelope, FaStethoscope } from "react-icons/fa";
+import { motion } from "framer-motion";
 import api from "@/services/api";
 
 const loginSchema = z.object({
@@ -56,56 +57,61 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 flex items-center justify-center px-4 relative overflow-hidden">
+    <div className="min-h-screen bg-[#071321] flex items-center justify-center px-4 relative overflow-hidden">
       {/* Background neon glows */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-500/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary-500/5 rounded-full blur-3xl" />
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#0c2e60]/30 rounded-full blur-3xl" />
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#f9a825]/10 rounded-full blur-3xl" />
 
-      <div className="w-full max-w-md space-y-8 relative z-10">
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="w-full max-w-md space-y-8 relative z-10"
+      >
         
         {/* Branding header */}
         <div className="text-center space-y-3">
-          <div className="w-14 h-14 bg-primary-500 rounded-full flex items-center justify-center text-white mx-auto shadow-lg shadow-primary-500/20">
+          <div className="w-14 h-14 bg-[#0c2e60] border border-[#f9a825]/30 rounded-full flex items-center justify-center text-[#f9a825] mx-auto shadow-lg">
             <FaStethoscope className="text-2xl animate-pulse" />
           </div>
           <div>
             <h2 className="text-2xl font-black text-white tracking-tight leading-none">
-              MBBS ADVISOR SYSTEM
+              ADMISSION ANYTIME
             </h2>
-            <span className="text-[10px] uppercase font-bold tracking-widest text-slate-400">
+            <span className="text-[10px] uppercase font-bold tracking-widest text-[#f9a825] mt-1 block">
               Administrative Control Panel
             </span>
           </div>
         </div>
 
         {/* Login Box */}
-        <div className="bg-slate-800/80 backdrop-blur-md border border-slate-700 rounded-premium p-6 md:p-8 shadow-2xl">
+        <div className="bg-[#0b1c2c]/80 backdrop-blur-md border border-slate-800 rounded-2xl p-6 md:p-8 shadow-2xl">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             
             {/* Email */}
             <div>
-              <label className="block text-xs font-bold text-slate-300 mb-1">Admin Email</label>
+              <label className="block text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1.5 pl-0.5">Admin Email</label>
               <div className="relative">
                 <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
                   <FaEnvelope size={13} />
                 </span>
                 <input
                   type="email"
-                  placeholder="admin@mbbsconsultancy.com"
+                  placeholder="admin@admissionanytime.com"
                   {...register("email")}
-                  className={`w-full bg-slate-700/60 border rounded-xl pl-10 pr-4 py-3 text-sm text-white outline-none focus:border-primary-500 ${
-                    errors.email ? "border-red-500" : "border-slate-600"
+                  className={`w-full bg-slate-900/60 border rounded-xl pl-10 pr-4 py-3 text-xs text-white outline-none focus:border-[#f9a825] focus:ring-1 focus:ring-[#f9a825]/25 transition-all ${
+                    errors.email ? "border-red-500" : "border-slate-850"
                   }`}
                 />
               </div>
               {errors.email && (
-                <span className="text-[10px] text-red-400 font-semibold mt-1 block">{errors.email.message}</span>
+                <span className="text-[10px] text-red-400 font-semibold mt-1.5 block">{errors.email.message}</span>
               )}
             </div>
 
             {/* Password */}
             <div>
-              <label className="block text-xs font-bold text-slate-300 mb-1">Secure Password</label>
+              <label className="block text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1.5 pl-0.5">Secure Password</label>
               <div className="relative">
                 <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
                   <FaLock size={13} />
@@ -114,13 +120,13 @@ export default function AdminLoginPage() {
                   type="password"
                   placeholder="••••••••"
                   {...register("password")}
-                  className={`w-full bg-slate-700/60 border rounded-xl pl-10 pr-4 py-3 text-sm text-white outline-none focus:border-primary-500 ${
-                    errors.password ? "border-red-500" : "border-slate-600"
+                  className={`w-full bg-slate-900/60 border rounded-xl pl-10 pr-4 py-3 text-xs text-white outline-none focus:border-[#f9a825] focus:ring-1 focus:ring-[#f9a825]/25 transition-all ${
+                    errors.password ? "border-red-500" : "border-slate-850"
                   }`}
                 />
               </div>
               {errors.password && (
-                <span className="text-[10px] text-red-400 font-semibold mt-1 block">{errors.password.message}</span>
+                <span className="text-[10px] text-red-400 font-semibold mt-1.5 block">{errors.password.message}</span>
               )}
             </div>
 
@@ -131,7 +137,7 @@ export default function AdminLoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-primary-500 hover:bg-primary-600 text-white font-extrabold py-3.5 rounded-xl shadow-lg transition-all text-xs disabled:opacity-50 mt-4 uppercase tracking-wider"
+              className="w-full bg-[#f9a825] hover:bg-[#f57f17] text-[#0c2e60] font-black py-3.5 rounded-xl shadow-lg transition-all text-xs disabled:opacity-50 mt-4 uppercase tracking-wider hover:-translate-y-0.5"
             >
               {loading ? "Authenticating..." : "Sign In to Admin"}
             </button>
@@ -140,12 +146,12 @@ export default function AdminLoginPage() {
         </div>
 
         <div className="text-center">
-          <Link href="/" className="text-slate-400 hover:text-white text-xs font-medium">
+          <Link href="/" className="text-slate-500 hover:text-[#f9a825] text-xs font-bold transition-colors">
             ← Return to Homepage
           </Link>
         </div>
 
-      </div>
+      </motion.div>
     </div>
   );
 }

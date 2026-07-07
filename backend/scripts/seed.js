@@ -193,15 +193,13 @@ const seedDatabase = async () => {
     console.log('Wiped out existing databases.');
 
     // Seed Admin
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash('admin12345', salt);
     await Admin.create({
       name: 'Senior Admin Officer',
-      email: 'admin@mbbsconsultancy.com',
-      password: hashedPassword,
+      email: 'admin@admissionanytime.com',
+      password: 'admin12345',
       role: 'superadmin'
     });
-    console.log('Admin account seeded (admin@mbbsconsultancy.com / admin12345)');
+    console.log('Admin account seeded (admin@admissionanytime.com / admin12345)');
 
     // Seed Countries
     const seededCountries = await Country.create(countriesData);

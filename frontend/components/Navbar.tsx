@@ -14,30 +14,8 @@ import {
 
 const navLinks = [
   { label: "HOME", href: "/" },
-  {
-    label: "MBBS IN INDIA",
-    href: "/mbbs-india",
-    hasDropdown: true,
-    children: [
-      { label: "Government Seats", href: "/mbbs-india" },
-      { label: "Private Colleges", href: "/mbbs-india" },
-      { label: "Deemed Universities", href: "/mbbs-india" },
-      { label: "Counselling Guidance", href: "/mbbs-india" },
-    ],
-  },
-  {
-    label: "MBBS ABROAD",
-    href: "/mbbs-abroad",
-    hasDropdown: true,
-    children: [
-      { label: "MBBS in Georgia", href: "/mbbs-abroad/georgia" },
-      { label: "MBBS in Russia", href: "/mbbs-abroad/russia" },
-      { label: "MBBS in Kazakhstan", href: "/mbbs-abroad/kazakhstan" },
-      { label: "MBBS in Uzbekistan", href: "/mbbs-abroad/uzbekistan" },
-      { label: "MBBS in Kyrgyzstan", href: "/mbbs-abroad/kyrgyzstan" },
-      { label: "MBBS in Nepal", href: "/mbbs-abroad/nepal" },
-    ],
-  },
+  { label: "MBBS IN INDIA", href: "/mbbs-india" },
+  { label: "MBBS ABROAD", href: "/mbbs-abroad" },
   { label: "UNIVERSITIES", href: "/universities" },
   { label: "SERVICES", href: "/services" },
   { label: "ABOUT US", href: "/about" },
@@ -59,6 +37,10 @@ export default function Navbar() {
   useEffect(() => {
     setIsOpen(false);
   }, [pathname]);
+
+  if (pathname && (pathname.startsWith("/admin") || pathname.startsWith("/lp"))) {
+    return null;
+  }
 
   return (
     <header
@@ -123,17 +105,17 @@ export default function Navbar() {
         {/* ─── Phone CTA (Desktop) ─── */}
         <div className="hidden md:flex items-center gap-3 flex-shrink-0">
           <a
-            href="tel:01202611111"
+            href="tel:+919876543210"
             className="w-10 h-10 rounded-full bg-[#0F4C81]/5 border border-[#0F4C81]/10 flex items-center justify-center text-[#0F4C81] hover:bg-[#0F4C81] hover:text-white transition-all duration-300"
           >
             <FaPhoneAlt size={14} />
           </a>
           <div className="text-right">
             <a
-              href="tel:01202611111"
+              href="tel:+919876543210"
               className="text-[14px] font-black text-[#1a1a2e] hover:text-[#0F4C81] block leading-none transition-colors"
             >
-              0120-2611111
+              +91 98765 43210
             </a>
             <span className="text-[10px] font-semibold text-slate-400 mt-0.5 block tracking-wider">
               (10AM - 7PM)
@@ -141,14 +123,23 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* ─── Mobile Hamburger ─── */}
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="lg:hidden w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 text-[#0F4C81] hover:bg-blue-50 transition-colors"
-          aria-label="Toggle menu"
-        >
-          {isOpen ? <FaTimes size={18} /> : <FaBars size={18} />}
-        </button>
+        {/* ─── Mobile Actions (Phone & Hamburger) ─── */}
+        <div className="flex items-center gap-2 lg:hidden">
+          <a
+            href="tel:+919876543210"
+            className="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 text-[#0F4C81] hover:bg-blue-50 transition-colors"
+            aria-label="Call Us"
+          >
+            <FaPhoneAlt size={14} />
+          </a>
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 text-[#0F4C81] hover:bg-blue-50 transition-colors"
+            aria-label="Toggle menu"
+          >
+            {isOpen ? <FaTimes size={18} /> : <FaBars size={18} />}
+          </button>
+        </div>
       </div>
 
       {/* ─── Mobile Slide-Down Menu ─── */}
@@ -180,17 +171,17 @@ export default function Navbar() {
               {/* Mobile CTA strip */}
               <div className="pt-4 mt-2 border-t border-slate-100 flex flex-col sm:flex-row gap-3">
                 <a
-                  href="tel:01202611111"
+                  href="tel:+919876543210"
                   className="flex items-center justify-center gap-2 bg-[#0F4C81] text-white font-bold py-3 px-5 rounded-xl text-sm flex-1"
                 >
                   <FaPhoneAlt size={13} />
-                  0120-2611111
+                  +91 98765 43210
                 </a>
                 <a
                   href="https://wa.me/919876543210"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 bg-[#107c41] text-white font-bold py-3 px-5 rounded-xl text-sm flex-1"
+                  className="flex items-center justify-center gap-2 bg-[#16a34a] text-white font-bold py-3 px-5 rounded-xl text-sm flex-1"
                 >
                   <FaWhatsapp size={15} />
                   WhatsApp
