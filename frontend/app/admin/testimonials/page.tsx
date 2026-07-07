@@ -92,7 +92,7 @@ export default function AdminTestimonialsPage() {
       country,
       rating,
       review: reviewText,
-      status,
+      status: status as "Active" | "Inactive",
     };
 
     try {
@@ -110,7 +110,7 @@ export default function AdminTestimonialsPage() {
         country,
         rating,
         review: reviewText,
-        status: status as any,
+        status: status as "Active" | "Inactive",
         createdAt: new Date().toISOString(),
       };
       setReviews(prev => [...prev, mockReview]);
@@ -130,7 +130,7 @@ export default function AdminTestimonialsPage() {
       country: editCountry,
       rating: editRating,
       review: editReviewText,
-      status: editStatus,
+      status: editStatus as "Active" | "Inactive",
     };
 
     try {
