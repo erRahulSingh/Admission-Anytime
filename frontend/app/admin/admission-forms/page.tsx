@@ -112,9 +112,9 @@ export default function AdminAdmissionFormsPage() {
       email: editEmail,
       phone: editPhone,
       neetScore: Number(editNeetScore),
-      interestedIn: editInterestedIn,
+      interestedIn: editInterestedIn as "India" | "Abroad" | "Both",
       country: editCountry,
-      status: editStatus,
+      status: editStatus as "Pending" | "Contacted" | "In Discussion" | "Admitted" | "Closed",
       notes: editNotes,
     };
 
@@ -144,9 +144,9 @@ export default function AdminAdmissionFormsPage() {
       email: newEmail,
       phone: newPhone,
       neetScore: Number(newNeetScore),
-      interestedIn: newInterestedIn,
+      interestedIn: newInterestedIn as "India" | "Abroad" | "Both",
       country: newCountry,
-      status: newStatus,
+      status: newStatus as "Pending" | "Contacted" | "In Discussion" | "Admitted" | "Closed",
       notes: newNotes,
     };
 
