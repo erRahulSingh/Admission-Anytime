@@ -113,7 +113,7 @@ export default function AdminCountriesPage() {
       language: lang,
       benefits: benefitsArray,
       requirements: reqsArray,
-      status,
+      status: status as "Active" | "Inactive",
       flagImage: flagUrl || "https://images.unsplash.com/photo-1508672019048-805c876b67e2?q=80&w=200",
     };
 
@@ -136,7 +136,7 @@ export default function AdminCountriesPage() {
         language: lang,
         benefits: benefitsArray,
         requirements: reqsArray,
-        status: status as any,
+        status: status as "Active" | "Inactive",
         flagImage: payload.flagImage,
         createdAt: new Date().toISOString(),
       };
@@ -162,7 +162,7 @@ export default function AdminCountriesPage() {
       language: editLang,
       benefits: benefitsArray,
       requirements: reqsArray,
-      status: editStatus,
+      status: editStatus as "Active" | "Inactive",
       flagImage: editFlagUrl || "https://images.unsplash.com/photo-1508672019048-805c876b67e2?q=80&w=200",
     };
 

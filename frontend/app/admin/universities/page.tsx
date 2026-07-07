@@ -133,7 +133,7 @@ export default function AdminUniversitiesPage() {
       courseDuration: duration,
       keyHighlights: highlightsArray,
       description: desc,
-      status,
+      status: status as "Active" | "Inactive",
     };
 
     try {
@@ -158,7 +158,7 @@ export default function AdminUniversitiesPage() {
         courseDuration: duration,
         keyHighlights: highlightsArray,
         description: desc,
-        status: status as any,
+        status: status as "Active" | "Inactive",
         createdAt: new Date().toISOString(),
       };
       setUnis(prev => [...prev, mockUni]);
@@ -184,7 +184,7 @@ export default function AdminUniversitiesPage() {
       courseDuration: editDuration,
       keyHighlights: highlightsArray,
       description: editDesc,
-      status: editStatus,
+      status: editStatus as "Active" | "Inactive",
     };
 
     try {
