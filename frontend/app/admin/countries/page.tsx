@@ -31,7 +31,7 @@ export default function AdminCountriesPage() {
   const [lang, setLang] = useState("English");
   const [benefits, setBenefits] = useState("");
   const [reqs, setReqs] = useState("");
-  const [status, setStatus] = useState("Active");
+  const [status, setStatus] = useState<"Active" | "Inactive">("Active");
   const [flagUrl, setFlagUrl] = useState("");
 
   // Edit Form State
@@ -44,7 +44,7 @@ export default function AdminCountriesPage() {
   const [editLang, setEditLang] = useState("English");
   const [editBenefits, setEditBenefits] = useState("");
   const [editReqs, setEditReqs] = useState("");
-  const [editStatus, setEditStatus] = useState("Active");
+  const [editStatus, setEditStatus] = useState<"Active" | "Inactive">("Active");
   const [editFlagUrl, setEditFlagUrl] = useState("");
 
   async function loadCountries() {
@@ -478,7 +478,7 @@ export default function AdminCountriesPage() {
                     <label className="block text-[10px] font-black text-slate-500 uppercase tracking-wide mb-1">Status</label>
                     <select
                       value={status}
-                      onChange={(e) => setStatus(e.target.value)}
+                      onChange={(e) => setStatus(e.target.value as "Active" | "Inactive")}
                       className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-[#3b82f6] transition-all"
                     >
                       <option value="Active">Active</option>
@@ -642,7 +642,7 @@ export default function AdminCountriesPage() {
                     <label className="block text-[10px] font-black text-slate-500 uppercase tracking-wide mb-1">Status</label>
                     <select
                       value={editStatus}
-                      onChange={(e) => setEditStatus(e.target.value)}
+                      onChange={(e) => setEditStatus(e.target.value as "Active" | "Inactive")}
                       className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-[#3b82f6] transition-all"
                     >
                       <option value="Active">Active</option>

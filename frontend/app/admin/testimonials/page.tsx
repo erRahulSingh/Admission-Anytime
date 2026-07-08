@@ -29,7 +29,7 @@ export default function AdminTestimonialsPage() {
   const [country, setCountry] = useState("");
   const [rating, setRating] = useState(5);
   const [reviewText, setReviewText] = useState("");
-  const [status, setStatus] = useState("Active");
+  const [status, setStatus] = useState<"Active" | "Inactive">("Active");
 
   // Edit Form State
   const [editingReview, setEditingReview] = useState<TestimonialModel | null>(null);
@@ -38,7 +38,7 @@ export default function AdminTestimonialsPage() {
   const [editCountry, setEditCountry] = useState("");
   const [editRating, setEditRating] = useState(5);
   const [editReviewText, setEditReviewText] = useState("");
-  const [editStatus, setEditStatus] = useState("Active");
+  const [editStatus, setEditStatus] = useState<"Active" | "Inactive">("Active");
 
   async function loadTestimonials() {
     try {
@@ -390,7 +390,7 @@ export default function AdminTestimonialsPage() {
                     <label className="block text-[10px] font-black text-slate-500 uppercase tracking-wide mb-1">Status</label>
                     <select
                       value={status}
-                      onChange={(e) => setStatus(e.target.value)}
+                      onChange={(e) => setStatus(e.target.value as "Active" | "Inactive")}
                       className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-[#3b82f6] transition-all"
                     >
                       <option value="Active">Active</option>
@@ -517,7 +517,7 @@ export default function AdminTestimonialsPage() {
                     <label className="block text-[10px] font-black text-slate-500 uppercase tracking-wide mb-1">Status</label>
                     <select
                       value={editStatus}
-                      onChange={(e) => setEditStatus(e.target.value)}
+                      onChange={(e) => setEditStatus(e.target.value as "Active" | "Inactive")}
                       className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-[#3b82f6] transition-all"
                     >
                       <option value="Active">Active</option>

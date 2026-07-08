@@ -31,7 +31,7 @@ export default function AdminAdmissionFormsPage() {
   const [editNeetScore, setEditNeetScore] = useState(0);
   const [editInterestedIn, setEditInterestedIn] = useState<"India" | "Abroad" | "Both">("Abroad");
   const [editCountry, setEditCountry] = useState("");
-  const [editStatus, setEditStatus] = useState("Pending");
+  const [editStatus, setEditStatus] = useState<"Pending" | "Contacted" | "In Discussion" | "Admitted" | "Closed">("Pending");
   const [editNotes, setEditNotes] = useState("");
 
   // Add Lead Modal State
@@ -42,7 +42,7 @@ export default function AdminAdmissionFormsPage() {
   const [newNeetScore, setNewNeetScore] = useState(0);
   const [newInterestedIn, setNewInterestedIn] = useState<"India" | "Abroad" | "Both">("Abroad");
   const [newCountry, setNewCountry] = useState("");
-  const [newStatus, setNewStatus] = useState("Pending");
+  const [newStatus, setNewStatus] = useState<"Pending" | "Contacted" | "In Discussion" | "Admitted" | "Closed">("Pending");
   const [newNotes, setNewNotes] = useState("");
 
   async function loadLeads() {
@@ -492,7 +492,7 @@ export default function AdminAdmissionFormsPage() {
                     <label className="block text-[10px] font-black text-slate-500 uppercase tracking-wide mb-1">Status</label>
                     <select
                       value={newStatus}
-                      onChange={(e) => setNewStatus(e.target.value)}
+                      onChange={(e) => setNewStatus(e.target.value as "Pending" | "Contacted" | "In Discussion" | "Admitted" | "Closed")}
                       className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/10 focus:border-[#3b82f6] transition-all"
                     >
                       <option value="Pending">Pending</option>
@@ -641,7 +641,7 @@ export default function AdminAdmissionFormsPage() {
                     <label className="block text-[10px] font-black text-slate-500 uppercase tracking-wide mb-1">Status</label>
                     <select
                       value={editStatus}
-                      onChange={(e) => setEditStatus(e.target.value)}
+                      onChange={(e) => setEditStatus(e.target.value as "Pending" | "Contacted" | "In Discussion" | "Admitted" | "Closed")}
                       className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/10 focus:border-[#3b82f6] transition-all"
                     >
                       <option value="Pending">Pending</option>
