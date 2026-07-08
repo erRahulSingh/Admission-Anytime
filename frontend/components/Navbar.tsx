@@ -12,7 +12,14 @@ import {
   FaWhatsapp,
 } from "react-icons/fa";
 
-const navLinks = [
+type NavLink = {
+  label: string;
+  href: string;
+  hasDropdown?: boolean;
+  children?: { label: string; href: string }[];
+};
+
+const navLinks: NavLink[] = [
   { label: "HOME", href: "/" },
   { label: "MBBS IN INDIA", href: "/mbbs-india" },
   { label: "MBBS ABROAD", href: "/mbbs-abroad" },
