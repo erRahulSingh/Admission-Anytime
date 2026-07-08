@@ -80,7 +80,7 @@ export default function HeroSection() {
     setLoading(true);
     setErrorMsg("");
     try {
-      await api.post("/admissions", data);
+      await api.post("/admissions", { ...data, source: "Website" });
       setSuccess(true);
       reset();
     } catch (error: any) {

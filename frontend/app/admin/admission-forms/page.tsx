@@ -308,6 +308,7 @@ export default function AdminAdmissionFormsPage() {
               <tr className="border-b border-slate-100 bg-[#0c2e60] text-[#f9a825] font-black uppercase tracking-wider">
                 <th className="py-4 px-6 text-[10px]">Date</th>
                 <th className="py-4 px-6 text-[10px]">Student Details</th>
+                <th className="py-4 px-6 text-[10px]">Source</th>
                 <th className="py-4 px-6 text-center text-[10px]">NEET Score</th>
                 <th className="py-4 px-6 text-[10px]">Preference</th>
                 <th className="py-4 px-6 text-[10px]">Country</th>
@@ -319,7 +320,7 @@ export default function AdminAdmissionFormsPage() {
             <tbody className="text-text-dark font-semibold divide-y divide-slate-100">
               {filteredLeads.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="py-12 text-center text-slate-400 font-semibold italic">
+                  <td colSpan={9} className="py-12 text-center text-slate-400 font-semibold italic">
                     <FaInfoCircle className="inline-block mr-1.5" /> No leads found matching your criteria.
                   </td>
                 </tr>
@@ -332,6 +333,15 @@ export default function AdminAdmissionFormsPage() {
                     <td className="py-4 px-6">
                       <span className="font-black text-sm text-[#0c2e60] block">{lead.fullName}</span>
                       <span className="text-[10px] text-slate-400 block mt-0.5">{lead.email} • {lead.phone}</span>
+                    </td>
+                    <td className="py-4 px-6">
+                      <span className={`px-2 py-0.5 rounded-lg text-[9px] font-black uppercase tracking-wider inline-block ${
+                        lead.source === "Ads"
+                          ? "bg-purple-50 text-purple-600 border border-purple-100"
+                          : "bg-emerald-50 text-emerald-600 border border-emerald-100"
+                      }`}>
+                        {lead.source || "Website"}
+                      </span>
                     </td>
                     <td className="py-4 px-6 text-center">
                       <span className="bg-blue-50 text-blue-600 border border-blue-100 px-2.5 py-1 rounded-lg font-black text-xs inline-block">

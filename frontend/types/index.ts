@@ -51,6 +51,7 @@ export interface AdmissionFormLead {
   country: string;
   status: "Pending" | "Contacted" | "In Discussion" | "Admitted" | "Closed";
   notes?: string;
+  source?: "Website" | "Ads";
   createdAt: string;
 }
 

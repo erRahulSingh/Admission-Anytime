@@ -114,6 +114,7 @@ export default function AdsLandingPage() {
       neetScore: 0,
       interestedIn: preference,
       country: "Pending Selection",
+      source: "Ads",
     };
 
     try {
@@ -147,6 +148,7 @@ export default function AdsLandingPage() {
       neetScore: 0,
       interestedIn: preference,
       country: country,
+      source: "Ads",
     };
 
     try {
@@ -180,6 +182,7 @@ export default function AdsLandingPage() {
       country: country,
       notes: `Target Budget: ${budget}. ${notes}`,
       status: "Pending",
+      source: "Ads",
     };
 
     try {
@@ -300,7 +303,7 @@ export default function AdsLandingPage() {
               <motion.div
                 animate={{ y: [0, -8, 0] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="w-32 sm:w-44 md:w-52 lg:hidden flex-shrink-0"
+                className="h-36 sm:h-48 md:h-56 w-auto lg:hidden flex-shrink-0 object-contain"
               >
                 <img
                   src="/hero_doctor.png"

@@ -39,6 +39,11 @@ const admissionFormSchema = new mongoose.Schema(
       type: String,
       default: '',
     },
+    source: {
+      type: String,
+      enum: ['Website', 'Ads'],
+      default: 'Website',
+    },
   },
   {
     timestamps: true,
