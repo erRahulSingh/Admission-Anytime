@@ -254,7 +254,7 @@ export default function Footer() {
       <div className="fixed bottom-6 right-6 z-50 flex items-center justify-center">
         <span className="absolute w-14 h-14 bg-[#25D366] rounded-full whatsapp-pulse z-0" />
         <a
-          href="https://wa.me/919876543210?text=Hi!%20I%20am%2520interested%2520in%2520Admission%2520Guidance"
+          href="https://wa.me/919876543210?text=Hi!%20I%20am%20interested%20in%20Admission%20Guidance"
           target="_blank"
           rel="noopener noreferrer"
           className="relative z-10 bg-[#25D366] hover:bg-[#20ba5a] text-white p-4 rounded-full shadow-2xl hover:scale-110 active:scale-95 transition-all duration-300 flex items-center justify-center text-2xl shadow-green-500/20"

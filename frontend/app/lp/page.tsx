@@ -123,8 +123,8 @@ export default function AdsLandingPage() {
       } else {
         // Create new record
         const res: any = await api.post("/admissions", payload);
-        if (res?.data?.success && res.data.lead?._id) {
-          setLeadId(res.data.lead._id);
+        if (res?.success && res.lead?._id) {
+          setLeadId(res.lead._id);
         }
       }
       setStep(2);
@@ -185,6 +185,8 @@ export default function AdsLandingPage() {
     try {
       if (leadId && !leadId.startsWith("mock-id-")) {
         await api.put(`/admissions/${leadId}`, payload);
+      } else {
+        await api.post("/admissions", payload);
       }
       setSuccess(true);
     } catch (err: unknown) {
@@ -298,7 +300,7 @@ export default function AdsLandingPage() {
               <motion.div
                 animate={{ y: [0, -8, 0] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="w-24 sm:w-32 md:w-36 lg:hidden flex-shrink-0"
+                className="w-32 sm:w-44 md:w-52 lg:hidden flex-shrink-0"
               >
                 <img
                   src="/hero_doctor.png"
@@ -714,7 +716,7 @@ export default function AdsLandingPage() {
           <FaPhoneAlt size={10} /> Call Counselor
         </a>
         <a
-          href="https://wa.me/919876543210?text=Hi!%20I%20am%2520interested%2520in%2520MBBS%2520Admission%2520Guidance"
+          href="https://wa.me/919876543210?text=Hi!%20I%20am%20interested%20in%20MBBS%20Admission%20Guidance"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center justify-center gap-2 bg-[#16A34A] hover:bg-[#117f39] text-white font-black py-3.5 px-5 rounded-xl text-xs flex-1 uppercase tracking-wider shadow-lg active:scale-95 transition-all"
