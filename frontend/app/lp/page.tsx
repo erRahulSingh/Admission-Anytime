@@ -216,7 +216,7 @@ export default function AdsLandingPage() {
 
   return (
     <div className="bg-[#f8fafc] text-slate-800 min-h-screen font-sans antialiased pb-20 md:pb-0">
-      
+
       {/* ═══ 1. Mini Header ═══ */}
       <header className="bg-white border-b border-slate-100 py-4 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 flex justify-between items-center">
@@ -252,9 +252,9 @@ export default function AdsLandingPage() {
       {/* ═══ 2. Premium Hero Banner & Interactive Wizard Form ═══ */}
       <section className="relative py-8 md:py-16 overflow-hidden border-b border-slate-100 bg-gradient-to-b from-[#e0eff8]/50 via-[#f0f5fa]/30 to-[#f8fafc]">
         <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#0F4C81_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
-        
+
         <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-10">
-          
+
           {/* Hero left content */}
           <div className="lg:col-span-7 space-y-4 animate-fade-in">
             <div className="flex flex-row items-center justify-between gap-4">
@@ -264,7 +264,7 @@ export default function AdsLandingPage() {
                   <div className="absolute left-0 w-11 h-11 bg-gradient-to-br from-[#ff5200] to-[#ff7300] rounded-full flex items-center justify-center shadow-md border-2 border-white z-10">
                     <FaGraduationCap className="text-white text-base" />
                   </div>
-                  <div className="bg-gradient-to-r from-[#d9a834] via-[#4d8fae] to-[#0e75bc] text-white text-[10px] md:text-[11px] font-black uppercase tracking-wider pl-8 pr-6 py-2.5 rounded-full shadow-md leading-none">
+                  <div className="bg-gradient-to-r from-[#d9a834] via-[#4d8fae] to-[#0e75bc] text-white text-[8px] md:text-[10px] font-black uppercase tracking-wider pl-8 pr-6 py-2.5 rounded-full shadow-md leading-none">
                     ISO 9001:2015 Certified Consultants
                   </div>
                 </div>
@@ -272,7 +272,7 @@ export default function AdsLandingPage() {
                   initial={{ opacity: 0, y: -15 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6 }}
-                  className="text-3xl md:text-5xl font-extrabold leading-tight tracking-wide text-[#0F4C81]"
+                  className="text-2xl md:text-4xl font-extrabold leading-tight tracking-wide text-[#0F4C81]"
                 >
                   Secure Direct MBBS <br />
                   <span className="text-[#FFC107] drop-shadow-sm">Admissions 2026</span>
@@ -280,30 +280,29 @@ export default function AdsLandingPage() {
 
                 {/* Benefit badges */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-md">
-                  <div className="flex items-center gap-3 text-xs font-bold text-slate-700">
+                  <div className="flex items-center gap-3 text-xs font-bold text-slate-500">
                     <FaCheckCircle className="text-[#0F4C81] text-lg flex-shrink-0" />
                     <span>Zero Donation / Pay Direct Fees</span>
                   </div>
-                  <div className="flex items-center gap-3 text-xs font-bold text-slate-700">
+                  <div className="flex items-center gap-3 text-xs font-bold text-slate-500">
                     <FaCheckCircle className="text-[#0F4C81] text-lg flex-shrink-0" />
                     <span>NMC Guideline Compliant</span>
                   </div>
-                  <div className="flex items-center gap-3 text-xs font-bold text-slate-700">
+                  <div className="flex items-center gap-3 text-xs font-bold text-slate-500">
                     <FaCheckCircle className="text-[#0F4C81] text-lg flex-shrink-0" />
                     <span>100% English Curriculum</span>
                   </div>
-                  <div className="flex items-center gap-3 text-xs font-bold text-slate-700">
+                  <div className="flex items-center gap-3 text-xs font-bold text-slate-500">
                     <FaCheckCircle className="text-[#0F4C81] text-lg flex-shrink-0" />
                     <span>NExT / FMGE Training Support</span>
                   </div>
                 </div>
               </div>
 
-              {/* Floating Doctor Image - Only visible in mobile and tablet, hidden on desktop */}
               <motion.div
                 animate={{ y: [0, -8, 0] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="h-36 sm:h-48 md:h-56 w-auto lg:hidden flex-shrink-0 object-contain"
+                className="w-24 sm:w-32 md:w-36 lg:hidden flex-shrink-0"
               >
                 <img
                   src="/hero_doctor.png"
@@ -317,7 +316,7 @@ export default function AdsLandingPage() {
           {/* Interactive Multi-step Lead Wizard Right */}
           <div id="lead-wizard-card" className="lg:col-span-5">
             <div className="bg-white border border-slate-200/80 rounded-3xl p-5 md:p-6 shadow-xl space-y-4 relative overflow-hidden">
-              
+
               {/* Top Progress bar */}
               <div className="space-y-2">
                 <div className="flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-wider">
@@ -350,7 +349,7 @@ export default function AdsLandingPage() {
                 </div>
               ) : (
                 <div className="space-y-4">
-                  
+
                   {/* Step 1: Contact Info */}
                   {step === 1 && (
                     <div className="space-y-4">
@@ -435,11 +434,10 @@ export default function AdsLandingPage() {
                               key={item.val}
                               type="button"
                               onClick={() => setPreference(item.val)}
-                              className={`py-3 px-2 rounded-xl text-xs font-semibold transition-all ${
-                                preference === item.val
-                                  ? "bg-[#0F4C81] text-white shadow-md"
-                                  : "bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100"
-                              }`}
+                              className={`py-3 px-2 rounded-xl text-xs font-semibold transition-all ${preference === item.val
+                                ? "bg-[#0F4C81] text-white shadow-md"
+                                : "bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100"
+                                }`}
                             >
                               {item.label}
                             </button>
