@@ -252,38 +252,60 @@ export default function AdsLandingPage() {
           
           {/* Hero left content */}
           <div className="lg:col-span-7 space-y-4 animate-fade-in">
-            {/* Customized Certified Badge */}
-            <div className="relative inline-flex items-center pl-6 select-none pb-2">
-              <div className="absolute left-0 w-11 h-11 bg-gradient-to-br from-[#ff5200] to-[#ff7300] rounded-full flex items-center justify-center shadow-md border-2 border-white z-10">
-                <FaGraduationCap className="text-white text-base" />
-              </div>
-              <div className="bg-gradient-to-r from-[#d9a834] via-[#4d8fae] to-[#0e75bc] text-white text-[10px] md:text-[11px] font-black uppercase tracking-wider pl-8 pr-6 py-2.5 rounded-full shadow-md leading-none">
-                ISO 9001:2015 Certified Consultants
-              </div>
-            </div>
-            <h1 className="text-3xl md:text-5xl font-extrabold leading-tight tracking-wide text-[#0F4C81]">
-              Secure Direct MBBS <br />
-              <span className="text-[#FFC107] drop-shadow-sm">Admissions 2026</span>
-            </h1>
+            <div className="flex flex-row items-center justify-between gap-4">
+              <div className="space-y-4 flex-1">
+                {/* Customized Certified Badge */}
+                <div className="relative inline-flex items-center pl-6 select-none pb-2">
+                  <div className="absolute left-0 w-11 h-11 bg-gradient-to-br from-[#ff5200] to-[#ff7300] rounded-full flex items-center justify-center shadow-md border-2 border-white z-10">
+                    <FaGraduationCap className="text-white text-base" />
+                  </div>
+                  <div className="bg-gradient-to-r from-[#d9a834] via-[#4d8fae] to-[#0e75bc] text-white text-[10px] md:text-[11px] font-black uppercase tracking-wider pl-8 pr-6 py-2.5 rounded-full shadow-md leading-none">
+                    ISO 9001:2015 Certified Consultants
+                  </div>
+                </div>
+                <motion.h1
+                  initial={{ opacity: 0, y: -15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6 }}
+                  className="text-3xl md:text-5xl font-extrabold leading-tight tracking-wide text-[#0F4C81]"
+                >
+                  Secure Direct MBBS <br />
+                  <span className="text-[#FFC107] drop-shadow-sm">Admissions 2026</span>
+                </motion.h1>
 
-            {/* Benefit badges */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-md">
-              <div className="flex items-center gap-3 text-xs font-bold text-slate-700">
-                <FaCheckCircle className="text-[#0F4C81] text-lg flex-shrink-0" />
-                <span>Zero Donation / Pay Direct Fees</span>
+                {/* Benefit badges */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-md">
+                  <div className="flex items-center gap-3 text-xs font-bold text-slate-700">
+                    <FaCheckCircle className="text-[#0F4C81] text-lg flex-shrink-0" />
+                    <span>Zero Donation / Pay Direct Fees</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-xs font-bold text-slate-700">
+                    <FaCheckCircle className="text-[#0F4C81] text-lg flex-shrink-0" />
+                    <span>NMC Guideline Compliant</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-xs font-bold text-slate-700">
+                    <FaCheckCircle className="text-[#0F4C81] text-lg flex-shrink-0" />
+                    <span>100% English Curriculum</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-xs font-bold text-slate-700">
+                    <FaCheckCircle className="text-[#0F4C81] text-lg flex-shrink-0" />
+                    <span>NExT / FMGE Training Support</span>
+                  </div>
+                </div>
               </div>
-              <div className="flex items-center gap-3 text-xs font-bold text-slate-700">
-                <FaCheckCircle className="text-[#0F4C81] text-lg flex-shrink-0" />
-                <span>NMC Guideline Compliant</span>
-              </div>
-              <div className="flex items-center gap-3 text-xs font-bold text-slate-700">
-                <FaCheckCircle className="text-[#0F4C81] text-lg flex-shrink-0" />
-                <span>100% English Curriculum</span>
-              </div>
-              <div className="flex items-center gap-3 text-xs font-bold text-slate-700">
-                <FaCheckCircle className="text-[#0F4C81] text-lg flex-shrink-0" />
-                <span>NExT / FMGE Training Support</span>
-              </div>
+
+              {/* Floating Doctor Image - Only visible in mobile and tablet, hidden on desktop */}
+              <motion.div
+                animate={{ y: [0, -8, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                className="w-24 sm:w-32 md:w-36 lg:hidden flex-shrink-0"
+              >
+                <img
+                  src="/hero_doctor.png"
+                  alt="MBBS Doctor"
+                  className="w-full h-auto object-contain rounded-2xl drop-shadow-lg"
+                />
+              </motion.div>
             </div>
           </div>
 
@@ -334,7 +356,7 @@ export default function AdsLandingPage() {
 
                       {/* Name */}
                       <div className="relative">
-                        <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                        <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-550">
                           <FaUser size={12} />
                         </span>
                         <input
@@ -343,13 +365,13 @@ export default function AdsLandingPage() {
                           placeholder="Your Full Name *"
                           value={name}
                           onChange={(e) => setName(e.target.value)}
-                          className="w-full bg-slate-50/80 border border-slate-200 rounded-xl pl-9 pr-4 py-3 text-xs font-semibold outline-none focus:border-[#0F4C81] focus:bg-white text-slate-800 transition-all"
+                          className="w-full bg-slate-50/85 border border-slate-300 rounded-xl pl-9 pr-4 py-3 text-xs font-bold outline-none focus:border-[#0F4C81] focus:bg-white text-slate-950 placeholder-slate-700 transition-all shadow-sm"
                         />
                       </div>
 
                       {/* Phone */}
                       <div className="relative">
-                        <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                        <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-550">
                           <FaPhoneAlt size={11} />
                         </span>
                         <input
@@ -358,13 +380,13 @@ export default function AdsLandingPage() {
                           placeholder="WhatsApp Mobile Number *"
                           value={phone}
                           onChange={(e) => setPhone(e.target.value)}
-                          className="w-full bg-slate-50/80 border border-slate-200 rounded-xl pl-9 pr-4 py-3 text-xs font-semibold outline-none focus:border-[#0F4C81] focus:bg-white text-slate-800 transition-all"
+                          className="w-full bg-slate-50/85 border border-slate-300 rounded-xl pl-9 pr-4 py-3 text-xs font-bold outline-none focus:border-[#0F4C81] focus:bg-white text-slate-950 placeholder-slate-700 transition-all shadow-sm"
                         />
                       </div>
 
                       {/* Email */}
                       <div className="relative">
-                        <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                        <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-550">
                           <FaEnvelope size={11} />
                         </span>
                         <input
@@ -373,7 +395,7 @@ export default function AdsLandingPage() {
                           placeholder="Email Address *"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
-                          className="w-full bg-slate-50/80 border border-slate-200 rounded-xl pl-9 pr-4 py-3 text-xs font-semibold outline-none focus:border-[#0F4C81] focus:bg-white text-slate-800 transition-all"
+                          className="w-full bg-slate-50/85 border border-slate-300 rounded-xl pl-9 pr-4 py-3 text-xs font-bold outline-none focus:border-[#0F4C81] focus:bg-white text-slate-950 placeholder-slate-700 transition-all shadow-sm"
                         />
                       </div>
 
@@ -469,7 +491,7 @@ export default function AdsLandingPage() {
 
                       {/* NEET Score */}
                       <div className="relative">
-                        <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                        <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-550">
                           <FaGraduationCap size={13} />
                         </span>
                         <input
@@ -478,17 +500,17 @@ export default function AdsLandingPage() {
                           placeholder="NEET Score (Enter 0 if not qualified) *"
                           value={neetScore}
                           onChange={(e) => setNeetScore(e.target.value)}
-                          className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-3 text-xs font-semibold outline-none focus:border-[#0F4C81] focus:bg-white text-slate-800 transition-all"
+                          className="w-full bg-slate-50 border border-slate-300 rounded-xl pl-10 pr-4 py-3 text-xs font-bold outline-none focus:border-[#0F4C81] focus:bg-white text-slate-950 placeholder-slate-700 transition-all shadow-sm"
                         />
                       </div>
 
                       {/* Budget */}
                       <div className="space-y-2">
-                        <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-wider">Target Budget Range</label>
+                        <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider">Target Budget Range</label>
                         <select
                           value={budget}
                           onChange={(e) => setBudget(e.target.value)}
-                          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs font-semibold outline-none focus:border-[#0F4C81] focus:bg-white text-slate-800 transition-all"
+                          className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-xs font-bold outline-none focus:border-[#0F4C81] focus:bg-white text-slate-950 transition-all shadow-sm"
                         >
                           <option value="15-20 Lakhs">15 - 20 Lakhs Total</option>
                           <option value="20-25 Lakhs">20 - 25 Lakhs Total</option>
@@ -503,7 +525,7 @@ export default function AdsLandingPage() {
                         placeholder="Mention preferences, budget constraints or target colleges..."
                         value={notes}
                         onChange={(e) => setNotes(e.target.value)}
-                        className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs font-semibold outline-none focus:border-[#0F4C81] focus:bg-white text-slate-800 transition-all"
+                        className="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-xs font-bold outline-none focus:border-[#0F4C81] focus:bg-white text-slate-950 placeholder-slate-700 transition-all shadow-sm"
                       />
 
                       <div className="grid grid-cols-2 gap-3 mt-4">
@@ -533,7 +555,7 @@ export default function AdsLandingPage() {
       </section>
 
       {/* ═══ 3. Study Abroad Destinations (Clickable Flag Cards) ═══ */}
-      <section className="py-16 max-w-6xl mx-auto px-4 space-y-12">
+      <section className="pt-2 pb-16 md:py-16 max-w-6xl mx-auto px-4 space-y-6 md:space-y-12">
         <div className="text-center space-y-2">
           <h2 className="text-2xl md:text-4xl font-black text-[#0F4C81] tracking-wider uppercase">
             Top MBBS Destinations
@@ -543,36 +565,40 @@ export default function AdsLandingPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
           {countriesData.map((c, idx) => (
             <motion.div
               key={idx}
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: idx * 0.05 }}
               whileHover={{ y: -5 }}
               onClick={() => handleCountryCardClick(c.name)}
-              className="bg-white border border-slate-200/80 rounded-2xl p-5 hover:border-[#0F4C81] hover:shadow-lg transition-all cursor-pointer shadow-sm flex flex-col justify-between space-y-4 group"
+              className="bg-white border border-slate-200/80 border-l-4 border-l-[#0F4C81] md:border-l-slate-200/80 md:border-l rounded-2xl p-3 md:p-5 hover:border-l-[#FFC107] md:hover:border-[#0F4C81] hover:shadow-lg transition-all cursor-pointer shadow-sm flex flex-col justify-between space-y-4 group"
             >
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1.5 md:gap-2">
                     <img
                       src={`https://flagcdn.com/w40/${c.code}.png`}
                       alt={c.name}
-                      className="w-7 h-auto object-cover rounded shadow border border-slate-100"
+                      className="w-6 md:w-7 h-auto object-cover rounded shadow border border-slate-100"
                     />
-                    <h3 className="font-black text-sm text-slate-800 group-hover:text-[#0F4C81] transition-colors">{c.name}</h3>
+                    <h3 className="font-black text-xs md:text-sm text-slate-800 group-hover:text-[#0F4C81] transition-colors">{c.name}</h3>
                   </div>
-                  <FaGlobe className="text-slate-400 group-hover:text-[#0F4C81] transition-colors text-xs" />
+                  <FaGlobe className="text-slate-450 group-hover:text-[#0F4C81] transition-colors text-[10px] md:text-xs" />
                 </div>
 
-                <div className="space-y-1.5 text-[11px] text-slate-500 font-semibold leading-relaxed">
-                  <p>💰 <strong className="text-slate-700 font-bold">Avg Cost:</strong> {c.budget}</p>
-                  <p>⏳ <strong className="text-slate-700 font-bold">Duration:</strong> {c.duration}</p>
-                  <p>📈 <strong className="text-slate-700 font-bold">FMGE Pass Ratio:</strong> {c.fmge}</p>
+                <div className="space-y-1 md:space-y-1.5 text-[10px] md:text-[11px] text-slate-500 font-semibold leading-relaxed">
+                  <p>💰 <strong className="text-slate-700 font-bold">Cost:</strong> {c.budget}</p>
+                  <p>⏳ <strong className="text-slate-700 font-bold">Dur:</strong> {c.duration}</p>
+                  <p>📈 <strong className="text-slate-700 font-bold">FMGE:</strong> {c.fmge}</p>
                 </div>
               </div>
 
-              <div className="text-[10px] text-[#0F4C81] font-black uppercase flex items-center gap-1 group-hover:underline pt-2 border-t border-slate-100">
-                Apply Counseling <FaArrowRight size={8} />
+              <div className="text-[9px] md:text-[10px] text-[#0F4C81] font-black uppercase flex items-center gap-1 group-hover:underline pt-2 border-t border-slate-100">
+                Apply <FaArrowRight size={7} />
               </div>
             </motion.div>
           ))}
@@ -591,18 +617,26 @@ export default function AdsLandingPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 relative">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-8 relative">
             {[
               { step: "01", title: "Counselling & Selection", desc: "Select target country and budget guidelines with our expert counselors." },
               { step: "02", title: "Document Verification", desc: "Verify class 12th transcripts, eligibility parameters, and NEET scorecards." },
               { step: "03", title: "Admissions Letter", desc: "Receive the official admission invitation directly from the selected foreign university." },
               { step: "04", title: "Visa & Departure", desc: "Complete medical checkups, translation stamps, flight schedules, and pre-departure briefings." },
             ].map((node, idx) => (
-              <div key={idx} className="bg-white border border-slate-200/80 p-6 rounded-2xl space-y-3 relative group shadow-sm">
-                <span className="text-2xl font-black text-[#FFC107] block">{node.step}</span>
-                <h3 className="font-extrabold text-sm text-slate-800 group-hover:text-[#0F4C81] transition-colors">{node.title}</h3>
-                <p className="text-[11px] text-slate-500 font-semibold leading-relaxed">{node.desc}</p>
-              </div>
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: idx * 0.08 }}
+                whileHover={{ y: -4 }}
+                className="bg-white border border-slate-200/80 border-t-4 border-t-[#FFC107] md:border-t-slate-200/80 md:border-t rounded-2xl p-4 md:p-6 space-y-3 relative group shadow-sm hover:shadow-md hover:border-t-[#0F4C81] transition-all"
+              >
+                <span className="text-xl md:text-2xl font-black text-[#FFC107] block">{node.step}</span>
+                <h3 className="font-extrabold text-xs md:text-sm text-slate-800 group-hover:text-[#0F4C81] transition-colors leading-snug">{node.title}</h3>
+                <p className="text-[10px] md:text-[11px] text-slate-500 font-semibold leading-relaxed">{node.desc}</p>
+              </motion.div>
             ))}
           </div>
         </div>
