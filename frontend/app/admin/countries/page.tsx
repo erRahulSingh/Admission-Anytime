@@ -54,7 +54,7 @@ export default function AdminCountriesPage() {
       if (data && data.success) {
         setCountries(data.countries);
       }
-    } catch (err) {
+    } catch (err: unknown) {
       console.warn("Failed fetching admin countries. Using fallback database.");
       setCountries([
         {
@@ -122,7 +122,7 @@ export default function AdminCountriesPage() {
       resetAddForm();
       setShowAddForm(false);
       loadCountries();
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(err);
       // Local addition fallback
       const mockCountry: Country = {
@@ -170,7 +170,7 @@ export default function AdminCountriesPage() {
       await api.put(`/countries/${editingCountry._id}`, payload);
       setEditingCountry(null);
       loadCountries();
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(err);
       // Fallback local update
       setCountries(prev =>
@@ -202,7 +202,7 @@ export default function AdminCountriesPage() {
     try {
       await api.delete(`/countries/${id}`);
       loadCountries();
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(err);
       setCountries(prev => prev.filter(c => c._id !== id));
     }

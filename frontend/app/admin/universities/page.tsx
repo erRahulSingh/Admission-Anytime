@@ -65,7 +65,7 @@ export default function AdminUniversitiesPage() {
       if (uniData && uniData.success) {
         setUnis(uniData.universities);
       }
-    } catch (err) {
+    } catch (err: unknown) {
       console.warn("Failed retrieving universities. Utilizing fallback database.");
       setCountries([
         { _id: "c-1", name: "Georgia", slug: "georgia" } as any,
@@ -141,7 +141,7 @@ export default function AdminUniversitiesPage() {
       resetAddForm();
       setShowAddForm(false);
       loadData();
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(err);
       // Local fallback creation
       const chosenCountry = countries.find(c => c._id === countryId);
@@ -191,7 +191,7 @@ export default function AdminUniversitiesPage() {
       await api.put(`/universities/${editingUni._id}`, payload);
       setEditingUni(null);
       loadData();
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(err);
       // Fallback local update
       const chosenCountry = countries.find(c => c._id === editCountryId);
@@ -229,7 +229,7 @@ export default function AdminUniversitiesPage() {
     try {
       await api.delete(`/universities/${id}`);
       loadData();
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(err);
       setUnis(prev => prev.filter(u => u._id !== id));
     }

@@ -42,7 +42,7 @@ export default function AdminServicesPage() {
       if (data && data.success) {
         setServices(data.services);
       }
-    } catch (err) {
+    } catch (err: unknown) {
       console.warn("Failed retrieving services. Utilizing fallback database.");
       setServices([
         {
@@ -89,7 +89,7 @@ export default function AdminServicesPage() {
       resetAddForm();
       setShowAddForm(false);
       loadServices();
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(err);
       // Local fallback addition
       const mockService: ServiceModel = {
@@ -122,7 +122,7 @@ export default function AdminServicesPage() {
       await api.put(`/services/${editingService._id}`, payload);
       setEditingService(null);
       loadServices();
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(err);
       // Local fallback update
       setServices(prev =>
@@ -147,7 +147,7 @@ export default function AdminServicesPage() {
     try {
       await api.delete(`/services/${id}`);
       loadServices();
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(err);
       setServices(prev => prev.filter(s => s._id !== id));
     }

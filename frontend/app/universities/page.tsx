@@ -113,7 +113,7 @@ export default function UniversitiesFinderPage() {
         if (data && data.success) {
           setUnis(data.universities);
         }
-      } catch (err) {
+      } catch (err: unknown) {
         console.warn("Failed loading universities from backend. Fallback to mock data.");
         // Filter fallback static list locally
         let list = [...fallbackUnis];

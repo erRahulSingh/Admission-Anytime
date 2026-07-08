@@ -52,7 +52,7 @@ export default function AdminAdmissionFormsPage() {
       if (data && data.success) {
         setLeads(data.leads);
       }
-    } catch (err) {
+    } catch (err: unknown) {
       console.warn("Failed retrieving live leads from backend. Falling back to mock leads.");
       setLeads([
         {
@@ -122,7 +122,7 @@ export default function AdminAdmissionFormsPage() {
       await api.put(`/admissions/${editingLead._id}`, payload);
       setEditingLead(null);
       loadLeads();
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(err);
       // Fallback local edit update for mock environment
       setLeads(prev =>
@@ -155,7 +155,7 @@ export default function AdminAdmissionFormsPage() {
       setIsAdding(false);
       resetAddForm();
       loadLeads();
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(err);
       // Fallback local creation for mock environment
       const mockLead: AdmissionFormLead = {
@@ -186,7 +186,7 @@ export default function AdminAdmissionFormsPage() {
     try {
       await api.delete(`/admissions/${id}`);
       loadLeads();
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(err);
       setLeads(prev => prev.filter(l => l._id !== id));
     }

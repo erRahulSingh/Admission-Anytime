@@ -131,7 +131,7 @@ export default function CountryPage({ params }: CountryPageProps) {
             setUnis(uniRes.universities);
           }
         }
-      } catch (err) {
+      } catch (err: unknown) {
         console.warn("Failed fetching from backend. Utilizing fallback database profiles.", err);
         // Fallback static files
         const matchedCountry = fallbackCountries[countrySlug] || {

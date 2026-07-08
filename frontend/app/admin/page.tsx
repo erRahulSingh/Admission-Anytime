@@ -30,7 +30,7 @@ export default function AdminDashboardPage() {
           setRecentLeads(data.recentLeads);
           setRecentContacts(data.recentContacts);
         }
-      } catch (err) {
+      } catch (err: unknown) {
         console.warn("Failed fetching live stats, falling back to mock dashboard stats.");
         setStats({
           totalLeads: 24,

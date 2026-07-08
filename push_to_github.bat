@@ -23,7 +23,7 @@ git add .
 
 :: Commit changes
 echo [4/4] Committing updates...
-git commit -m "Upgrade site footer, admin CRM modules, layout exclusion routes, and premium Facebook Ads landing page"
+git commit -m "Fix: Remove hardcoded local path from next.config, fix TypeScript catch blocks for production build"
 
 :: Push changes
 echo [5/5] Pushing code to GitHub...

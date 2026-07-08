@@ -34,7 +34,7 @@ export default function AdminContactRequestsPage() {
       if (data && data.success) {
         setContacts(data.contacts);
       }
-    } catch (err) {
+    } catch (err: unknown) {
       console.warn("Failed retrieving contact messages. Falling back to mock dataset.");
       setContacts([
         {
@@ -75,7 +75,7 @@ export default function AdminContactRequestsPage() {
       });
       setReplyingContact(null);
       loadContacts();
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(err);
       // Local updates fallback
       setContacts(prev =>
@@ -97,7 +97,7 @@ export default function AdminContactRequestsPage() {
     try {
       await api.delete(`/contacts/${id}`);
       loadContacts();
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(err);
       setContacts(prev => prev.filter(c => c._id !== id));
     }

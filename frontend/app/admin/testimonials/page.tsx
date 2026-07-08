@@ -47,7 +47,7 @@ export default function AdminTestimonialsPage() {
       if (data && data.success) {
         setReviews(data.testimonials);
       }
-    } catch (err) {
+    } catch (err: unknown) {
       console.warn("Failed retrieving testimonials. Utilizing fallback database.");
       setReviews([
         {
@@ -100,7 +100,7 @@ export default function AdminTestimonialsPage() {
       resetAddForm();
       setShowAddForm(false);
       loadTestimonials();
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(err);
       // Local fallback addition
       const mockReview: TestimonialModel = {
@@ -137,7 +137,7 @@ export default function AdminTestimonialsPage() {
       await api.put(`/testimonials/${editingReview._id}`, payload);
       setEditingReview(null);
       loadTestimonials();
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(err);
       // Local fallback update
       setReviews(prev =>
@@ -166,7 +166,7 @@ export default function AdminTestimonialsPage() {
     try {
       await api.delete(`/testimonials/${id}`);
       loadTestimonials();
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(err);
       setReviews(prev => prev.filter(r => r._id !== id));
     }

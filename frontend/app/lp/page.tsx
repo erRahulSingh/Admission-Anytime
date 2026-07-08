@@ -128,7 +128,7 @@ export default function AdsLandingPage() {
         }
       }
       setStep(2);
-    } catch (err) {
+    } catch (err: unknown) {
       console.warn("Failed saving step 1 lead. Proceeding client-side.");
       if (!leadId) setLeadId("mock-id-" + Date.now());
       setStep(2);
@@ -154,7 +154,7 @@ export default function AdsLandingPage() {
         await api.put(`/admissions/${leadId}`, payload);
       }
       setStep(3);
-    } catch (err) {
+    } catch (err: unknown) {
       console.warn("Failed updating step 2 lead. Proceeding client-side.");
       setStep(3);
     } finally {
@@ -187,7 +187,7 @@ export default function AdsLandingPage() {
         await api.put(`/admissions/${leadId}`, payload);
       }
       setSuccess(true);
-    } catch (err) {
+    } catch (err: unknown) {
       console.warn("Failed submitting final lead. Registering success locally.");
       setSuccess(true);
     } finally {
