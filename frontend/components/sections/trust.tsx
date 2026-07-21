@@ -73,20 +73,20 @@ export default function TrustSection() {
         </div>
 
         {/* Grid of Trust Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3.5 sm:gap-6">
           {trustFactors.map((factor, i) => (
             <div
               key={i}
-              className="bg-white border border-slate-200 rounded-xl p-5 flex flex-col items-center justify-center text-center gap-4 hover:shadow-lg hover:border-slate-350 hover:-translate-y-1 transition-all duration-300 group cursor-default"
+              className="bg-white border border-slate-200 rounded-xl p-3.5 sm:p-5 flex flex-col items-center justify-center text-center gap-2.5 sm:gap-4 hover:shadow-lg hover:border-slate-350 hover:-translate-y-1 transition-all duration-300 group cursor-default"
             >
-              <div className="text-[#0c2e60] text-3xl sm:text-4xl flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
+              <div className="text-[#0c2e60] text-2xl sm:text-4xl flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
                 {factor.icon}
               </div>
-              <div className="space-y-2">
-                <h3 className="text-xs sm:text-sm font-black text-[#0c2e60] tracking-wide group-hover:text-[#3b82f6] transition-colors">
+              <div className="space-y-1 sm:space-y-2">
+                <h3 className="text-[11px] sm:text-sm font-black text-[#0c2e60] tracking-wide group-hover:text-[#3b82f6] transition-colors leading-tight">
                   {factor.title}
                 </h3>
-                <p className="text-[10px] sm:text-[11px] text-slate-400 leading-relaxed font-semibold">
+                <p className="text-[9px] sm:text-[11px] text-slate-400 leading-relaxed font-semibold">
                   {factor.desc}
                 </p>
               </div>

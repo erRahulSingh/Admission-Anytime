@@ -10,7 +10,7 @@ git add .
 
 :: Commit changes
 echo [2/3] Committing updates...
-git commit -m "feat: complete mobile UI responsiveness, 1x2 cards grid, privacy & terms pages, hamburger header updates"
+git commit -m "feat: convert homepage trust section to 1x2 cards grid on mobile"
 
 :: Push changes
 echo [3/3] Pushing code to GitHub...
