@@ -89,8 +89,8 @@ export default function AdsLandingPage() {
       alert("Please enter your full name.");
       return false;
     }
-    if (!phone.trim() || phone.length < 10) {
-      alert("Please enter a valid 10-digit mobile number.");
+    if (!phone.trim()) {
+      alert("Please enter a valid mobile number.");
       return false;
     }
     if (!email.trim() || !email.includes("@")) {

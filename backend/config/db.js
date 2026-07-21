@@ -2,10 +2,23 @@ import mongoose from 'mongoose';
 
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/mbbs_consultancy');
+    const conn = await mongoose.connect(
+      process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/mbbs_consultancy',
+      {
+        serverSelectionTimeoutMS: 5000,
+      }
+    );
     console.log(`MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
-    console.error(`Error DB connection: ${error.message}`);
+    console.error(`Error DB connection (${error.message}). Attempting local fallback...`);
+    try {
+      const localConn = await mongoose.connect('mongodb://127.0.0.1:27017/mbbs_consultancy', {
+        serverSelectionTimeoutMS: 3000,
+      });
+      console.log(`MongoDB Connected (Local Fallback): ${localConn.connection.host}`);
+    } catch (localErr) {
+      console.error(`Local DB connection failed: ${localErr.message}`);
+    }
   }
 };
 

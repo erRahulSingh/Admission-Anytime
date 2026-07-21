@@ -10,23 +10,31 @@ import {
   FaBars,
   FaTimes,
   FaWhatsapp,
+  FaHome,
+  FaGraduationCap,
+  FaGlobe,
+  FaUniversity,
+  FaHandHoldingMedical,
+  FaInfoCircle,
+  FaEnvelope,
 } from "react-icons/fa";
 
 type NavLink = {
   label: string;
   href: string;
+  icon?: React.ReactNode;
   hasDropdown?: boolean;
   children?: { label: string; href: string }[];
 };
 
 const navLinks: NavLink[] = [
-  { label: "HOME", href: "/" },
-  { label: "MBBS IN INDIA", href: "/mbbs-india" },
-  { label: "MBBS ABROAD", href: "/mbbs-abroad" },
-  { label: "UNIVERSITIES", href: "/universities" },
-  { label: "SERVICES", href: "/services" },
-  { label: "ABOUT US", href: "/about" },
-  { label: "CONTACT US", href: "/contact" },
+  { label: "HOME", href: "/", icon: <FaHome /> },
+  { label: "MBBS IN INDIA", href: "/mbbs-india", icon: <FaGraduationCap /> },
+  { label: "MBBS ABROAD", href: "/mbbs-abroad", icon: <FaGlobe /> },
+  { label: "UNIVERSITIES", href: "/universities", icon: <FaUniversity /> },
+  { label: "SERVICES", href: "/services", icon: <FaHandHoldingMedical /> },
+  { label: "ABOUT US", href: "/about", icon: <FaInfoCircle /> },
+  { label: "CONTACT US", href: "/contact", icon: <FaEnvelope /> },
 ];
 
 export default function Navbar() {
@@ -124,21 +132,11 @@ export default function Navbar() {
             >
               +91 98765 43210
             </a>
-            <span className="text-[10px] font-semibold text-slate-400 mt-0.5 block tracking-wider">
-              (10AM - 7PM)
-            </span>
           </div>
         </div>
 
-        {/* ─── Mobile Actions (Phone & Hamburger) ─── */}
-        <div className="flex items-center gap-2 lg:hidden">
-          <a
-            href="tel:+919876543210"
-            className="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 text-[#0F4C81] hover:bg-blue-50 transition-colors"
-            aria-label="Call Us"
-          >
-            <FaPhoneAlt size={14} />
-          </a>
+        {/* ─── Mobile Action (Only Hamburger) ─── */}
+        <div className="flex items-center lg:hidden">
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 text-[#0F4C81] hover:bg-blue-50 transition-colors"
@@ -149,53 +147,88 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* ─── Mobile Slide-Down Menu ─── */}
+      {/* ─── Mobile Right Slide-Over Drawer Menu ─── */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.25 }}
-            className="lg:hidden bg-white border-t border-slate-100 overflow-hidden"
-          >
-            <div className="max-w-[1280px] mx-auto px-4 sm:px-6 py-5 space-y-1">
-              {navLinks.map((link) => (
-                <div key={link.label}>
-                  <Link
-                    href={link.href}
-                    onClick={() => setIsOpen(false)}
-                    className="flex items-center justify-between py-3 px-3 rounded-lg text-sm font-extrabold text-[#1a1a2e] hover:bg-blue-50 hover:text-[#0F4C81] transition-colors"
-                  >
-                    {link.label}
-                    {link.hasDropdown && (
-                      <FaChevronDown className="text-[10px] opacity-40" />
-                    )}
-                  </Link>
-                </div>
-              ))}
+          <>
+            {/* Backdrop Overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsOpen(false)}
+              className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs lg:hidden"
+            />
 
-              {/* Mobile CTA strip */}
-              <div className="pt-4 mt-2 border-t border-slate-100 flex flex-col sm:flex-row gap-3">
+            {/* Right Side Compact Card Panel */}
+            <motion.div
+              initial={{ x: "100%", opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: "100%", opacity: 0 }}
+              transition={{ type: "spring", damping: 25, stiffness: 280 }}
+              className="fixed top-16 right-3 z-50 w-[82%] max-w-[300px] h-auto max-h-[85vh] bg-white border border-slate-200/90 shadow-2xl rounded-2xl flex flex-col justify-between lg:hidden overflow-hidden"
+            >
+              {/* Drawer Top Header */}
+              <div>
+                <div className="flex items-center justify-between p-3.5 border-b border-slate-100 bg-slate-50/70">
+                  <span className="text-[11px] font-black text-[#0c2e60] uppercase tracking-wider">
+                    Quick Navigation
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setIsOpen(false)}
+                    className="w-7 h-7 rounded-full bg-slate-200/70 hover:bg-slate-200 text-[#0c2e60] flex items-center justify-center text-xs transition-colors"
+                  >
+                    <FaTimes />
+                  </button>
+                </div>
+
+                {/* Nav Links with Icons */}
+                <div className="p-3 space-y-1 overflow-y-auto max-h-[55vh]">
+                  {navLinks.map((link) => (
+                    <Link
+                      key={link.label}
+                      href={link.href}
+                      onClick={() => setIsOpen(false)}
+                      className={`flex items-center gap-3 py-2 px-3 rounded-xl text-[12px] font-black transition-all ${
+                        pathname === link.href
+                          ? "bg-[#0c2e60] text-white shadow-sm"
+                          : "text-[#0c2e60] hover:bg-blue-50"
+                      }`}
+                    >
+                      <span className={`text-sm flex-shrink-0 ${pathname === link.href ? "text-[#f9a825]" : "text-[#0F4C81]"}`}>
+                        {link.icon}
+                      </span>
+                      <span className="flex-1">{link.label}</span>
+                      {link.hasDropdown && (
+                        <FaChevronDown className="text-[10px] opacity-40" />
+                      )}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              {/* Drawer Bottom CTA Strip */}
+              <div className="p-3 border-t border-slate-100 bg-slate-50/70 space-y-2">
                 <a
                   href="tel:+919876543210"
-                  className="flex items-center justify-center gap-2 bg-[#0F4C81] text-white font-bold py-3 px-5 rounded-xl text-sm flex-1"
+                  className="flex items-center justify-center gap-2 bg-[#0c2e60] hover:bg-[#0a2550] text-white font-extrabold py-3 px-4 rounded-xl text-xs shadow-md transition-all active:scale-95"
                 >
-                  <FaPhoneAlt size={13} />
+                  <FaPhoneAlt size={12} />
                   +91 98765 43210
                 </a>
                 <a
                   href="https://wa.me/919876543210"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 bg-[#16a34a] text-white font-bold py-3 px-5 rounded-xl text-sm flex-1"
+                  className="flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] text-white font-extrabold py-3 px-4 rounded-xl text-xs shadow-md transition-all active:scale-95"
                 >
-                  <FaWhatsapp size={15} />
-                  WhatsApp
+                  <FaWhatsapp size={14} />
+                  WhatsApp Us
                 </a>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </header>

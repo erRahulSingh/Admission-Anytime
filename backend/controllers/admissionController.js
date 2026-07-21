@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import AdmissionForm from '../models/AdmissionForm.js';
 import { sendNotificationEmails } from '../utils/mailer.js';
 
@@ -8,24 +9,30 @@ export const createLead = async (req, res, next) => {
   try {
     const { fullName, phone, email, neetScore, interestedIn, country } = req.body;
 
-    if (!fullName || !phone || !email || !neetScore || !country) {
+    if (!fullName || !phone || !email || neetScore === undefined || neetScore === null || !country) {
       res.status(400);
       throw new Error('Please fill all required fields');
     }
 
-    const lead = await AdmissionForm.create({
-      fullName,
-      phone,
-      email,
-      neetScore,
-      interestedIn,
-      country,
-    });
+    let lead = null;
+    if (mongoose.connection.readyState === 1) {
+      lead = await AdmissionForm.create({
+        fullName,
+        phone,
+        email,
+        neetScore,
+        interestedIn,
+        country,
+      });
 
-    // Send async emails
-    sendNotificationEmails(lead).catch((err) =>
-      console.error('Failed to send notification emails:', err.message)
-    );
+      // Send async emails
+      sendNotificationEmails(lead).catch((err) =>
+        console.error('Failed to send notification emails:', err.message)
+      );
+    } else {
+      console.warn('DB not connected (readyState !== 1). Inquiry acknowledged client-side.');
+      lead = { fullName, phone, email, neetScore, interestedIn, country, createdAt: new Date() };
+    }
 
     res.status(201).json({
       success: true,

@@ -211,13 +211,13 @@ export default function ServicesPage() {
     <div className="bg-[#fafcff] min-h-screen pb-16">
       
       {/* ═══ 1. Banner ═══ */}
-      <div className="relative bg-[#0c2e60] text-white pt-16 pb-20 overflow-hidden">
+      <div className="relative bg-[#0c2e60] text-white pt-10 sm:pt-16 pb-14 sm:pb-20 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-[#0a1f3f] via-[#0c2e60] to-[#0a1f3f] opacity-95" />
-        <div className="relative z-10 max-w-[1280px] mx-auto px-4 sm:px-6 text-center space-y-4">
-          <span className="text-[#f9a825] font-extrabold uppercase text-xs tracking-widest bg-white/10 px-4 py-1.5 rounded-full">
+        <div className="relative z-10 max-w-[1280px] mx-auto px-3.5 sm:px-6 text-center space-y-3 sm:space-y-4">
+          <span className="text-[#f9a825] font-black uppercase text-[10px] sm:text-xs tracking-widest bg-white/10 px-3.5 sm:px-4 py-1.5 rounded-full">
             Expert Counseling Division
           </span>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight">
             Popular Medical Universities
           </h1>
           <p className="text-slate-300 text-sm md:text-base max-w-3xl mx-auto leading-relaxed">
@@ -239,17 +239,17 @@ export default function ServicesPage() {
             </p>
           </div>
 
-          <div className="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-xl shadow-slate-100/40">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="bg-white border border-slate-100 rounded-2xl sm:rounded-3xl p-3.5 sm:p-8 shadow-xl shadow-slate-100/40">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-4">
               {comparisonFactors.map((factor, i) => (
                 <div
                   key={i}
-                  className="flex items-center gap-3 bg-slate-50/50 hover:bg-[#3b82f6]/5 border border-slate-100 hover:border-[#3b82f6]/10 rounded-2xl p-4 transition-all duration-300 hover:scale-[1.02] group cursor-default"
+                  className="flex items-center gap-2 sm:gap-3 bg-slate-50/60 hover:bg-[#3b82f6]/5 border border-slate-100 hover:border-[#3b82f6]/10 rounded-xl sm:rounded-2xl p-2.5 sm:p-4 transition-all duration-300 hover:scale-[1.02] group cursor-default"
                 >
-                  <div className="w-8 h-8 rounded-full bg-[#10b981]/15 text-[#10b981] flex items-center justify-center text-xs flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-[#10b981]/15 text-[#10b981] flex items-center justify-center text-[10px] sm:text-xs flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
                     <FaCheck />
                   </div>
-                  <span className="text-xs sm:text-sm font-black text-[#0c2e60] tracking-wide leading-tight">
+                  <span className="text-[11px] sm:text-sm font-black text-[#0c2e60] tracking-tight leading-snug">
                     {factor}
                   </span>
                 </div>

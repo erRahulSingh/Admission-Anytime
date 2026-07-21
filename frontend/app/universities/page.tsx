@@ -137,24 +137,24 @@ export default function UniversitiesFinderPage() {
   }, [search, countryFilter]);
 
   return (
-    <div className="bg-slate-50 min-h-screen py-12 md:py-20">
-      <div className="max-w-[1280px] mx-auto px-4 space-y-12">
+    <div className="bg-slate-50 min-h-screen py-6 sm:py-12 md:py-20">
+      <div className="max-w-[1280px] mx-auto px-3.5 sm:px-6 space-y-8 sm:space-y-12">
         
         {/* Title */}
-        <div className="text-center max-w-2xl mx-auto space-y-4">
-          <span className="text-xs font-extrabold uppercase tracking-widest text-primary-500 bg-primary-50 px-4 py-1.5 rounded-full">
+        <div className="text-center max-w-2xl mx-auto space-y-3 sm:space-y-4">
+          <span className="text-[10px] sm:text-xs font-extrabold uppercase tracking-widest text-primary-500 bg-primary-50 px-3.5 sm:px-4 py-1.5 rounded-full">
             University Finder
           </span>
-          <h1 className="text-3xl md:text-5xl font-black text-text-dark">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-black text-text-dark">
             Find Your Ideal Medical College
           </h1>
-          <p className="text-text-muted text-sm md:text-base">
+          <p className="text-text-muted text-xs sm:text-sm md:text-base">
             Search, filter, and compare top WHO and NMC-approved government universities in India and abroad.
           </p>
         </div>
 
         {/* Search controls */}
-        <div className="bg-white p-6 rounded-premium border border-slate-100 shadow-md flex flex-col md:flex-row gap-4 items-center">
+        <div className="bg-white p-4 sm:p-6 rounded-2xl sm:rounded-premium border border-slate-100 shadow-md flex flex-col md:flex-row gap-3 sm:gap-4 items-center">
           
           {/* Input field */}
           <div className="relative w-full md:flex-1">

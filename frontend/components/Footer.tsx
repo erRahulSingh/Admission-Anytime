@@ -75,7 +75,7 @@ export default function Footer() {
         }
       `}} />
 
-      <div className="max-w-[1280px] mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+      <div className="max-w-[1280px] mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10">
 
         {/* Column 1: Company details */}
         <div className="space-y-6">
@@ -142,43 +142,9 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Column 3: Countries Grid with Dividers */}
-        <div>
-          <h4 className="text-sm font-black text-white uppercase tracking-wider mb-6 border-l-4 border-[#c39b34] pl-3">
-            MBBS Abroad Countries
-          </h4>
-          <div className="grid grid-cols-2 border border-slate-800/80 rounded-xl overflow-hidden divide-x divide-y divide-slate-800/85 bg-[#071320]/25">
-            {countriesList.map((country, idx) => {
-              const code = flagCodes[country.name] || "un";
-              return (
-                <Link
-                  key={idx}
-                  href={country.href}
-                  className="flex items-center justify-between p-3.5 hover:bg-[#112335]/35 transition-colors group"
-                >
-                  <div className="flex items-center gap-2.5 min-w-0">
-                    <img
-                      src={`https://flagcdn.com/w40/${code}.png`}
-                      alt=""
-                      className="w-5.5 h-auto object-cover rounded shadow-sm border border-slate-700/50 flex-shrink-0"
-                    />
-                    <span className="text-[11px] text-slate-300 group-hover:text-[#c39b34] font-black tracking-wide truncate transition-colors duration-250">
-                      {country.name}
-                    </span>
-                  </div>
-                  <FaGlobe className="text-slate-500/80 group-hover:text-[#c39b34] text-[10px] flex-shrink-0 transition-colors duration-250" />
-                </Link>
-              );
-            })}
-            {countriesList.length % 2 !== 0 && (
-              <div className="p-3.5 bg-[#071320]/10" />
-            )}
-          </div>
-        </div>
-
-        {/* Column 4: Contact & Newsletter Subscription Pill */}
+        {/* Column 3: Contact Details */}
         <div className="space-y-6">
-          <h4 className="text-sm font-black text-white uppercase tracking-wider mb-2 border-l-4 border-[#c39b34] pl-3">
+          <h4 className="text-sm font-black text-white uppercase tracking-wider mb-4 border-l-4 border-[#c39b34] pl-3">
             Contact Details
           </h4>
           <div className="space-y-4 text-xs text-slate-300 font-bold">
@@ -201,52 +167,17 @@ export default function Footer() {
               </a>
             </p>
           </div>
-
-          <div className="pt-2">
-            <p className="text-[10px] font-black uppercase text-slate-400 mb-3 tracking-wider">
-              Subscribe to Newsletters
-            </p>
-            <form onSubmit={handleSubscribe} className="relative flex items-center shadow-lg">
-              <input
-                type="email"
-                placeholder="Enter email..."
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-[#1b2a3a]/30 border-2 border-[#c39b34] text-white rounded-full px-5 py-3 text-xs outline-none pr-14 focus:bg-[#1b2a3a]/55 transition-all"
-                required
-              />
-              <button
-                type="submit"
-                className="absolute right-1 w-9.5 h-9.5 bg-[#c39b34] hover:bg-[#b08726] rounded-full flex items-center justify-center text-[#0b1a27] transition-all shadow-md active:scale-95"
-              >
-                <FaPaperPlane size={11} />
-              </button>
-            </form>
-            {success && (
-              <p className="text-[10px] text-emerald-400 font-semibold mt-2">
-                Successfully subscribed! Thank you.
-              </p>
-            )}
-          </div>
         </div>
 
-      </div>
-
-      {/* Official Partner Accord line */}
-      <div className="max-w-[1280px] mx-auto px-4 mt-6">
-        <div className="flex items-center justify-center gap-1.5 text-[11px] font-black text-slate-400 py-4 border-b border-slate-800/80">
-          <span className="text-[#c39b34] text-sm">🛡️</span>
-          <span className="uppercase tracking-wider">Official Partner | Accredited Universities</span>
-        </div>
       </div>
 
       {/* Footer base line */}
       <div className="max-w-[1280px] mx-auto px-4 mt-4 flex flex-col md:flex-row justify-between items-center text-slate-400 text-[11px] gap-4 font-semibold">
         <p>© 2026 Admission Anytime. All Rights Reserved. ISO 9001:2015 Certified. 🏆</p>
         <div className="flex space-x-4">
-          <a href="#" className="hover:text-[#c39b34] hover:underline transition-colors">Privacy Policy</a>
+          <Link href="/privacy-policy" className="hover:text-[#c39b34] hover:underline transition-colors">Privacy Policy</Link>
           <span className="text-slate-700">|</span>
-          <a href="#" className="hover:text-[#c39b34] hover:underline transition-colors">Terms & Conditions</a>
+          <Link href="/terms-and-conditions" className="hover:text-[#c39b34] hover:underline transition-colors">Terms & Conditions</Link>
         </div>
       </div>
 

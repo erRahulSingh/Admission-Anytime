@@ -49,6 +49,19 @@ try {
   console.error('Doctor copy warning:', e.message);
 }
 
+// Copy campus bg dynamically on boot
+const srcCampusBg = 'C:/Users/rahul/.gemini/antigravity-ide/brain/55b4a9ed-8de0-412b-a749-193df1bd1ab3/media__1784608626867.png';
+const destCampusBg = 'c:/Users/rahul/OneDrive/Desktop/Academy/frontend/public/hero_bg.png';
+
+try {
+  if (fs.existsSync(srcCampusBg)) {
+    fs.copyFileSync(srcCampusBg, destCampusBg);
+    console.log('Campus BG image copied dynamically to frontend assets!');
+  }
+} catch (e) {
+  console.error('Campus BG copy warning:', e.message);
+}
+
 const app = express();
 
 // Security Middlewares

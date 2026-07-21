@@ -15,22 +15,22 @@ import {
 
 export default function AboutPage() {
   return (
-    <div className="bg-gradient-to-br from-[#f8fafc] via-[#edf4fe] to-[#f1f5f9] min-h-screen py-12 md:py-20">
-      <div className="max-w-[1280px] mx-auto px-4 space-y-16">
+    <div className="bg-gradient-to-br from-[#f8fafc] via-[#edf4fe] to-[#f1f5f9] min-h-screen py-6 sm:py-12 md:py-20">
+      <div className="max-w-[1280px] mx-auto px-3.5 sm:px-6 space-y-8 sm:space-y-16">
         
         {/* ─── Page Header / Hero Banner ─── */}
-        <div className="relative bg-[#0c2e60] text-white rounded-3xl p-8 md:p-16 shadow-2xl overflow-hidden">
+        <div className="relative bg-[#0c2e60] text-white rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-14 shadow-2xl overflow-hidden">
           {/* Decorative Gradients */}
           <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-br from-white/10 to-transparent rounded-full blur-2xl pointer-events-none"></div>
           <div className="absolute bottom-0 left-0 w-80 h-80 bg-gradient-to-tr from-[#f9a825]/10 to-transparent rounded-full blur-2xl pointer-events-none"></div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center relative z-10">
             {/* Header Text */}
-            <div className="lg:col-span-8 space-y-4 text-left">
-              <span className="inline-block bg-[#f9a825] text-text-dark font-black text-[10px] sm:text-[11px] px-3 py-1.5 tracking-wider uppercase rounded-md shadow-sm">
+            <div className="lg:col-span-8 space-y-3 sm:space-y-4 text-left">
+              <span className="inline-block bg-[#f9a825] text-text-dark font-black text-[9px] sm:text-[11px] px-3 py-1.5 tracking-wider uppercase rounded-md shadow-sm">
                 25+ Years of Trust & Transparency
               </span>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-none text-white">
+              <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-tight text-white">
                 ABOUT <span className="text-[#f9a825]">ADMISSION ANYTIME</span>
               </h1>
               <p className="text-slate-300 text-xs sm:text-sm md:text-base font-semibold max-w-2xl leading-relaxed">

@@ -20,11 +20,11 @@ import {
 import api from "@/services/api";
 
 const contactSchema = z.object({
-  name: z.string().min(3, "Name must be at least 3 characters"),
+  name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Please enter a valid email"),
-  phone: z.string().regex(/^\d{10}$/, "Phone must be exactly 10 digits"),
-  subject: z.string().min(4, "Subject must be at least 4 characters"),
-  message: z.string().min(10, "Message must be at least 10 characters"),
+  phone: z.string().min(1, "Phone number required"),
+  subject: z.string().min(2, "Subject required"),
+  message: z.string().min(5, "Message required"),
 });
 
 type ContactFormValues = z.infer<typeof contactSchema>;
@@ -62,13 +62,13 @@ export default function ContactPage() {
     <div className="bg-[#fafcff] min-h-screen pb-16">
       
       {/* ═══ 1. Banner Section ═══ */}
-      <div className="relative bg-[#0c2e60] text-white pt-16 pb-20 overflow-hidden">
+      <div className="relative bg-[#0c2e60] text-white pt-10 sm:pt-16 pb-14 sm:pb-20 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-[#0a1f3f] via-[#0c2e60] to-[#0a1f3f] opacity-95" />
-        <div className="relative z-10 max-w-[1280px] mx-auto px-4 sm:px-6 text-center space-y-4">
-          <span className="text-[#f9a825] font-extrabold uppercase text-xs tracking-widest bg-white/10 px-4 py-1.5 rounded-full inline-block">
+        <div className="relative z-10 max-w-[1280px] mx-auto px-3.5 sm:px-6 text-center space-y-3 sm:space-y-4">
+          <span className="text-[#f9a825] font-black uppercase text-[10px] sm:text-xs tracking-widest bg-white/10 px-3.5 sm:px-4 py-1.5 rounded-full inline-block">
             Get In Touch
           </span>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight">
             Connect With Our Counselors
           </h1>
           <p className="text-slate-350 text-xs sm:text-sm max-w-2xl mx-auto leading-relaxed font-semibold">
@@ -77,13 +77,13 @@ export default function ContactPage() {
         </div>
       </div>
 
-      <div className="max-w-[1280px] mx-auto px-4 sm:px-6 mt-12 sm:mt-16">
+      <div className="max-w-[1280px] mx-auto px-3.5 sm:px-6 mt-8 sm:mt-16">
         
         {/* ═══ 2. Contact Grid ═══ */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
           
           {/* ──── LEFT: Inquiry Form Card ──── */}
-          <div className="lg:col-span-7 bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-xl shadow-slate-100/40 relative overflow-hidden">
+          <div className="lg:col-span-7 bg-white p-4 sm:p-8 rounded-2xl border border-slate-200 shadow-xl shadow-slate-100/40 relative overflow-hidden">
             <div className="absolute top-0 left-0 w-full h-[4px] bg-[#f9a825]" />
             
             <div className="space-y-1.5 mb-6">

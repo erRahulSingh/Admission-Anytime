@@ -170,13 +170,13 @@ export default function MBBSAbroadListingPage() {
     <div className="bg-[#fafcff] min-h-screen pb-16">
       
       {/* ═══ 1. Banner Section ═══ */}
-      <div className="relative bg-[#0c2e60] text-white pt-16 pb-20 overflow-hidden">
+      <div className="relative bg-[#0c2e60] text-white pt-10 sm:pt-16 pb-14 sm:pb-20 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-[#0a1f3f] via-[#0c2e60] to-[#0a1f3f] opacity-95" />
-        <div className="relative z-10 max-w-[1280px] mx-auto px-4 sm:px-6 text-center space-y-4">
-          <span className="text-[#f9a825] font-extrabold uppercase text-xs tracking-widest bg-white/10 px-4 py-1.5 rounded-full inline-block">
+        <div className="relative z-10 max-w-[1280px] mx-auto px-3.5 sm:px-6 text-center space-y-3 sm:space-y-4">
+          <span className="text-[#f9a825] font-black uppercase text-[10px] sm:text-xs tracking-widest bg-white/10 px-3.5 sm:px-4 py-1.5 rounded-full inline-block">
             Globally Accredited Programs
           </span>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight">
             Study MBBS Abroad
           </h1>
           <p className="text-[#3b82f6] font-extrabold text-sm sm:text-base tracking-wide">
@@ -224,16 +224,16 @@ export default function MBBSAbroadListingPage() {
             </div>
 
             {/* Right advantages checklist */}
-            <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-3.5 w-full">
+            <div className="lg:col-span-7 grid grid-cols-2 gap-2.5 sm:gap-3.5 w-full">
               {advantages.map((adv, idx) => (
                 <div
                   key={idx}
-                  className="flex items-center gap-3 bg-slate-50/50 border border-slate-100 hover:border-[#3b82f6]/20 rounded-xl p-3.5 transition-all duration-200 hover:scale-[1.02] group cursor-default"
+                  className="flex items-center gap-2 sm:gap-3 bg-slate-50/70 border border-slate-100 hover:border-[#3b82f6]/20 rounded-xl p-2.5 sm:p-3.5 transition-all duration-200 hover:scale-[1.02] group cursor-default"
                 >
-                  <div className="w-6 h-6 rounded-full bg-[#10b981]/10 text-[#10b981] flex items-center justify-center text-[10px] flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-[#10b981]/15 text-[#10b981] flex items-center justify-center text-[9px] sm:text-[10px] flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
                     <FaCheck />
                   </div>
-                  <span className="text-[11px] sm:text-xs font-bold text-[#0c2e60] leading-snug">
+                  <span className="text-[10px] sm:text-xs font-bold text-[#0c2e60] leading-tight">
                     {adv}
                   </span>
                 </div>
@@ -336,7 +336,7 @@ export default function MBBSAbroadListingPage() {
             Selecting the best country for MBBS is not simply about tuition fees. Every student has different aspirations, budget limits, and career licensing targets.
           </p>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
             {selectionCriteria.map((c, idx) => (
               <div
                 key={idx}

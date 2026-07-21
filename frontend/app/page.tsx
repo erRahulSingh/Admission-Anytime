@@ -13,7 +13,6 @@ import FAQSection from "@/components/sections/faq";
 import TestimonialsSection from "@/components/sections/testimonials";
 import CTASection from "@/components/sections/cta";
 import TrustSection from "@/components/sections/trust";
-import SEOContentSection from "@/components/sections/seo-content";
 
 export const metadata: Metadata = {
   title: "MBBS Admission 2026–27 in India & Abroad | Admission Anytime | Expert Medical Admission Guidance",
@@ -44,18 +43,17 @@ export default function HomePage() {
     <>
       <HeroSection />
       <StatsSection />
-      <ChooseUsSection />
       <CoursesSection />
+      <ServicesSection />
+      <ChooseUsSection />
       <StudyIndiaSection />
       <StudyAbroadSection />
       <PopularUniversities />
       <AdmissionProcessSection />
-      <ServicesSection />
       <TrustSection />
       <TestimonialsSection />
       <FAQSection />
       <CTASection />
-      <SEOContentSection />
     </>
   );
 }

@@ -16,18 +16,18 @@ import {
 
 export default function MBBSIndiaPage() {
   return (
-    <div className="bg-gradient-to-br from-[#f8fafc] via-[#edf4fe] to-[#f1f5f9] min-h-screen py-12 md:py-20">
-      <div className="max-w-[1280px] mx-auto px-4 space-y-16">
+    <div className="bg-gradient-to-br from-[#f8fafc] via-[#edf4fe] to-[#f1f5f9] min-h-screen py-6 sm:py-12 md:py-20">
+      <div className="max-w-[1280px] mx-auto px-3.5 sm:px-6 space-y-8 sm:space-y-16">
         
         {/* ─── Banner Title ─── */}
-        <div className="bg-[#0c2e60] text-white p-8 md:p-16 rounded-3xl text-center space-y-4 shadow-2xl relative overflow-hidden">
+        <div className="bg-[#0c2e60] text-white p-5 sm:p-8 md:p-14 rounded-2xl sm:rounded-3xl text-center space-y-3 sm:space-y-4 shadow-2xl relative overflow-hidden">
           <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-br from-white/10 to-transparent rounded-full blur-2xl pointer-events-none"></div>
           <div className="absolute bottom-0 left-0 w-80 h-80 bg-gradient-to-tr from-[#f9a825]/10 to-transparent rounded-full blur-2xl pointer-events-none"></div>
           
-          <span className="inline-block bg-[#f9a825] text-text-dark font-black text-[10px] sm:text-[11px] px-4 py-1.5 uppercase tracking-widest rounded-md shadow-sm">
+          <span className="inline-block bg-[#f9a825] text-text-dark font-black text-[9px] sm:text-[11px] px-3.5 sm:px-4 py-1.5 uppercase tracking-widest rounded-md shadow-sm">
             National Counseling Guidance (2026-27)
           </span>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-none">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
             STUDY MBBS IN INDIA
           </h1>
           <p className="text-slate-300 text-xs sm:text-sm md:text-base max-w-2xl mx-auto leading-relaxed font-semibold">
@@ -54,16 +54,16 @@ export default function MBBSIndiaPage() {
                 Medical seats in India are categorized under two main bodies: the Medical Counselling Committee (MCC) for 15% All India Quota and State Counseling Authorities for 85% home state quotas.
               </p>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-                <div className="border border-slate-100 p-5 rounded-2xl bg-slate-50/50 hover:border-primary-100 hover:bg-white transition-all duration-300">
-                  <h4 className="font-black text-xs text-primary-500 uppercase tracking-wider mb-2">15% All India Quota (AIQ)</h4>
-                  <p className="text-xs text-[#475569] leading-relaxed">
+              <div className="grid grid-cols-2 md:grid-cols-2 gap-2.5 sm:gap-4 pt-2">
+                <div className="border border-slate-100 p-3 sm:p-5 rounded-xl sm:rounded-2xl bg-slate-50/50 hover:border-primary-100 hover:bg-white transition-all duration-300">
+                  <h4 className="font-black text-[10px] sm:text-xs text-primary-500 uppercase tracking-wider mb-1">15% All India Quota (AIQ)</h4>
+                  <p className="text-[10px] sm:text-xs text-[#475569] leading-relaxed">
                     Open to all qualified aspirants nationwide. Allocated directly by MCC in multiple rounds based on NEET merit.
                   </p>
                 </div>
-                <div className="border border-slate-100 p-5 rounded-2xl bg-slate-50/50 hover:border-primary-100 hover:bg-white transition-all duration-300">
-                  <h4 className="font-black text-xs text-[#f9a825] uppercase tracking-wider mb-2">85% State Quotas</h4>
-                  <p className="text-xs text-[#475569] leading-relaxed">
+                <div className="border border-slate-100 p-3 sm:p-5 rounded-xl sm:rounded-2xl bg-slate-50/50 hover:border-primary-100 hover:bg-white transition-all duration-300">
+                  <h4 className="font-black text-[10px] sm:text-xs text-[#f9a825] uppercase tracking-wider mb-1">85% State Quotas</h4>
+                  <p className="text-[10px] sm:text-xs text-[#475569] leading-relaxed">
                     Reserved for domicile residents of respective states. Conducted by respective state medical boards.
                   </p>
                 </div>
@@ -79,48 +79,48 @@ export default function MBBSIndiaPage() {
                 </h2>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-2 md:grid-cols-2 gap-3 sm:gap-6">
                 
                 {/* Government */}
-                <div className="bg-white p-6 rounded-3xl border border-slate-100 hover:border-slate-200 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 space-y-3">
-                  <div className="w-10 h-10 bg-primary-50 text-primary-500 rounded-xl flex items-center justify-center text-lg">
-                    <FaBuilding className="text-lg" />
+                <div className="bg-white p-3.5 sm:p-6 rounded-2xl sm:rounded-3xl border border-slate-100 hover:border-slate-200 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 space-y-2 sm:space-y-3">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-primary-50 text-primary-500 rounded-xl flex items-center justify-center text-sm sm:text-lg">
+                    <FaBuilding />
                   </div>
-                  <h3 className="font-black text-xs sm:text-sm text-[#0c2e60] uppercase tracking-wider">Government Medical Colleges</h3>
-                  <p className="text-xs text-[#475569] leading-relaxed">
+                  <h3 className="font-black text-[10px] sm:text-sm text-[#0c2e60] uppercase tracking-wider">Government Medical Colleges</h3>
+                  <p className="text-[10px] sm:text-xs text-[#475569] leading-relaxed">
                     Government medical colleges remain the first choice for many students because of their affordable tuition fees, highly qualified faculty, extensive hospital exposure, and strong academic reputation. We guide students through counseling procedures to maximize their admission opportunities based on merit.
                   </p>
                 </div>
 
                 {/* Private */}
-                <div className="bg-white p-6 rounded-3xl border border-slate-100 hover:border-slate-200 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 space-y-3">
-                  <div className="w-10 h-10 bg-primary-50 text-primary-500 rounded-xl flex items-center justify-center text-lg">
-                    <FaHospital className="text-lg" />
+                <div className="bg-white p-3.5 sm:p-6 rounded-2xl sm:rounded-3xl border border-slate-100 hover:border-slate-200 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 space-y-2 sm:space-y-3">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-primary-50 text-primary-500 rounded-xl flex items-center justify-center text-sm sm:text-lg">
+                    <FaHospital />
                   </div>
-                  <h3 className="font-black text-xs sm:text-sm text-[#0c2e60] uppercase tracking-wider">Private Medical Colleges</h3>
-                  <p className="text-xs text-[#475569] leading-relaxed">
+                  <h3 className="font-black text-[10px] sm:text-sm text-[#0c2e60] uppercase tracking-wider">Private Medical Colleges</h3>
+                  <p className="text-[10px] sm:text-xs text-[#475569] leading-relaxed">
                     Private medical colleges offer excellent infrastructure, modern laboratories, advanced teaching methodologies, and quality clinical training. Our counselors help students compare institutions based on academics, fee structure, accreditation, and career opportunities.
                   </p>
                 </div>
 
                 {/* Deemed */}
-                <div className="bg-white p-6 rounded-3xl border border-slate-100 hover:border-slate-200 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 space-y-3">
-                  <div className="w-10 h-10 bg-primary-50 text-primary-500 rounded-xl flex items-center justify-center text-lg">
-                    <FaGraduationCap className="text-lg" />
+                <div className="bg-white p-3.5 sm:p-6 rounded-2xl sm:rounded-3xl border border-slate-100 hover:border-slate-200 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 space-y-2 sm:space-y-3">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-primary-50 text-primary-500 rounded-xl flex items-center justify-center text-sm sm:text-lg">
+                    <FaGraduationCap />
                   </div>
-                  <h3 className="font-black text-xs sm:text-sm text-[#0c2e60] uppercase tracking-wider">Deemed Universities</h3>
-                  <p className="text-xs text-[#475569] leading-relaxed">
+                  <h3 className="font-black text-[10px] sm:text-sm text-[#0c2e60] uppercase tracking-wider">Deemed Universities</h3>
+                  <p className="text-[10px] sm:text-xs text-[#475569] leading-relaxed">
                     Several reputed deemed universities provide high-quality medical education with modern teaching facilities and research opportunities. We help students identify institutions that align with their career aspirations and educational preferences.
                   </p>
                 </div>
 
                 {/* Premier */}
-                <div className="bg-white p-6 rounded-3xl border border-slate-100 hover:border-slate-200 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 space-y-3">
-                  <div className="w-10 h-10 bg-primary-50 text-primary-500 rounded-xl flex items-center justify-center text-lg">
-                    <FaAward className="text-lg" />
+                <div className="bg-white p-3.5 sm:p-6 rounded-2xl sm:rounded-3xl border border-slate-100 hover:border-slate-200 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 space-y-2 sm:space-y-3">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-primary-50 text-primary-500 rounded-xl flex items-center justify-center text-sm sm:text-lg">
+                    <FaAward />
                   </div>
-                  <h3 className="font-black text-xs sm:text-sm text-[#0c2e60] uppercase tracking-wider">Premier Institutions (AIIMS & BHU)</h3>
-                  <p className="text-xs text-[#475569] leading-relaxed">
+                  <h3 className="font-black text-[10px] sm:text-sm text-[#0c2e60] uppercase tracking-wider">Premier Institutions (AIIMS & BHU)</h3>
+                  <p className="text-[10px] sm:text-xs text-[#475569] leading-relaxed">
                     Premier institutions are highly competitive and require careful planning. Admission Anytime provides guidance regarding eligibility, counseling procedures, documentation, and important admission updates to help students navigate these opportunities effectively.
                   </p>
                 </div>
