@@ -137,8 +137,12 @@ export default function UniversitiesFinderPage() {
   }, [search, countryFilter]);
 
   return (
-    <div className="bg-slate-50 min-h-screen py-6 sm:py-12 md:py-20">
-      <div className="max-w-[1280px] mx-auto px-3.5 sm:px-6 space-y-8 sm:space-y-12">
+    <div className="relative bg-gradient-to-br from-[#f8fafc] via-[#eff6ff] to-[#f1f5f9] min-h-screen py-6 sm:py-12 md:py-20 overflow-hidden">
+      {/* Premium blurred ambient background shapes */}
+      <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full bg-blue-400/10 blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] rounded-full bg-indigo-400/10 blur-[140px] pointer-events-none" />
+
+      <div className="relative z-10 max-w-[1280px] mx-auto px-3.5 sm:px-6 space-y-8 sm:space-y-12">
         
         {/* Title */}
         <div className="text-center max-w-2xl mx-auto space-y-3 sm:space-y-4">
@@ -206,50 +210,97 @@ export default function UniversitiesFinderPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {unis.map((uni, idx) => (
-              <div
-                key={idx}
-                className="bg-white rounded-premium border border-slate-100 shadow-lg shadow-slate-100/50 hover:shadow-2xl hover:shadow-slate-200/50 transition-all duration-300 hover:-translate-y-1.5 overflow-hidden flex flex-col justify-between group"
-              >
-                <div className="p-6 md:p-8 space-y-5">
-                  <div className="flex justify-between items-start gap-2">
-                    <div className="w-10 h-10 bg-primary-50 text-primary-500 rounded-xl flex items-center justify-center text-lg flex-shrink-0">
-                      <FaUniversity />
+            {unis.map((uni, idx) => {
+              const countryName = (uni.country as any)?.name || "Abroad";
+              const countrySlug = (uni.country as any)?.slug?.toLowerCase() || "georgia";
+              const flagCodeMap: Record<string, string> = {
+                russia: "ru",
+                georgia: "ge",
+                kazakhstan: "kz",
+                uzbekistan: "uz",
+                kyrgyzstan: "kg",
+                nepal: "np",
+                armenia: "am",
+                philippines: "ph",
+                egypt: "eg",
+                india: "in",
+              };
+              const flagCode = flagCodeMap[countrySlug] || "ge";
+
+              return (
+                <div
+                  key={idx}
+                  className="bg-white rounded-2xl border border-slate-200/80 border-l-[4px] border-l-[#0c2e60] hover:border-l-[#f9a825] shadow-md hover:shadow-2xl hover:shadow-[#0c2e60]/10 transition-all duration-300 hover:-translate-y-1.5 overflow-hidden flex flex-col justify-between group"
+                >
+                  <div className="p-5 sm:p-6 space-y-4">
+                    {/* Top Row: Icon + Badges */}
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="w-10 h-10 bg-gradient-to-br from-[#0c2e60] to-[#0F4C81] text-[#f9a825] rounded-xl flex items-center justify-center text-lg flex-shrink-0 shadow-sm group-hover:scale-105 transition-transform">
+                        <FaUniversity />
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="bg-emerald-50 text-emerald-700 border border-emerald-200/60 px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-wider">
+                          NMC & WHO Approved
+                        </span>
+                        <span className="bg-slate-100 border border-slate-200 text-[#0c2e60] px-2.5 py-1 rounded-full text-[10px] font-extrabold flex items-center gap-1.5 shadow-2xs">
+                          <div className="w-3.5 h-3.5 rounded-full overflow-hidden border border-slate-200 flex-shrink-0 flex items-center justify-center">
+                            <img
+                              src={`https://flagcdn.com/w80/${flagCode}.png`}
+                              alt={`${countryName} Flag`}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                          <span>{countryName}</span>
+                        </span>
+                      </div>
                     </div>
-                    <span className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-[10px] font-bold flex items-center gap-1">
-                      <FaGlobe className="text-[9px]" /> {(uni.country as any)?.name || "Abroad"}
-                    </span>
+
+                    {/* Title & Ranking */}
+                    <div className="space-y-1.5 pt-1">
+                      <h3 className="text-base sm:text-lg font-black text-[#0c2e60] leading-snug group-hover:text-[#0F4C81] transition-colors">
+                        {uni.name}
+                      </h3>
+                      {uni.ranking && (
+                        <span className="inline-block text-[10px] font-bold text-amber-700 bg-amber-50 border border-amber-200/60 px-2 py-0.5 rounded-md">
+                          🏆 {uni.ranking}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Info Pills */}
+                    <div className="space-y-2 pt-3 border-t border-slate-100 text-xs font-semibold text-slate-600">
+                      <div className="flex items-center justify-between bg-slate-50 border border-slate-100 p-2.5 rounded-xl">
+                        <span className="flex items-center gap-2 text-slate-500">
+                          <FaMoneyBillWave className="text-emerald-600 text-sm" /> Tuition Fee
+                        </span>
+                        <span className="font-extrabold text-[#0c2e60] text-xs">
+                          {uni.tuitionFee || "Contact for Fee"}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between bg-slate-50 border border-slate-100 p-2.5 rounded-xl">
+                        <span className="flex items-center gap-2 text-slate-500">
+                          <FaClock className="text-[#0F4C81] text-sm" /> Duration
+                        </span>
+                        <span className="font-bold text-[#0c2e60] text-xs">
+                          {uni.courseDuration || "5 - 6 Years"}
+                        </span>
+                      </div>
+                    </div>
                   </div>
 
-                  <div>
-                    <h3 className="text-lg font-extrabold text-text-dark leading-snug group-hover:text-primary-500 transition-colors">
-                      {uni.name}
-                    </h3>
-                    <span className="text-[10px] text-slate-400 block mt-1">{uni.ranking}</span>
-                  </div>
-
-                  <div className="space-y-2.5 pt-2 border-t border-slate-50 text-xs text-text-muted">
-                    <div className="flex items-center gap-2">
-                      <FaMoneyBillWave className="text-secondary-500" />
-                      <span><strong>Tuition:</strong> {uni.tuitionFee}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <FaClock className="text-primary-500" />
-                      <span><strong>Course Duration:</strong> {uni.courseDuration}</span>
-                    </div>
+                  {/* Bottom Action Footer */}
+                  <div className="p-5 pt-0">
+                    <Link
+                      href="/contact"
+                      className="w-full text-center bg-[#0c2e60] hover:bg-[#0a2550] text-white font-extrabold py-3 rounded-xl transition-all duration-300 text-xs tracking-wider uppercase shadow-md flex items-center justify-center gap-2 group-hover:bg-[#0F4C81]"
+                    >
+                      <span>Apply for Direct Admission</span>
+                      <span className="group-hover:translate-x-1 transition-transform">→</span>
+                    </Link>
                   </div>
                 </div>
-
-                <div className="p-6 pt-0 border-t border-slate-50/50 mt-4 bg-slate-50/20">
-                  <Link
-                    href={`/contact`}
-                    className="w-full text-center block bg-primary-500 hover:bg-primary-600 text-white font-bold py-3 rounded-xl transition-all duration-300 text-xs shadow-sm hover:shadow-md"
-                  >
-                    Apply for Direct Admission
-                  </Link>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
 

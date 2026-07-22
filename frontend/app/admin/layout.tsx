@@ -14,6 +14,8 @@ import {
   FaSignOutAlt,
   FaHome,
   FaChevronDown,
+  FaUserGraduate,
+  FaBookOpen,
 } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -68,11 +70,13 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const sidebarLinks = [
     { label: "Dashboard Stats", href: "/admin", icon: <FaChartPie /> },
     { label: "Admission Leads", href: "/admin/admission-forms", icon: <FaUserInjured /> },
+    { label: "Admitted Students", href: "/admin/students", icon: <FaUserGraduate /> },
     { label: "Contact Inbox", href: "/admin/contact-requests", icon: <FaInbox /> },
     { label: "Universities", href: "/admin/universities", icon: <FaUniversity /> },
     { label: "Countries", href: "/admin/countries", icon: <FaGlobe /> },
     { label: "Testimonials", href: "/admin/testimonials", icon: <FaQuoteLeft /> },
     { label: "Services Offered", href: "/admin/services", icon: <FaServicestack /> },
+    { label: "Blog Articles", href: "/admin/blogs", icon: <FaBookOpen /> },
   ];
 
   return (

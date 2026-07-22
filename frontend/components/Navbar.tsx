@@ -120,17 +120,17 @@ export default function Navbar() {
         {/* ─── Phone CTA (Desktop) ─── */}
         <div className="hidden md:flex items-center gap-3 flex-shrink-0">
           <a
-            href="tel:+919876543210"
+            href="tel:+916284063840"
             className="w-10 h-10 rounded-full bg-[#0F4C81]/5 border border-[#0F4C81]/10 flex items-center justify-center text-[#0F4C81] hover:bg-[#0F4C81] hover:text-white transition-all duration-300"
           >
             <FaPhoneAlt size={14} />
           </a>
           <div className="text-right">
             <a
-              href="tel:+919876543210"
+              href="tel:+916284063840"
               className="text-[14px] font-black text-[#1a1a2e] hover:text-[#0F4C81] block leading-none transition-colors"
             >
-              +91 98765 43210
+              +91 62840 63840
             </a>
           </div>
         </div>
@@ -211,14 +211,14 @@ export default function Navbar() {
               {/* Drawer Bottom CTA Strip */}
               <div className="p-3 border-t border-slate-100 bg-slate-50/70 space-y-2">
                 <a
-                  href="tel:+919876543210"
+                  href="tel:+916284063840"
                   className="flex items-center justify-center gap-2 bg-[#0c2e60] hover:bg-[#0a2550] text-white font-extrabold py-3 px-4 rounded-xl text-xs shadow-md transition-all active:scale-95"
                 >
                   <FaPhoneAlt size={12} />
-                  +91 98765 43210
+                  +91 62840 63840
                 </a>
                 <a
-                  href="https://wa.me/919876543210"
+                  href="https://wa.me/916284063840"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] text-white font-extrabold py-3 px-4 rounded-xl text-xs shadow-md transition-all active:scale-95"

@@ -223,34 +223,62 @@ export default function CountryPage({ params }: CountryPageProps) {
             ) : (
               <div className="space-y-6">
                 {unis.map((uni, idx) => (
-                  <div key={idx} className="bg-white p-6 md:p-8 rounded-premium border border-slate-100 shadow-md flex flex-col md:flex-row justify-between gap-6 hover:shadow-xl transition-all">
-                    <div className="space-y-4">
-                      <div>
-                        <h3 className="text-xl font-extrabold text-text-dark">{uni.name}</h3>
-                        <span className="text-[10px] font-bold text-slate-400">Est. {uni.established} | {uni.ranking}</span>
+                  <div
+                    key={idx}
+                    className="bg-white p-6 sm:p-7 rounded-2xl border border-slate-200/80 border-l-[4px] border-l-[#0c2e60] hover:border-l-[#f9a825] shadow-md hover:shadow-xl transition-all duration-300 flex flex-col md:flex-row justify-between gap-6 group"
+                  >
+                    <div className="space-y-3.5 flex-1">
+                      {/* Header */}
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <div>
+                          <h3 className="text-lg sm:text-xl font-extrabold text-[#0c2e60] group-hover:text-[#0F4C81] transition-colors">
+                            {uni.name}
+                          </h3>
+                          <span className="text-[10px] font-bold text-amber-700 bg-amber-50 border border-amber-200/60 px-2 py-0.5 rounded-md inline-block mt-1">
+                            🏆 Est. {uni.established} | {uni.ranking}
+                          </span>
+                        </div>
+                        <span className="bg-emerald-50 text-emerald-700 border border-emerald-200/60 px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-wider">
+                          NMC & WHO Approved
+                        </span>
                       </div>
 
-                      <div className="flex flex-wrap gap-4 text-xs text-text-muted">
-                        <span><strong>Tuition:</strong> {uni.tuitionFee}</span>
-                        <span>•</span>
-                        <span><strong>Hostel:</strong> {uni.hostelFee}</span>
-                        <span>•</span>
-                        <span><strong>Medium:</strong> {uni.mediumOfInstruction}</span>
+                      {/* Fee and duration chips */}
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs font-semibold text-slate-600 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                        <div>
+                          <span className="text-slate-400 block text-[10px] uppercase font-bold">Tuition Fee</span>
+                          <span className="font-extrabold text-[#0c2e60]">{uni.tuitionFee}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-400 block text-[10px] uppercase font-bold">Hostel Fee</span>
+                          <span className="font-extrabold text-[#0c2e60]">{uni.hostelFee}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-400 block text-[10px] uppercase font-bold">Medium</span>
+                          <span className="font-extrabold text-[#0c2e60]">{uni.mediumOfInstruction}</span>
+                        </div>
                       </div>
 
-                      <ul className="space-y-1.5 pl-4 list-disc text-xs text-text-muted">
-                        {uni.keyHighlights?.map((hl, hIdx) => (
-                          <li key={hIdx}>{hl}</li>
-                        ))}
-                      </ul>
+                      {/* Highlights */}
+                      {uni.keyHighlights && uni.keyHighlights.length > 0 && (
+                        <ul className="space-y-1.5 pt-1 text-xs text-slate-600">
+                          {uni.keyHighlights.map((hl, hIdx) => (
+                            <li key={hIdx} className="flex items-center gap-2">
+                              <span className="text-emerald-500 text-xs">✔</span>
+                              <span className="font-medium">{hl}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
                     </div>
 
-                    <div className="flex flex-col justify-center items-stretch md:items-end gap-2.5">
+                    <div className="flex flex-col justify-center items-stretch md:items-end gap-2.5 md:w-52 flex-shrink-0">
                       <Link
                         href="/contact"
-                        className="bg-primary-500 text-white font-bold text-center px-6 py-2.5 rounded-xl text-xs hover:bg-primary-600 transition-colors shadow-sm"
+                        className="bg-[#0c2e60] hover:bg-[#0a2550] text-white font-extrabold text-center px-6 py-3 rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2 group-hover:bg-[#0F4C81]"
                       >
-                        Apply Online
+                        <span>Apply Online</span>
+                        <span className="group-hover:translate-x-1 transition-transform">→</span>
                       </Link>
                     </div>
                   </div>

@@ -256,12 +256,12 @@ export default function ContactPage() {
                     Talk to Admissions Expert
                   </h3>
                   <p className="text-[10px] sm:text-[11px] text-slate-500 font-semibold leading-relaxed mt-1">
-                    Direct Line: <a href="tel:+919876543210" className="hover:underline font-extrabold text-[#0c2e60]">+91 98765 43210</a> <br />
-                    Hotline: <a href="tel:+91114567890" className="hover:underline font-extrabold text-[#0c2e60]">+91 11 4567 890</a>
+                    Direct Line: <a href="tel:+916284063840" className="hover:underline font-extrabold text-[#0c2e60]">+91 62840 63840</a> <br />
+                    Landline: <a href="tel:012026111110" className="hover:underline font-extrabold text-[#0c2e60]">0120-26111110</a>
                   </p>
                 </div>
                 <a
-                  href="tel:+919876543210"
+                  href="tel:+916284063840"
                   className="inline-flex items-center gap-1.5 bg-[#0c2e60] hover:bg-[#0a2550] text-white font-extrabold px-3 py-2 rounded-lg text-[9px] tracking-widest transition-colors shadow-sm uppercase"
                 >
                   Call Now <FaArrowRight size={8} />
@@ -284,7 +284,7 @@ export default function ContactPage() {
                   </p>
                 </div>
                 <a
-                  href="https://wa.me/919876543210"
+                  href="https://wa.me/916284063840"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 bg-[#16a34a] hover:bg-[#15803d] text-white font-extrabold px-3 py-2 rounded-lg text-[9px] tracking-widest transition-colors shadow-sm uppercase"
@@ -306,6 +306,7 @@ export default function ContactPage() {
                   </h3>
                   <p className="text-[10px] sm:text-[11px] text-slate-500 font-semibold leading-relaxed mt-1">
                     Admissions: <a href="mailto:info@admissionanytime.com" className="hover:underline font-extrabold text-[#0c2e60]">info@admissionanytime.com</a> <br />
+                    Support: <a href="mailto:info@admissionanytime.com" className="hover:underline font-extrabold text-[#0c2e60]">info@admissionanytime.com</a> <br />
                     Documents: <a href="mailto:docs@admissionanytime.com" className="hover:underline font-extrabold text-[#0c2e60]">docs@admissionanytime.com</a>
                   </p>
                 </div>
@@ -323,7 +324,7 @@ export default function ContactPage() {
                     Office Location & Timing
                   </h3>
                   <p className="text-[10px] sm:text-[11px] text-slate-500 font-semibold leading-relaxed mt-1">
-                    Suite 402, Metro Plaza, Outer Ring Road, New Delhi, 110001
+                    Cors.Offo. 510, Devika Tower, Chander Nagar Surya Nagar, Sahibabad, Ghaziabad (Delhi NCR) U.P. 201011
                   </p>
                   <p className="text-[9px] text-slate-400 font-semibold mt-1.5 flex items-center gap-1">
                     <FaClock /> Mon - Sat: 09:30 AM to 06:30 PM (Sunday Closed)

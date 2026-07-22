@@ -112,4 +112,5 @@ export interface DashboardStats {
   totalCountries: number;
   totalUniversities: number;
   totalStudents: number;
+  totalBlogs?: number;
 }

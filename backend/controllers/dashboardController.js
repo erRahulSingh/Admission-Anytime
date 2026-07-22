@@ -3,6 +3,7 @@ import ContactRequest from '../models/ContactRequest.js';
 import Country from '../models/Country.js';
 import University from '../models/University.js';
 import Student from '../models/Student.js';
+import Blog from '../models/Blog.js';
 
 // @desc    Get Admin Dashboard Stats / Analytics
 // @route   GET /api/dashboard/stats
@@ -21,6 +22,7 @@ export const getDashboardStats = async (req, res, next) => {
     const totalCountries = await Country.countDocuments();
     const totalUniversities = await University.countDocuments();
     const totalStudents = await Student.countDocuments();
+    const totalBlogs = await Blog.countDocuments();
 
     // Recent leads list
     const recentLeads = await AdmissionForm.find()
@@ -77,6 +79,7 @@ export const getDashboardStats = async (req, res, next) => {
         totalCountries,
         totalUniversities,
         totalStudents,
+        totalBlogs,
       },
       recentLeads,
       recentContacts,

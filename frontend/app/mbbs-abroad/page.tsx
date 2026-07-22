@@ -167,7 +167,10 @@ const studentSupportServices = [
 
 export default function MBBSAbroadListingPage() {
   return (
-    <div className="bg-[#fafcff] min-h-screen pb-16">
+    <div className="relative bg-gradient-to-br from-[#f8fafc] via-[#eff6ff] to-[#f1f5f9] min-h-screen pb-16 overflow-hidden">
+      {/* Premium blurred ambient background shapes */}
+      <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full bg-blue-400/10 blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] rounded-full bg-indigo-400/10 blur-[140px] pointer-events-none" />
       
       {/* ═══ 1. Banner Section ═══ */}
       <div className="relative bg-[#0c2e60] text-white pt-10 sm:pt-16 pb-14 sm:pb-20 overflow-hidden">
@@ -336,7 +339,7 @@ export default function MBBSAbroadListingPage() {
             Selecting the best country for MBBS is not simply about tuition fees. Every student has different aspirations, budget limits, and career licensing targets.
           </p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
             {selectionCriteria.map((c, idx) => (
               <div
                 key={idx}
@@ -406,7 +409,7 @@ export default function MBBSAbroadListingPage() {
           {/* Buttons */}
           <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 relative z-10">
             <a
-              href="https://wa.me/919876543210"
+              href="https://wa.me/916284063840"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-[#16a34a] hover:bg-[#15803d] text-white font-extrabold px-5 py-3.5 rounded-xl text-[11px] sm:text-[12px] flex items-center gap-2 shadow-md transition-all hover:-translate-y-0.5 cursor-pointer"
@@ -414,7 +417,7 @@ export default function MBBSAbroadListingPage() {
               <FaWhatsapp size={14} /> CHAT ON WHATSAPP
             </a>
             <a
-              href="tel:01202611111"
+              href="tel:012026111110"
               className="bg-[#0ea5e9] hover:bg-[#0284c7] text-white font-extrabold px-4 py-2 sm:py-3.5 rounded-xl flex flex-col items-center justify-center shadow-md transition-all hover:-translate-y-0.5 cursor-pointer"
             >
               <span className="flex items-center gap-1.5 text-[11px] sm:text-[12px]">

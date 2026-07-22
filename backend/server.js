@@ -15,6 +15,7 @@ import serviceRoutes from './routes/serviceRoutes.js';
 import testimonialRoutes from './routes/testimonialRoutes.js';
 import blogRoutes from './routes/blogRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js';
+import studentRoutes from './routes/studentRoutes.js';
 
 // Load env variables
 dotenv.config();
@@ -106,6 +107,7 @@ app.use('/api/services', serviceRoutes);
 app.use('/api/testimonials', testimonialRoutes);
 app.use('/api/blogs', blogRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/students', studentRoutes);
 
 // Import models for seeding
 import Admin from './models/Admin.js';

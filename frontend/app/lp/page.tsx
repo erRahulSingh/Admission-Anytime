@@ -239,7 +239,7 @@ export default function AdsLandingPage() {
           <div className="flex items-center gap-3">
             <span className="text-[10px] uppercase font-black text-slate-400 tracking-wider hidden sm:block">Speak to Counselor</span>
             <a
-              href="tel:+919876543210"
+              href="tel:+916284063840"
               className="w-10 h-10 bg-[#FFC107] hover:bg-[#e0a800] text-[#0b1a27] rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-all relative group animate-pulse"
               title="Call Counselor Now"
             >
@@ -711,13 +711,13 @@ export default function AdsLandingPage() {
       {/* ═══ 7. Mobile-only Fixed Sticky Footer CTA Bar ═══ */}
       <div className="fixed bottom-0 inset-x-0 bg-white border-t border-slate-100 p-3.5 flex md:hidden gap-3 shadow-[0_-4px_16px_rgba(0,0,0,0.06)] z-50">
         <a
-          href="tel:+919876543210"
+          href="tel:+916284063840"
           className="flex items-center justify-center gap-2 bg-[#FFC107] hover:bg-[#e0a800] text-[#0b1a27] font-black py-3.5 px-5 rounded-xl text-xs flex-1 uppercase tracking-wider shadow-lg active:scale-95 transition-all"
         >
           <FaPhoneAlt size={10} /> Call Counselor
         </a>
         <a
-          href="https://wa.me/919876543210?text=Hi!%20I%20am%20interested%20in%20MBBS%20Admission%20Guidance"
+          href="https://wa.me/916284063840?text=Hi!%20I%20am%20interested%20in%20MBBS%20Admission%20Guidance"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center justify-center gap-2 bg-[#16A34A] hover:bg-[#117f39] text-white font-black py-3.5 px-5 rounded-xl text-xs flex-1 uppercase tracking-wider shadow-lg active:scale-95 transition-all"

@@ -137,40 +137,40 @@ export default function MBBSIndiaPage() {
                 </h2>
               </div>
               
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs border-collapse">
+              <div className="overflow-x-auto -mx-2 sm:mx-0">
+                <table className="w-full text-left text-xs border-collapse min-w-[320px]">
                   <thead>
-                    <tr className="border-b border-slate-100 text-slate-500 font-bold uppercase">
-                      <th className="py-3 px-2">Category</th>
-                      <th className="py-3 px-2">Govt Seat Cutoff</th>
-                      <th className="py-3 px-2">Deemed Seat Cutoff</th>
-                      <th className="py-3 px-2">Status</th>
+                    <tr className="border-b border-slate-100 text-slate-500 font-bold uppercase text-[10px] sm:text-xs">
+                      <th className="py-3 px-2 sm:px-3">Category</th>
+                      <th className="py-3 px-2 sm:px-3">Govt Seat Cutoff</th>
+                      <th className="py-3 px-2 sm:px-3">Deemed Seat Cutoff</th>
+                      <th className="py-3 px-2 sm:px-3 whitespace-nowrap">Status</th>
                     </tr>
                   </thead>
-                  <tbody className="text-text-dark font-semibold divide-y divide-slate-50">
+                  <tbody className="text-text-dark font-semibold divide-y divide-slate-50 text-[11px] sm:text-xs">
                     <tr>
-                      <td className="py-4 px-2 font-black text-[#0c2e60]">General / UR</td>
-                      <td className="py-4 px-2 text-[#16a34a] font-extrabold">615 - 625 Marks</td>
-                      <td className="py-4 px-2">250 - 450 Marks</td>
-                      <td className="py-4 px-2"><span className="bg-green-50 text-green-600 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider">High Merit</span></td>
+                      <td className="py-3.5 px-2 sm:px-3 font-black text-[#0c2e60] whitespace-nowrap">General / UR</td>
+                      <td className="py-3.5 px-2 sm:px-3 text-[#16a34a] font-extrabold whitespace-nowrap">615 - 625 Marks</td>
+                      <td className="py-3.5 px-2 sm:px-3 whitespace-nowrap">250 - 450 Marks</td>
+                      <td className="py-3.5 px-2 sm:px-3"><span className="bg-green-50 text-green-700 border border-green-200/60 px-2.5 py-1 rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-wider whitespace-nowrap inline-block">High Merit</span></td>
                     </tr>
                     <tr>
-                      <td className="py-4 px-2 font-black text-[#0c2e60]">OBC</td>
-                      <td className="py-4 px-2 text-[#16a34a] font-extrabold">610 - 618 Marks</td>
-                      <td className="py-4 px-2">220 - 400 Marks</td>
-                      <td className="py-4 px-2"><span className="bg-green-50 text-green-600 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider">High Merit</span></td>
+                      <td className="py-3.5 px-2 sm:px-3 font-black text-[#0c2e60] whitespace-nowrap">OBC</td>
+                      <td className="py-3.5 px-2 sm:px-3 text-[#16a34a] font-extrabold whitespace-nowrap">610 - 618 Marks</td>
+                      <td className="py-3.5 px-2 sm:px-3 whitespace-nowrap">220 - 400 Marks</td>
+                      <td className="py-3.5 px-2 sm:px-3"><span className="bg-green-50 text-green-700 border border-green-200/60 px-2.5 py-1 rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-wider whitespace-nowrap inline-block">High Merit</span></td>
                     </tr>
                     <tr>
-                      <td className="py-4 px-2 font-black text-[#0c2e60]">SC</td>
-                      <td className="py-4 px-2 text-[#f9a825] font-extrabold">495 - 515 Marks</td>
-                      <td className="py-4 px-2">150 - 300 Marks</td>
-                      <td className="py-4 px-2"><span className="bg-yellow-50 text-yellow-600 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider">Medium Merit</span></td>
+                      <td className="py-3.5 px-2 sm:px-3 font-black text-[#0c2e60] whitespace-nowrap">SC</td>
+                      <td className="py-3.5 px-2 sm:px-3 text-[#f9a825] font-extrabold whitespace-nowrap">495 - 515 Marks</td>
+                      <td className="py-3.5 px-2 sm:px-3 whitespace-nowrap">150 - 300 Marks</td>
+                      <td className="py-3.5 px-2 sm:px-3"><span className="bg-amber-50 text-amber-700 border border-amber-200/60 px-2.5 py-1 rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-wider whitespace-nowrap inline-block">Medium Merit</span></td>
                     </tr>
                     <tr>
-                      <td className="py-4 px-2 font-black text-[#0c2e60]">ST</td>
-                      <td className="py-4 px-2 text-[#f9a825] font-extrabold">470 - 490 Marks</td>
-                      <td className="py-4 px-2">130 - 280 Marks</td>
-                      <td className="py-4 px-2"><span className="bg-yellow-50 text-yellow-600 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider">Medium Merit</span></td>
+                      <td className="py-3.5 px-2 sm:px-3 font-black text-[#0c2e60] whitespace-nowrap">ST</td>
+                      <td className="py-3.5 px-2 sm:px-3 text-[#f9a825] font-extrabold whitespace-nowrap">470 - 490 Marks</td>
+                      <td className="py-3.5 px-2 sm:px-3 whitespace-nowrap">130 - 280 Marks</td>
+                      <td className="py-3.5 px-2 sm:px-3"><span className="bg-amber-50 text-amber-700 border border-amber-200/60 px-2.5 py-1 rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-wider whitespace-nowrap inline-block">Medium Merit</span></td>
                     </tr>
                   </tbody>
                 </table>

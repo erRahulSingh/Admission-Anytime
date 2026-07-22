@@ -59,7 +59,7 @@ export default function AdminAdmissionFormsPage() {
           _id: "lead-1",
           fullName: "Priyesh Patel",
           email: "priyesh@gmail.com",
-          phone: "9876543210",
+          phone: "6284063840",
           neetScore: 420,
           interestedIn: "Abroad",
           country: "Georgia",

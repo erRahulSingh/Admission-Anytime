@@ -151,13 +151,20 @@ export default function Footer() {
             <p className="flex items-start gap-2.5">
               <FaMapMarkerAlt className="text-[#c39b34] mt-0.5 flex-shrink-0" />
               <span>
-                Suite 402, Metro Plaza, Outer Ring Road, New Delhi, 110001
+                Cors.Offo. 510, Devika Tower, Chander Nagar Surya Nagar, Sahibabad, Ghaziabad (Delhi NCR) U.P. 201011
               </span>
             </p>
             <p className="flex items-center gap-2.5">
               <FaPhoneAlt className="text-[#c39b34] flex-shrink-0" />
-              <a href="tel:+919876543210" className="hover:text-[#c39b34] hover:underline transition-colors">
-                +91 98765 43210
+              <a href="tel:+916284063840" className="hover:text-[#c39b34] hover:underline transition-colors">
+                +91 62840 63840
+              </a>
+            </p>
+            <p className="flex items-center gap-2.5">
+              <FaPhoneAlt className="text-[#c39b34] flex-shrink-0" />
+              <span>Landline: </span>
+              <a href="tel:012026111110" className="hover:text-[#c39b34] hover:underline transition-colors">
+                0120-26111110
               </a>
             </p>
             <p className="flex items-center gap-2.5">
@@ -185,7 +192,7 @@ export default function Footer() {
       <div className="fixed bottom-6 right-6 z-50 flex items-center justify-center">
         <span className="absolute w-14 h-14 bg-[#25D366] rounded-full whatsapp-pulse z-0" />
         <a
-          href="https://wa.me/919876543210?text=Hi!%20I%20am%20interested%20in%20Admission%20Guidance"
+          href="https://wa.me/916284063840?text=Hi!%20I%20am%20interested%20in%20Admission%20Guidance"
           target="_blank"
           rel="noopener noreferrer"
           className="relative z-10 bg-[#25D366] hover:bg-[#20ba5a] text-white p-4 rounded-full shadow-2xl hover:scale-110 active:scale-95 transition-all duration-300 flex items-center justify-center text-2xl shadow-green-500/20"

@@ -46,7 +46,7 @@ export default function CTASection() {
           {/* Right: 3 CTA Buttons */}
           <div className="flex flex-wrap items-center justify-center gap-3 relative z-10">
             <a
-              href="https://wa.me/919876543210"
+              href="https://wa.me/916284063840"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-[#16a34a] hover:bg-[#15803d] text-white font-extrabold px-5 py-3 rounded-xl text-[11px] sm:text-[12px] flex items-center gap-2 shadow-md transition-all hover:-translate-y-0.5"
@@ -54,7 +54,7 @@ export default function CTASection() {
               <FaWhatsapp size={14} /> WHATSAPP NOW
             </a>
             <a
-              href="tel:01202611111"
+              href="tel:012026111110"
               className="bg-[#0ea5e9] hover:bg-[#0284c7] text-white font-extrabold px-4 py-2 sm:py-2.5 rounded-xl flex flex-col items-center shadow-md transition-all hover:-translate-y-0.5"
             >
               <span className="flex items-center gap-1.5 text-[11px] sm:text-[12px]">
@@ -90,7 +90,7 @@ export default function CTASection() {
 
         {/* ─── Floating WhatsApp Button ─── */}
         <a
-          href="https://wa.me/919876543210"
+          href="https://wa.me/916284063840"
           target="_blank"
           rel="noopener noreferrer"
           className="fixed bottom-6 right-6 w-14 h-14 bg-[#25d366] rounded-full flex items-center justify-center text-white text-2xl shadow-lg shadow-green-500/30 hover:scale-110 transition-transform z-50"

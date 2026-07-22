@@ -177,10 +177,10 @@ export default function TermsAndConditionsPage() {
                     <FaEnvelope /> info@admissionanytime.com
                   </a>
                   <a
-                    href="tel:+919876543210"
+                    href="tel:+916284063840"
                     className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 font-black px-5 py-2.5 rounded-xl text-xs transition-colors"
                   >
-                    <FaPhoneAlt /> +91 98765 43210
+                    <FaPhoneAlt /> +91 62840 63840
                   </a>
                 </div>
               </div>

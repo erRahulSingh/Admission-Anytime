@@ -179,8 +179,15 @@ Regardless of where you study (private India or foreign university), every stude
 
 const seedDatabase = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/mbbs_consultancy');
-    console.log('Connected to database for seeding...');
+    const mongoUri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/mbbs_consultancy';
+    try {
+      await mongoose.connect(mongoUri, { serverSelectionTimeoutMS: 5000 });
+      console.log('Connected to database for seeding...');
+    } catch (primaryErr) {
+      console.error(`Primary DB failed (${primaryErr.message}). Trying local fallback...`);
+      await mongoose.connect('mongodb://127.0.0.1:27017/mbbs_consultancy', { serverSelectionTimeoutMS: 3000 });
+      console.log('Connected to local MongoDB for seeding...');
+    }
 
     // Clear existing collections
     await Admin.deleteMany({});
