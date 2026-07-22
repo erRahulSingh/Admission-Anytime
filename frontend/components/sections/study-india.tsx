@@ -108,6 +108,13 @@ const countries = [
     color: "border-t-blue-700",
     bullets: ["NMC Approved", "Indian Curriculum", "Near India"],
   },
+  {
+    name: "BANGLADESH",
+    code: "bd",
+    slug: "bangladesh",
+    color: "border-t-emerald-600",
+    bullets: ["Top Government Colleges", "NMC/WHO Approved", "Similar Syllabus", "Affordable Fees"],
+  },
 ];
 
 export default function StudyIndiaSection() {
@@ -133,47 +140,84 @@ export default function StudyIndiaSection() {
               </h3>
             </div>
 
-            {/* Tabs */}
-            <div className="grid grid-cols-4 border-b border-slate-100 mb-4">
-              {tabs.map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`pb-2.5 text-[8px] sm:text-[9px] font-bold uppercase text-center leading-tight whitespace-pre-line transition-all outline-none ${activeTab === tab
-                    ? "border-b-2 border-[#16a34a] text-[#16a34a] font-extrabold"
-                    : "text-[#0c2e60] hover:text-[#0F4C81]"
-                    }`}
-                >
-                  {tab}
-                </button>
-              ))}
-            </div>
-
-            {/* Content: List + Image */}
-            <div className="grid grid-cols-12 gap-3 flex-1">
-              {/* Two-column college list */}
-              <div className="col-span-7 space-y-2">
-                {tabContents[activeTab].map(([col1, col2], idx) => (
-                  <div key={idx} className="grid grid-cols-2 gap-x-2">
-                    <div className="flex items-center gap-1.5 text-[10px] sm:text-[11px] font-bold text-[#0c2e60]">
-                      <FaCheckCircle className="text-[#16a34a] text-[11px] flex-shrink-0" />
-                      <span className="truncate">{col1}</span>
-                    </div>
-                    <div className="flex items-center gap-1.5 text-[10px] sm:text-[11px] font-bold text-[#0c2e60]">
-                      <FaCheckCircle className="text-[#16a34a] text-[11px] flex-shrink-0" />
-                      <span className="truncate">{col2}</span>
-                    </div>
+            {/* 4 Header Categories (2x2 Grid) with college names 1-by-1 underneath each header */}
+            <div className="space-y-4 flex-1">
+              <div className="grid grid-cols-2 gap-3">
+                {/* Header 1: GOVT COLLEGES */}
+                <div className="bg-slate-50/70 border border-slate-100 rounded-xl p-3 space-y-2">
+                  <h4 className="text-[10px] sm:text-[11px] font-black text-[#16a34a] uppercase tracking-wider border-b border-emerald-100 pb-1.5 flex items-center gap-1">
+                    <span className="w-1.5 h-3 bg-[#16a34a] rounded-full inline-block"></span>
+                    GOVT COLLEGES
+                  </h4>
+                  <div className="space-y-1">
+                    {["AIIMS", "BHU", "JIPMER", "AMU", "MMC Chennai", "KGMU Lucknow", "MAMC Delhi", "AFMC Pune", "CMC Vellore"].map((item, idx) => (
+                      <div key={idx} className="flex items-center gap-1.5 text-[9px] sm:text-[10px] font-bold text-[#0c2e60]">
+                        <FaCheckCircle className="text-[#16a34a] text-[10px] flex-shrink-0" />
+                        <span className="truncate">{item}</span>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                </div>
+
+                {/* Header 2: PRIVATE COLLEGES */}
+                <div className="bg-slate-50/70 border border-slate-100 rounded-xl p-3 space-y-2">
+                  <h4 className="text-[10px] sm:text-[11px] font-black text-[#0F4C81] uppercase tracking-wider border-b border-blue-100 pb-1.5 flex items-center gap-1">
+                    <span className="w-1.5 h-3 bg-[#0F4C81] rounded-full inline-block"></span>
+                    PRIVATE COLLEGES
+                  </h4>
+                  <div className="space-y-1">
+                    {["KMC Manipal", "St. John's", "MS Ramaiah", "Hamdard Delhi", "DY Patil Pune", "PSG Coimbatore", "Kalinga", "JSS Mysore"].map((item, idx) => (
+                      <div key={idx} className="flex items-center gap-1.5 text-[9px] sm:text-[10px] font-bold text-[#0c2e60]">
+                        <FaCheckCircle className="text-[#16a34a] text-[10px] flex-shrink-0" />
+                        <span className="truncate">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Header 3: DEEMED UNIVERSITIES */}
+                <div className="bg-slate-50/70 border border-slate-100 rounded-xl p-3 space-y-2">
+                  <h4 className="text-[10px] sm:text-[11px] font-black text-purple-700 uppercase tracking-wider border-b border-purple-100 pb-1.5 flex items-center gap-1">
+                    <span className="w-1.5 h-3 bg-purple-600 rounded-full inline-block"></span>
+                    DEEMED UNIVERSITIES
+                  </h4>
+                  <div className="space-y-1">
+                    {["Amrita Kochi", "SRM Chennai", "Bharati Vidyapeeth", "MGM Mumbai", "GITAM Vizag", "DY Patil Mumbai", "Saveetha"].map((item, idx) => (
+                      <div key={idx} className="flex items-center gap-1.5 text-[9px] sm:text-[10px] font-bold text-[#0c2e60]">
+                        <FaCheckCircle className="text-[#16a34a] text-[10px] flex-shrink-0" />
+                        <span className="truncate">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Header 4: COUNSELLING GUIDANCE */}
+                <div className="bg-slate-50/70 border border-slate-100 rounded-xl p-3 space-y-2">
+                  <h4 className="text-[10px] sm:text-[11px] font-black text-amber-600 uppercase tracking-wider border-b border-amber-100 pb-1.5 flex items-center gap-1">
+                    <span className="w-1.5 h-3 bg-amber-500 rounded-full inline-block"></span>
+                    COUNSELLING GUIDANCE
+                  </h4>
+                  <div className="space-y-1">
+                    {["AIQ Allocation", "State Domicile", "Choice Filling", "Cut-off Predictor", "Document Verify", "Security Deposit"].map((item, idx) => (
+                      <div key={idx} className="flex items-center gap-1.5 text-[9px] sm:text-[10px] font-bold text-[#0c2e60]">
+                        <FaCheckCircle className="text-[#16a34a] text-[10px] flex-shrink-0" />
+                        <span className="truncate">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
 
-              {/* College Image — Replace COLLEGE_IMAGE_URL with your link, then change false to true */}
-              <div className="col-span-5 rounded-xl overflow-hidden border border-slate-100 shadow-sm min-h-[140px] bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center">
-                {true ? (
-                  <img src="https://uploads.onecompiler.io/43k3a6e7q/1783327566613/ChatGPT%20Image%20Jul%206,%202026,%2002_15_48%20PM.png" alt="College Building" className="w-full h-full object-cover" />
-                ) : (
-                  <span className="text-4xl">🏛️</span>
-                )}
+              {/* College Image at BOTTOM of box */}
+              <div className="w-full rounded-xl overflow-hidden border border-slate-200/80 shadow-md h-[130px] sm:h-[140px] bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center group mt-auto">
+                <img
+                  src="/indian_medical_college.png"
+                  alt="Medical College Building"
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
+                  onError={(e) => {
+                    e.currentTarget.src = "https://uploads.onecompiler.io/43k3a6e7q/1783327566613/ChatGPT%20Image%20Jul%206,%202026,%2002_15_48%20PM.png";
+                  }}
+                />
               </div>
             </div>
           </div>
@@ -202,62 +246,31 @@ export default function StudyIndiaSection() {
             </h3>
           </div>
 
-          {/* Countries Grid — top 3 big, bottom 4 smaller */}
-          <div className="space-y-4">
-
-            {/* Top Row: Georgia, Russia, Kazakhstan */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {countries.slice(0, 3).map((c) => (
-                <div key={c.slug} className={`bg-white border border-slate-100 ${c.color} border-t-[3px] rounded-xl p-4 flex flex-col justify-between min-h-[180px] hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group`}>
-                  <div>
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="w-6 h-6 rounded-full overflow-hidden border border-slate-200 flex-shrink-0 flex items-center justify-center">
-                        <img src={`https://flagcdn.com/w80/${c.code}.png`} alt={`${c.name} Flag`} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
-                      </div>
-                      <span className="text-[11px] sm:text-[12px] font-black text-[#0c2e60] tracking-wide">{c.name}</span>
+          {/* Countries Grid — Unified 10 Countries in 1x2 Grid for Mobile */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-4">
+            {countries.map((c) => (
+              <div key={c.slug} className={`bg-white border border-slate-100 ${c.color} border-t-[3px] rounded-xl p-3 sm:p-4 flex flex-col justify-between min-h-[160px] sm:min-h-[175px] hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group`}>
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-5.5 h-5.5 sm:w-6 sm:h-6 rounded-full overflow-hidden border border-slate-200 flex-shrink-0 flex items-center justify-center">
+                      <img src={`https://flagcdn.com/w80/${c.code}.png`} alt={`${c.name} Flag`} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
                     </div>
-                    <ul className="space-y-1.5">
-                      {c.bullets.map((b, bi) => (
-                        <li key={bi} className="flex items-start gap-1.5 text-[10px] sm:text-[11px] font-semibold text-slate-600">
-                          <span className="text-[#16a34a] mt-0.5">✔</span>
-                          <span>{b}</span>
-                        </li>
-                      ))}
-                    </ul>
+                    <span className="text-[10px] sm:text-[11px] font-black text-[#0c2e60] tracking-wide">{c.name}</span>
                   </div>
-                  <Link href={`/mbbs-abroad/${c.slug}`} className="mt-3 block text-center bg-[#0c2e60] hover:bg-[#0a2550] text-white font-extrabold py-2 rounded-lg text-[9px] sm:text-[10px] tracking-wider transition-colors">
-                    View Universities
-                  </Link>
+                  <ul className="space-y-1">
+                    {c.bullets.map((b, bi) => (
+                      <li key={bi} className="flex items-start gap-1 text-[9px] sm:text-[10px] font-semibold text-slate-600">
+                        <span className="text-[#16a34a] mt-0.5">✔</span>
+                        <span>{b}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-              ))}
-            </div>
-
-            {/* Bottom Row: Uzbekistan, Kyrgyzstan, Nepal, China */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              {countries.slice(3).map((c) => (
-                <div key={c.slug} className={`bg-white border border-slate-100 ${c.color} border-t-[3px] rounded-xl p-3 sm:p-4 flex flex-col justify-between min-h-[160px] hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group`}>
-                  <div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="w-5.5 h-5.5 rounded-full overflow-hidden border border-slate-200 flex-shrink-0 flex items-center justify-center">
-                        <img src={`https://flagcdn.com/w80/${c.code}.png`} alt={`${c.name} Flag`} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
-                      </div>
-                      <span className="text-[10px] sm:text-[11px] font-black text-[#0c2e60] tracking-wide">{c.name}</span>
-                    </div>
-                    <ul className="space-y-1">
-                      {c.bullets.map((b, bi) => (
-                        <li key={bi} className="flex items-start gap-1 text-[9px] sm:text-[10px] font-semibold text-slate-600">
-                          <span className="text-[#16a34a] mt-0.5">✔</span>
-                          <span>{b}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <Link href={`/mbbs-abroad/${c.slug}`} className="mt-2 block text-center bg-[#0c2e60] hover:bg-[#0a2550] text-white font-extrabold py-1.5 sm:py-2 rounded-lg text-[9px] tracking-wider transition-colors">
-                    View Universities
-                  </Link>
-                </div>
-              ))}
-            </div>
+                <Link href={`/mbbs-abroad/${c.slug}`} className="mt-2.5 block text-center bg-[#0c2e60] hover:bg-[#0a2550] text-white font-extrabold py-1.5 sm:py-2 rounded-lg text-[9px] sm:text-[10px] tracking-wider transition-colors">
+                  View Universities
+                </Link>
+              </div>
+            ))}
           </div>
 
         </div>

@@ -27,23 +27,7 @@ const faqs = [
   {
     question: "Can you help with education loans?",
     answer: "Yes. We guide students and parents regarding education loan documentation and financing options available through eligible financial institutions.",
-  },
-  {
-    question: "Will you help after admission?",
-    answer: "Absolutely. Our support continues with travel guidance, hostel assistance, university joining formalities, and ongoing student support.",
-  },
-  {
-    question: "How long does the admission process take?",
-    answer: "The timeline varies depending on the university, counseling schedule, document verification, and visa procedures. Our counselors provide a personalized admission timeline during the counseling session.",
-  },
-  {
-    question: "Are hostel facilities available?",
-    answer: "Most universities provide hostel or accommodation options for international students. We help students understand the available facilities before admission.",
-  },
-  {
-    question: "How do I begin my admission process?",
-    answer: "Simply book a free counseling session with our admission experts. We will evaluate your profile and guide you through every step of the admission journey.",
-  },
+  }
 ];
 
 export default function FAQSection() {
@@ -68,7 +52,7 @@ export default function FAQSection() {
   };
 
   return (
-    <section className="pt-2 pb-12 sm:pt-4 sm:pb-16 md:pt-6 md:pb-20 bg-[#fafcff] overflow-hidden">
+    <section className="pt-2 pb-12 sm:pt-4 sm:pb-16 md:pt-6 md:pb-20 bg-white overflow-hidden">
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6 space-y-10 sm:space-y-14">
 
         {/* Schema markup script */}
@@ -107,7 +91,7 @@ export default function FAQSection() {
               <img
                 src="/faq_illustration.png"
                 alt="Admissions Consultation FAQ Illustration"
-                className="w-full h-full object-contain faq-float-img"
+                className="w-full h-full object-contain faq-float-img mix-blend-multiply"
                 onError={(e) => {
                   // Fallback if image has not finished copying yet
                   e.currentTarget.src = "https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=800";

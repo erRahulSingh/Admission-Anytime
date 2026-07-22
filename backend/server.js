@@ -63,6 +63,32 @@ try {
   console.error('Campus BG copy warning:', e.message);
 }
 
+// Copy FAQ illustration dynamically on boot
+const srcFaqImg = 'C:/Users/rahul/.gemini/antigravity-ide/brain/ff35d743-69cc-4c3f-b03f-bc1bec7329e8/faq_isolated_3d_illustration_1784714596572.png';
+const destFaqImg = 'c:/Users/rahul/OneDrive/Desktop/Academy/frontend/public/faq_illustration.png';
+
+try {
+  if (fs.existsSync(srcFaqImg)) {
+    fs.copyFileSync(srcFaqImg, destFaqImg);
+    console.log('FAQ illustration copied dynamically to frontend assets!');
+  }
+} catch (e) {
+  console.error('FAQ copy warning:', e.message);
+}
+
+// Copy Indian Medical College image dynamically on boot
+const srcIndiaCollegeImg = 'C:/Users/rahul/.gemini/antigravity-ide/brain/ff35d743-69cc-4c3f-b03f-bc1bec7329e8/indian_medical_college_1784715040409.png';
+const destIndiaCollegeImg = 'c:/Users/rahul/OneDrive/Desktop/Academy/frontend/public/indian_medical_college.png';
+
+try {
+  if (fs.existsSync(srcIndiaCollegeImg)) {
+    fs.copyFileSync(srcIndiaCollegeImg, destIndiaCollegeImg);
+    console.log('Indian Medical College image copied dynamically to frontend assets!');
+  }
+} catch (e) {
+  console.error('India College image copy warning:', e.message);
+}
+
 const app = express();
 
 // Security Middlewares
