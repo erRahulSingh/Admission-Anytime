@@ -10,7 +10,7 @@ git add .
 
 :: Commit changes
 echo [2/3] Committing updates...
-git commit -m "fix: resolve lead submission schema validation and controller fallback logic for admin panel"
+git commit -m "fix: resolve 401 Unauthorized token error in authMiddleware and enable cluster migration resilience"
 
 :: Push changes
 echo [3/3] Pushing code to GitHub...
