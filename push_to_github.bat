@@ -10,7 +10,7 @@ git add .
 
 :: Commit changes
 echo [2/3] Committing updates...
-git commit -m "feat: update Study India card layout, add Bangladesh 10th card 1x2 mobile grid and FAQ 3D image"
+git commit -m "fix: resolve lead submission schema validation and controller fallback logic for admin panel"
 
 :: Push changes
 echo [3/3] Pushing code to GitHub...

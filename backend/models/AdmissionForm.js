@@ -14,21 +14,20 @@ const admissionFormSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      required: [true, 'Please add email'],
+      default: '',
       trim: true,
     },
     neetScore: {
       type: Number,
-      required: [true, 'Please add NEET score'],
+      default: 0,
     },
     interestedIn: {
       type: String,
-      enum: ['India', 'Abroad', 'Both'],
-      default: 'Abroad',
+      default: 'Both',
     },
     country: {
       type: String,
-      required: [true, 'Please specify country preference'],
+      default: 'India & Abroad',
     },
     status: {
       type: String,
@@ -41,7 +40,6 @@ const admissionFormSchema = new mongoose.Schema(
     },
     source: {
       type: String,
-      enum: ['Website', 'Ads'],
       default: 'Website',
     },
   },
