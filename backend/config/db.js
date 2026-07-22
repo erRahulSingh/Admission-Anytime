@@ -2,8 +2,12 @@ import mongoose from 'mongoose';
 
 const connectDB = async () => {
   try {
+    let mongoUri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/mbbs_consultancy';
+    if (mongoUri.includes('w=gvjfwww')) {
+      mongoUri = mongoUri.replace('w=gvjfwww', 'w=majority');
+    }
     const conn = await mongoose.connect(
-      process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/mbbs_consultancy',
+      mongoUri,
       {
         serverSelectionTimeoutMS: 5000,
       }
