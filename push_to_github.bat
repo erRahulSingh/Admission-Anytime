@@ -10,7 +10,7 @@ git add .
 
 :: Commit changes
 echo [2/3] Committing updates...
-git commit -m "fix: resolve 401 Unauthorized token error in authMiddleware and enable cluster migration resilience"
+git commit -m "fix: resolve admin logout redirection and provide credentials instructions"
 
 :: Push changes
 echo [3/3] Pushing code to GitHub...
