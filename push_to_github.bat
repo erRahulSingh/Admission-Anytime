@@ -1,28 +1,34 @@
 @echo off
 echo =======================================================
-echo  Pushing Admission Anytime Project to GitHub
+echo  Fixing Vercel Build and MongoDB Connection
 echo =======================================================
 cd /d "%~dp0"
 
+:: Delete root vercel.json if exists
 if exist vercel.json (
     del /f /q vercel.json
+    echo [OK] Root vercel.json deleted!
 )
 
+:: Delete fix script after use
+if exist fix_vercel.bat (
+    del /f /q fix_vercel.bat
+    echo [OK] fix_vercel.bat cleaned up!
+)
+
+:: Stage ALL changes including deletions
 echo [1/3] Staging files...
 git add -A
 
-echo [2/3] Committing updates...
-git commit -m "fix: remove vercel.json to resolve Vercel Root Directory build error"
+:: Commit
+echo [2/3] Committing fix...
+git commit -m "fix: resolve MongoDB connection timeout on Vercel with cached connection and cleanup server.js"
 
-echo [3/3] Pushing code to GitHub...
+:: Push
+echo [3/3] Pushing to GitHub...
 git push origin main
-if %errorlevel% neq 0 (
-    echo.
-    echo Trying fallback push...
-    git push origin master
-)
 
 echo =======================================================
-echo  Git Push Completed successfully!
+echo  DONE! Both frontend and backend will auto-redeploy.
 echo =======================================================
 pause
