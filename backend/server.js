@@ -16,6 +16,13 @@ import testimonialRoutes from './routes/testimonialRoutes.js';
 import blogRoutes from './routes/blogRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js';
 import studentRoutes from './routes/studentRoutes.js';
+import marketingRoutes from './routes/marketingRoutes.js';
+import reportRoutes from './routes/reportRoutes.js';
+import settingRoutes from './routes/settingRoutes.js';
+import roleRoutes from './routes/roleRoutes.js';
+import notificationRoutes from './routes/notificationRoutes.js';
+import securityRoutes from './routes/securityRoutes.js';
+import billingRoutes from './routes/billingRoutes.js';
 
 // Load env variables
 dotenv.config();
@@ -134,6 +141,13 @@ app.use('/api/testimonials', testimonialRoutes);
 app.use('/api/blogs', blogRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/students', studentRoutes);
+app.use('/api/marketing', marketingRoutes);
+app.use('/api/reports', reportRoutes);
+app.use('/api/settings', settingRoutes);
+app.use('/api/roles', roleRoutes);
+app.use('/api/notifications', notificationRoutes);
+app.use('/api/security', securityRoutes);
+app.use('/api/billing', billingRoutes);
 
 // Import models for seeding
 import Admin from './models/Admin.js';

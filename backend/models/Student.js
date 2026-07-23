@@ -13,8 +13,7 @@ const studentSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      required: [true, 'Please add student email'],
-      unique: true,
+      default: '',
     },
     phone: {
       type: String,
@@ -22,11 +21,23 @@ const studentSchema = new mongoose.Schema(
     },
     neetScore: {
       type: Number,
-      required: [true, 'Please add NEET Score'],
+      default: 0,
+    },
+    course: {
+      type: String,
+      default: 'MBBS in India',
     },
     countryInterested: {
       type: String,
-      required: true,
+      default: 'India',
+    },
+    source: {
+      type: String,
+      default: 'Website',
+    },
+    counsellor: {
+      type: String,
+      default: 'Neha Sharma',
     },
     selectedUniversity: {
       type: mongoose.Schema.Types.ObjectId,
@@ -34,7 +45,7 @@ const studentSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['Applied', 'Document Verification', 'Visa Processing', 'Enroute', 'Joined'],
+      enum: ['Applied', 'Document Verification', 'Visa Processing', 'Enroute', 'Joined', 'Rejected'],
       default: 'Applied',
     },
     documents: [

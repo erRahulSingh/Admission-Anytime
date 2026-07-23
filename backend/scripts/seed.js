@@ -9,6 +9,8 @@ import University from '../models/University.js';
 import Service from '../models/Service.js';
 import Testimonial from '../models/Testimonial.js';
 import Blog from '../models/Blog.js';
+import AdmissionForm from '../models/AdmissionForm.js';
+import Student from '../models/Student.js';
 
 dotenv.config();
 
@@ -199,6 +201,8 @@ const seedDatabase = async () => {
     await Service.deleteMany({});
     await Testimonial.deleteMany({});
     await Blog.deleteMany({});
+    await AdmissionForm.deleteMany({});
+    await Student.deleteMany({});
 
     console.log('Wiped out existing databases.');
 
@@ -313,6 +317,33 @@ const seedDatabase = async () => {
     // Seed Blogs
     await Blog.create(blogsData);
     console.log('Seeded blogs.');
+
+    // Seed Sample Admission Forms (Leads)
+    const sampleLeads = [
+      { fullName: 'Amit Kumar', phone: '+91 98765 43210', email: 'amit.kumar@example.com', neetScore: 540, interestedIn: 'India', country: 'India', status: 'Pending', source: 'Google Ads', notes: 'Inquiring for MBBS India seat cut-offs.' },
+      { fullName: 'Priya Sharma', phone: '+91 87654 32109', email: 'priya.sharma@example.com', neetScore: 480, interestedIn: 'Abroad', country: 'Georgia', status: 'Contacted', source: 'Website', notes: 'Interested in Tbilisi State Medical University.' },
+      { fullName: 'Rahul Verma', phone: '+91 76543 21098', email: 'rahul.verma@example.com', neetScore: 410, interestedIn: 'Abroad', country: 'Russia', status: 'In Discussion', source: 'Facebook Ads', notes: 'Discussing budget & Kazan Federal University.' },
+      { fullName: 'Sneha Singh', phone: '+91 65432 10987', email: 'sneha.singh@example.com', neetScore: 510, interestedIn: 'Both', country: 'Kazakhstan', status: 'Admitted', source: 'Referral', notes: 'Documentation verified, admission letter issued.' },
+      { fullName: 'Vikash Yadav', phone: '+91 54321 09876', email: 'vikash.yadav@example.com', neetScore: 390, interestedIn: 'Abroad', country: 'Georgia', status: 'Pending', source: 'Google Ads', notes: 'Requested fee structure for Batumi University.' },
+      { fullName: 'Ananya Gupta', phone: '+91 91234 56789', email: 'ananya.gupta@example.com', neetScore: 590, interestedIn: 'India', country: 'India', status: 'In Discussion', source: 'Website', notes: 'Looking for private medical college counseling.' },
+      { fullName: 'Rohan Mehta', phone: '+91 99887 76655', email: 'rohan.mehta@example.com', neetScore: 450, interestedIn: 'Abroad', country: 'Russia', status: 'Contacted', source: 'Facebook Ads', notes: 'Interested in September intake.' },
+      { fullName: 'Kavya Reddy', phone: '+91 98112 23344', email: 'kavya.reddy@example.com', neetScore: 520, interestedIn: 'Both', country: 'Georgia', status: 'Admitted', source: 'Referral', notes: 'Visa application submitted.' },
+      { fullName: 'Deepak Patel', phone: '+91 97445 56677', email: 'deepak.patel@example.com', neetScore: 360, interestedIn: 'Abroad', country: 'Kazakhstan', status: 'Pending', source: 'Others', notes: 'Direct counseling call requested.' },
+      { fullName: 'Pooja Joshi', phone: '+91 96332 21100', email: 'pooja.joshi@example.com', neetScore: 470, interestedIn: 'India', country: 'India', status: 'Closed', source: 'Website', notes: 'Joined local BDS program.' },
+    ];
+    await AdmissionForm.create(sampleLeads);
+    console.log('Seeded 10 sample admission leads.');
+
+    // Seed Sample Students
+    const sampleStudents = [
+      { applicationId: 'APP-2025-001', name: 'Amit Kumar', email: 'student.amit@example.com', phone: '+91 98765 43210', neetScore: 540, countryInterested: 'India', status: 'Applied' },
+      { applicationId: 'APP-2025-002', name: 'Priya Sharma', email: 'student.priya@example.com', phone: '+91 87654 32109', neetScore: 480, countryInterested: 'Georgia', status: 'Document Verification' },
+      { applicationId: 'APP-2025-003', name: 'Rahul Verma', email: 'student.rahul@example.com', phone: '+91 76543 21098', neetScore: 410, countryInterested: 'Russia', status: 'Visa Processing' },
+      { applicationId: 'APP-2025-004', name: 'Sneha Singh', email: 'student.sneha@example.com', phone: '+91 65432 10987', neetScore: 510, countryInterested: 'Kazakhstan', status: 'Enroute' },
+      { applicationId: 'APP-2025-005', name: 'Kavya Reddy', email: 'student.kavya@example.com', phone: '+91 98112 23344', neetScore: 520, countryInterested: 'Georgia', status: 'Joined' },
+    ];
+    await Student.create(sampleStudents);
+    console.log('Seeded 5 sample student applications.');
 
     console.log('Database seeded successfully!');
     process.exit(0);

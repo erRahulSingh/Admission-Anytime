@@ -24,8 +24,52 @@ const adminSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ['admin', 'superadmin'],
-      default: 'admin',
+      default: 'Counsellor',
+    },
+    department: {
+      type: String,
+      enum: ['Management', 'Counselling', 'Admissions', 'Marketing', 'Support'],
+      default: 'Counselling',
+    },
+    phone: {
+      type: String,
+      default: '',
+    },
+    status: {
+      type: String,
+      enum: ['Active', 'Inactive', 'Pending'],
+      default: 'Active',
+    },
+    avatar: {
+      type: String,
+      default: '',
+    },
+    lastLogin: {
+      type: Date,
+      default: Date.now,
+    },
+    language: {
+      type: String,
+      default: 'English',
+    },
+    timezone: {
+      type: String,
+      default: '(GMT +05:30) Asia/Kolkata',
+    },
+    dateFormat: {
+      type: String,
+      default: 'DD MMM YYYY (31 May 2025)',
+    },
+    timeFormat: {
+      type: String,
+      default: '12 Hour (05:30 PM)',
+    },
+    emailPreferences: {
+      accountNotifications: { type: Boolean, default: true },
+      applicationUpdates: { type: Boolean, default: true },
+      marketingPromotions: { type: Boolean, default: false },
+      weeklyReports: { type: Boolean, default: true },
+      systemAlerts: { type: Boolean, default: true },
     },
   },
   {

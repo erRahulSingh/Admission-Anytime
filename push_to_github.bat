@@ -10,7 +10,7 @@ git add .
 
 :: Commit changes
 echo [2/3] Committing updates...
-git commit -m "fix: resolve admin logout redirection and provide credentials instructions"
+git commit -m "feat: connect Reports, Users, General, Account, Roles, Notifications, Security, and Billing settings to MongoDB DB and add logout header dropdown"
 
 :: Push changes
 echo [3/3] Pushing code to GitHub...

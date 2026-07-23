@@ -1,46 +1,14 @@
 import mongoose from 'mongoose';
 import AdmissionForm from '../models/AdmissionForm.js';
+import Student from '../models/Student.js';
 import { sendNotificationEmails } from '../utils/mailer.js';
-
-// @desc    Submit new admission form (Lead)
-// @route   POST /api/admissions
-// @access  Public
-// In-memory fallback array for local dev/offline mode
-let localFallbackLeads = [
-  {
-    _id: "lead-fallback-1",
-    fullName: "Priyesh Patel",
-    email: "priyesh@gmail.com",
-    phone: "6284063840",
-    neetScore: 420,
-    interestedIn: "Abroad",
-    country: "Georgia",
-    status: "Pending",
-    source: "Website",
-    notes: "Interested in Tbilisi State Medical University. Budget is around 25 Lakhs.",
-    createdAt: new Date(),
-  },
-  {
-    _id: "lead-fallback-2",
-    fullName: "Meera Nair",
-    email: "meera@gmail.com",
-    phone: "9988776655",
-    neetScore: 580,
-    interestedIn: "Both",
-    country: "India",
-    status: "Contacted",
-    source: "Website - Popup",
-    notes: "Prefers government seats. Wants options in south India deemed universities.",
-    createdAt: new Date(),
-  }
-];
 
 // @desc    Submit new admission form (Lead)
 // @route   POST /api/admissions
 // @access  Public
 export const createLead = async (req, res, next) => {
   try {
-    const { fullName, phone, email, neetScore, interestedIn, country, source } = req.body;
+    const { fullName, phone, email, neetScore, interestedIn, country, source, notes, status } = req.body;
 
     if (!fullName || !phone) {
       res.status(400);
@@ -55,27 +23,20 @@ export const createLead = async (req, res, next) => {
       interestedIn: interestedIn || 'Both',
       country: country || 'India & Abroad',
       source: source || 'Website',
-      status: 'Pending',
-      notes: '',
+      status: status || 'Pending',
+      notes: notes || '',
     };
 
-    let lead = null;
-    if (mongoose.connection.readyState === 1) {
-      lead = await AdmissionForm.create(leadData);
+    const lead = await AdmissionForm.create(leadData);
 
-      // Send async emails
-      sendNotificationEmails(lead).catch((err) =>
-        console.error('Failed to send notification emails:', err.message)
-      );
-    } else {
-      console.warn('DB not connected (readyState !== 1). Inquiry stored in memory fallback.');
-      lead = { _id: `lead-mem-${Date.now()}`, ...leadData, createdAt: new Date() };
-      localFallbackLeads.unshift(lead);
-    }
+    // Send async notification email
+    sendNotificationEmails(lead).catch((err) =>
+      console.error('Failed to send notification emails:', err.message)
+    );
 
     res.status(201).json({
       success: true,
-      message: 'Admission query submitted successfully!',
+      message: 'Lead created successfully!',
       lead,
     });
   } catch (error) {
@@ -83,69 +44,90 @@ export const createLead = async (req, res, next) => {
   }
 };
 
-// @desc    Get all leads
+// @desc    Get all leads with live DB metrics & filters
 // @route   GET /api/admissions
 // @access  Private (Admin)
 export const getLeads = async (req, res, next) => {
   try {
     const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 20;
+    const limit = parseInt(req.query.limit) || 100;
     const skip = (page - 1) * limit;
 
-    const { status, search } = req.query;
-    
-    if (mongoose.connection.readyState === 1) {
-      let query = {};
+    const { status, search, source, interestedIn } = req.query;
 
-      if (status) {
-        query.status = status;
-      }
-
-      if (search) {
-        query.$or = [
-          { fullName: { $regex: search, $options: 'i' } },
-          { email: { $regex: search, $options: 'i' } },
-          { phone: { $regex: search, $options: 'i' } },
-          { country: { $regex: search, $options: 'i' } },
-          { source: { $regex: search, $options: 'i' } },
-        ];
-      }
-
-      const total = await AdmissionForm.countDocuments(query);
-      const leads = await AdmissionForm.find(query)
-        .sort({ createdAt: -1 })
-        .skip(skip)
-        .limit(limit);
-
-      return res.status(200).json({
-        success: true,
-        count: leads.length,
-        total,
-        pages: Math.ceil(total / limit),
-        leads,
-      });
-    } else {
-      console.warn('DB offline / fallback mode. Returning local in-memory leads.');
-      let filtered = [...localFallbackLeads];
-      if (status) {
-        filtered = filtered.filter(l => l.status === status);
-      }
-      if (search) {
-        const s = search.toLowerCase();
-        filtered = filtered.filter(l => 
-          l.fullName?.toLowerCase().includes(s) || 
-          l.phone?.toLowerCase().includes(s) || 
-          l.email?.toLowerCase().includes(s)
-        );
-      }
-      return res.status(200).json({
-        success: true,
-        count: filtered.length,
-        total: filtered.length,
-        pages: 1,
-        leads: filtered,
-      });
+    // Check if DB is empty; if so, auto-seed sample admission records
+    const initialCount = await AdmissionForm.countDocuments();
+    if (initialCount === 0) {
+      const defaultLeads = [
+        { fullName: 'Rahul Sharma', phone: '+91 98765 43210', email: 'rahul.sharma@email.com', interestedIn: 'India', country: 'India', status: 'Admitted', source: 'Google Ads', notes: 'Confirmed admission in B.Tech CSE' },
+        { fullName: 'Anjali Verma', phone: '+91 87654 32109', email: 'anjali.verma@email.com', interestedIn: 'Abroad', country: 'Georgia', status: 'Pending', source: 'Website', notes: 'Counseling scheduled for BBA' },
+        { fullName: 'Vikram Singh', phone: '+91 76543 21098', email: 'vikram.singh@email.com', interestedIn: 'Both', country: 'Russia', status: 'Admitted', source: 'Facebook Ads', notes: 'BCA admission confirmed' },
+        { fullName: 'Pooja Mehta', phone: '+91 65432 10987', email: 'pooja.mehta@email.com', interestedIn: 'India', country: 'India', status: 'Pending', source: 'Website', notes: 'B.Com course discussion' },
+        { fullName: 'Arjun Patel', phone: '+91 54321 09876', email: 'arjun.patel@email.com', interestedIn: 'Abroad', country: 'Kazakhstan', status: 'Admitted', source: 'Referral', notes: 'MBA Enrolled' },
+        { fullName: 'Neha Gupta', phone: '+91 43210 98765', email: 'neha.gupta@email.com', interestedIn: 'India', country: 'India', status: 'Closed', source: 'Google Ads', notes: 'Application rejected due to low cutoff' },
+        { fullName: 'Sagar Kumar', phone: '+91 32109 87654', email: 'sagar.kumar@email.com', interestedIn: 'Abroad', country: 'Georgia', status: 'In Discussion', source: 'Website', notes: 'Pending document verification' },
+        { fullName: 'Riya Sharma', phone: '+91 21098 76543', email: 'riya.sharma@email.com', interestedIn: 'Both', country: 'India', status: 'Admitted', source: 'Instagram Ads', notes: 'Confirmed seat BBA' },
+      ];
+      await AdmissionForm.create(defaultLeads);
     }
+
+    let query = {};
+
+    if (status) {
+      query.status = status;
+    }
+
+    if (source) {
+      query.source = { $regex: source, $options: 'i' };
+    }
+
+    if (interestedIn) {
+      query.interestedIn = interestedIn;
+    }
+
+    if (search) {
+      query.$or = [
+        { fullName: { $regex: search, $options: 'i' } },
+        { email: { $regex: search, $options: 'i' } },
+        { phone: { $regex: search, $options: 'i' } },
+        { country: { $regex: search, $options: 'i' } },
+        { source: { $regex: search, $options: 'i' } },
+      ];
+    }
+
+    const total = await AdmissionForm.countDocuments(query);
+    const leads = await AdmissionForm.find(query)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    // Live KPI counts from database
+    const totalLeadsCount = await AdmissionForm.countDocuments();
+    const newLeadsCount = await AdmissionForm.countDocuments({ status: 'Pending' });
+    const contactedCount = await AdmissionForm.countDocuments({ status: 'Contacted' });
+    const counsellingCount = await AdmissionForm.countDocuments({ status: 'In Discussion' });
+    const admittedCount = await AdmissionForm.countDocuments({ status: 'Admitted' });
+    const closedCount = await AdmissionForm.countDocuments({ status: 'Closed' });
+
+    const totalStudents = await Student.countDocuments();
+    const joinedStudents = await Student.countDocuments({ status: 'Joined' });
+
+    res.status(200).json({
+      success: true,
+      count: leads.length,
+      total,
+      pages: Math.ceil(total / limit),
+      leads,
+      stats: {
+        totalLeads: totalLeadsCount,
+        newLeads: newLeadsCount,
+        contacted: contactedCount,
+        counselling: counsellingCount,
+        applications: totalStudents,
+        admissions: admittedCount + joinedStudents,
+        closed: closedCount,
+      },
+    });
   } catch (error) {
     next(error);
   }
@@ -156,7 +138,7 @@ export const getLeads = async (req, res, next) => {
 // @access  Private (Admin)
 export const updateLead = async (req, res, next) => {
   try {
-    const { fullName, phone, email, neetScore, interestedIn, country, status, notes } = req.body;
+    const { fullName, phone, email, neetScore, interestedIn, country, status, notes, source } = req.body;
 
     let lead = await AdmissionForm.findById(req.params.id);
 
@@ -167,12 +149,13 @@ export const updateLead = async (req, res, next) => {
 
     lead = await AdmissionForm.findByIdAndUpdate(
       req.params.id,
-      { fullName, phone, email, neetScore, interestedIn, country, status, notes },
+      { fullName, phone, email, neetScore, interestedIn, country, status, notes, source },
       { new: true, runValidators: true }
     );
 
     res.status(200).json({
       success: true,
+      message: 'Lead updated successfully',
       lead,
     });
   } catch (error) {

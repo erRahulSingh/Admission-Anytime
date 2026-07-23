@@ -53,6 +53,7 @@ export default function Navbar() {
     setIsOpen(false);
   }, [pathname]);
 
+  // Hide Navbar on admin and landing pages
   if (pathname && (pathname.startsWith("/admin") || pathname.startsWith("/lp"))) {
     return null;
   }
