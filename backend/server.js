@@ -59,6 +59,16 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Database Connection Middleware for Serverless
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    res.status(500).json({ success: false, message: 'Database Connection Error: ' + err.message });
+  }
+});
+
 // Default Route
 app.get('/', (req, res) => {
   res.json({ message: 'MBBS Admission Consultancy API is running...' });

@@ -22,7 +22,7 @@ git add -A
 
 :: Commit
 echo [2/3] Committing fix...
-git commit -m "fix: resolve MongoDB connection timeout on Vercel with cached connection and cleanup server.js"
+git commit -m "fix: resolve querySrv ECONNREFUSED with Google DNS servers and automatic direct shard fallback"
 
 :: Push
 echo [3/3] Pushing to GitHub...

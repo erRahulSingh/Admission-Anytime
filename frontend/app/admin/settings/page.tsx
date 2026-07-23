@@ -707,8 +707,8 @@ export default function AdminSettingsPage() {
       {/* ══════════════════════════════════════════════════════════════ */}
       {/* 1. HORIZONTAL TOP SUB-NAV BAR                                 */}
       {/* ══════════════════════════════════════════════════════════════ */}
-      <div className="bg-white rounded-xl p-2 border border-[#e2e8f0] shadow-xs flex flex-wrap items-center justify-between gap-2">
-        <div className="flex flex-wrap items-center gap-1 overflow-x-auto">
+      <div className="bg-white rounded-xl p-2 border border-[#e2e8f0] shadow-xs flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2">
+        <div className="flex items-center gap-1 overflow-x-auto whitespace-nowrap pb-1 sm:pb-0 scrollbar-none">
           {topTabs.map((tab) => {
             const isActive = activeTab === tab.label;
             return (

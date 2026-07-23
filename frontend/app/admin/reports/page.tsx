@@ -444,7 +444,7 @@ export default function AdminReportsPage() {
             <span className="text-[11px] text-[#64748b] font-semibold">{timeRange}</span>
           </div>
 
-          <div className="grid grid-cols-5 gap-2 my-auto text-center">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 my-auto text-center">
             {courseData.map((course: any, idx: number) => (
               <div key={idx} className="flex flex-col items-center">
                 <div

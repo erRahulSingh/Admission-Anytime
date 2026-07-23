@@ -20,6 +20,8 @@ import {
   FaSignOutAlt,
   FaHome,
   FaSearch,
+  FaBars,
+  FaTimes,
 } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -33,6 +35,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const [authorized, setAuthorized] = useState(false);
   const [adminUser, setAdminUser] = useState<any>(null);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const isLoginPage = pathname === "/admin/login";
 
@@ -50,6 +53,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       if (user) setAdminUser(JSON.parse(user));
     }
   }, [router, pathname, isLoginPage]);
+
+  // Close sidebar on route change (mobile)
+  useEffect(() => {
+    setSidebarOpen(false);
+  }, [pathname]);
 
   const handleLogout = () => {
     localStorage.removeItem("adminToken");
@@ -96,11 +104,32 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
   return (
     <div className="min-h-screen bg-[#f0f2f5] flex" style={{ fontFamily: "'Inter', 'Plus Jakarta Sans', system-ui, sans-serif" }}>
+      {/* ═══════════════════ MOBILE SIDEBAR OVERLAY ═══════════════════ */}
+      <AnimatePresence>
+        {sidebarOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+            onClick={() => setSidebarOpen(false)}
+          />
+        )}
+      </AnimatePresence>
+
       {/* ═══════════════════ LEFT SIDEBAR ═══════════════════ */}
-      <aside className="w-[240px] bg-[#0c1527] text-white flex flex-col justify-between flex-shrink-0 min-h-screen">
+      <aside
+        className={`
+          fixed lg:static inset-y-0 left-0 z-50
+          w-[240px] bg-[#0c1527] text-white flex flex-col justify-between flex-shrink-0 min-h-screen
+          transform transition-transform duration-300 ease-in-out
+          ${sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
+        `}
+      >
         <div>
-          {/* Logo */}
-          <div className="px-5 pt-6 pb-5">
+          {/* Logo + Mobile Close */}
+          <div className="px-5 pt-6 pb-5 flex items-center justify-between">
             <Link href="/admin" className="flex items-center gap-3 group select-none">
               <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#1a6de1] to-[#38bdf8] flex items-center justify-center text-white shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform flex-shrink-0 border border-white/10">
                 <FaGraduationCap className="text-lg text-white" />
@@ -115,6 +144,13 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                 </div>
               </div>
             </Link>
+            {/* Close button (mobile only) */}
+            <button
+              onClick={() => setSidebarOpen(false)}
+              className="lg:hidden w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors text-[#94a3b8] hover:text-white"
+            >
+              <FaTimes className="text-[16px]" />
+            </button>
           </div>
 
           {/* Nav Links */}
@@ -145,7 +181,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         </div>
 
         {/* Sidebar Bottom */}
-        <div className="px-4 pb-5 space-y-3">
+        <div className="px-4 pb-5 space-y-3 hidden lg:block">
           {pathname === "/admin/marketing" ? (
             /* Promote Smarter Card for Marketing */
             <div className="bg-gradient-to-br from-[#122347] to-[#0e1b36] rounded-xl p-4 border border-[#1d355c]">
@@ -235,41 +271,51 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       </aside>
 
       {/* ═══════════════════ RIGHT CONTENT AREA ═══════════════════ */}
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col min-w-0 w-full">
         {/* Top Header Bar */}
-        <header className="bg-[#ffffff] border-b border-[#e8ecf1] h-[64px] px-7 flex items-center justify-between flex-shrink-0 sticky top-0 z-30">
-          {/* Left: Title */}
-          <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-[20px] font-bold text-[#1a1f36] leading-tight">{pageTitle}</h1>
-              {pathname === "/admin/marketing" && (
-                <span className="px-1.5 py-0.5 bg-blue-50 text-[#1a6de1] rounded-md text-[13px] font-bold flex items-center gap-1">
-                  📈
-                </span>
-              )}
+        <header className="bg-[#ffffff] border-b border-[#e8ecf1] h-[56px] lg:h-[64px] px-4 lg:px-7 flex items-center justify-between flex-shrink-0 sticky top-0 z-30">
+          {/* Left: Hamburger + Title */}
+          <div className="flex items-center gap-3 min-w-0">
+            {/* Hamburger Menu (Mobile) */}
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="lg:hidden w-9 h-9 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors text-[#3d4555] flex-shrink-0"
+            >
+              <FaBars className="text-[18px]" />
+            </button>
+
+            <div className="min-w-0">
+              <div className="flex items-center gap-2">
+                <h1 className="text-[16px] lg:text-[20px] font-bold text-[#1a1f36] leading-tight truncate">{pageTitle}</h1>
+                {pathname === "/admin/marketing" && (
+                  <span className="px-1.5 py-0.5 bg-blue-50 text-[#1a6de1] rounded-md text-[13px] font-bold flex items-center gap-1 flex-shrink-0">
+                    📈
+                  </span>
+                )}
+              </div>
+              <p className="text-[11px] lg:text-[12px] text-[#8c95a6] mt-0 truncate hidden sm:block">
+                {pathname === "/admin/marketing"
+                  ? "Track your marketing performance and lead generation across all channels."
+                  : pathname === "/admin/contact-requests"
+                  ? "Manage and track all counselling sessions and interactions"
+                  : pathname === "/admin/admissions"
+                  ? "Manage and track all admissions in one place."
+                  : pathname === "/admin/reports"
+                  ? "Deep insights into your admission journey and business performance"
+                  : pathname === "/admin/users"
+                  ? "Manage all users, roles and permissions from one place"
+                  : pathname === "/admin/settings"
+                  ? "Manage your system preferences and configurations"
+                  : "Welcome back! Here's what's happening today."}
+              </p>
             </div>
-            <p className="text-[12px] text-[#8c95a6] mt-0">
-              {pathname === "/admin/marketing"
-                ? "Track your marketing performance and lead generation across all channels."
-                : pathname === "/admin/contact-requests"
-                ? "Manage and track all counselling sessions and interactions"
-                : pathname === "/admin/admissions"
-                ? "Manage and track all admissions in one place."
-                : pathname === "/admin/reports"
-                ? "Deep insights into your admission journey and business performance"
-                : pathname === "/admin/users"
-                ? "Manage all users, roles and permissions from one place"
-                : pathname === "/admin/settings"
-                ? "Manage your system preferences and configurations"
-                : "Welcome back! Here's what's happening today."}
-            </p>
           </div>
 
           {/* Right: Search & Actions */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 lg:gap-3 flex-shrink-0">
             {/* Header Search Input for Settings */}
             {pathname === "/admin/settings" && (
-              <div className="relative hidden md:block w-52 mr-2">
+              <div className="relative hidden lg:block w-52 mr-2">
                 <input
                   type="text"
                   placeholder="Search anything..."
@@ -279,34 +325,35 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
               </div>
             )}
 
-            {/* Date Range */}
-            <div className="flex items-center gap-2 px-3 py-[7px] bg-white border border-[#e0e5ec] rounded-lg text-[12px] text-[#3d4555] font-medium cursor-pointer hover:border-[#c5cdd8] transition-colors">
+            {/* Date Range - hidden on small mobile */}
+            <div className="hidden sm:flex items-center gap-2 px-3 py-[7px] bg-white border border-[#e0e5ec] rounded-lg text-[12px] text-[#3d4555] font-medium cursor-pointer hover:border-[#c5cdd8] transition-colors">
               <FaCalendarAlt className="text-[#8c95a6] text-[12px]" />
-              <span>01 May 2025 - 31 May 2025</span>
+              <span className="hidden md:inline">01 May 2025 - 31 May 2025</span>
+              <span className="md:hidden">May 2025</span>
               <FaChevronDown className="text-[#8c95a6] text-[9px] ml-0.5" />
             </div>
 
             {/* Notification Bell */}
-            <div className="w-[36px] h-[36px] rounded-lg border border-[#e0e5ec] flex items-center justify-center relative cursor-pointer hover:bg-slate-50 transition-colors">
+            <div className="w-[34px] h-[34px] lg:w-[36px] lg:h-[36px] rounded-lg border border-[#e0e5ec] flex items-center justify-center relative cursor-pointer hover:bg-slate-50 transition-colors">
               <FaBell className="text-[#6b7a8d] text-[14px]" />
-              <span className="absolute top-[6px] right-[6px] w-[7px] h-[7px] bg-red-500 rounded-full border-[1.5px] border-white" />
+              <span className="absolute top-[5px] right-[5px] lg:top-[6px] lg:right-[6px] w-[7px] h-[7px] bg-red-500 rounded-full border-[1.5px] border-white" />
             </div>
 
-            {/* Separator */}
-            <div className="w-px h-7 bg-[#e8ecf1] mx-1" />
+            {/* Separator - hidden on mobile */}
+            <div className="w-px h-7 bg-[#e8ecf1] mx-1 hidden sm:block" />
 
             {/* User Profile Dropdown */}
             <div className="relative">
               <div
                 onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                className="flex items-center gap-2.5 cursor-pointer p-1 rounded-lg hover:bg-slate-100/80 transition-colors select-none"
+                className="flex items-center gap-2 cursor-pointer p-1 rounded-lg hover:bg-slate-100/80 transition-colors select-none"
               >
-                <div className="w-[38px] h-[38px] rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center overflow-hidden border-2 border-white shadow-sm flex-shrink-0">
-                  <span className="text-white font-bold text-[14px]">
+                <div className="w-[34px] h-[34px] lg:w-[38px] lg:h-[38px] rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center overflow-hidden border-2 border-white shadow-sm flex-shrink-0">
+                  <span className="text-white font-bold text-[13px] lg:text-[14px]">
                     {(adminUser?.name || "Admin").charAt(0).toUpperCase()}
                   </span>
                 </div>
-                <div className="hidden sm:block text-right">
+                <div className="hidden md:block text-right">
                   <div className="text-[12px] font-semibold text-[#1a1f36] leading-tight">
                     Hello, {adminUser?.name?.split(" ")[0] || "Admin"}
                   </div>
@@ -314,7 +361,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                     {adminUser?.role === "superadmin" ? "Super Admin" : "Admin"}
                   </div>
                 </div>
-                <FaChevronDown className={`text-[#8c95a6] text-[9px] transition-transform duration-200 ${userDropdownOpen ? "rotate-180" : ""}`} />
+                <FaChevronDown className={`text-[#8c95a6] text-[9px] transition-transform duration-200 hidden md:block ${userDropdownOpen ? "rotate-180" : ""}`} />
               </div>
 
               {/* Dropdown Menu Popover */}
@@ -387,7 +434,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto p-6">
+        <main className="flex-1 overflow-x-hidden overflow-y-auto p-3 sm:p-4 lg:p-6">
           <AnimatePresence mode="wait">
             <motion.div
               key={pathname}
