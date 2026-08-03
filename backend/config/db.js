@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import dns from 'dns';
 import fs from 'fs';
+import path from 'path';
 
 // Fix Node.js DNS SRV resolution issues on Windows & Vercel serverless environments
 try {
@@ -15,6 +16,32 @@ let cached = global.mongoose;
 if (!cached) {
   cached = global.mongoose = { conn: null, promise: null };
 }
+
+const getErrorFilePath = () => path.join(process.cwd(), 'db_error.txt');
+
+const clearErrorLog = () => {
+  try {
+    const errorFile = getErrorFilePath();
+    if (fs.existsSync(errorFile)) {
+      fs.unlinkSync(errorFile);
+    }
+  } catch (e) {
+    /* Ignore read-only or permission errors */
+  }
+};
+
+const writeErrorLog = (msg, append = false) => {
+  try {
+    const errorFile = getErrorFilePath();
+    if (append) {
+      fs.appendFileSync(errorFile, msg);
+    } else {
+      fs.writeFileSync(errorFile, msg);
+    }
+  } catch (e) {
+    console.error('DB Error Logger:', msg.trim());
+  }
+};
 
 const attemptConnect = async (uri) => {
   return mongoose.connect(uri, {
@@ -35,12 +62,12 @@ const connectDB = async () => {
     cached.promise = attemptConnect(mongoUri)
       .then((mongooseInstance) => {
         console.log(`MongoDB Connected: ${mongooseInstance.connection.host}`);
-        try { fs.unlinkSync('c:\\Users\\rahul\\OneDrive\\Desktop\\Academy\\backend\\db_error.txt'); } catch (e) {}
+        clearErrorLog();
         return mongooseInstance;
       })
       .catch(async (error) => {
         const errorMsg = `Primary DB connection failed: ${error.message}\n`;
-        fs.writeFileSync('c:\\Users\\rahul\\OneDrive\\Desktop\\Academy\\backend\\db_error.txt', errorMsg);
+        writeErrorLog(errorMsg, false);
 
         // Try local connection fallback
         if (mongoUri !== localUri) {
@@ -48,10 +75,10 @@ const connectDB = async () => {
             console.log('Attempting connection to local MongoDB fallback...');
             const localInstance = await attemptConnect(localUri);
             console.log(`MongoDB Connected via Local Fallback: ${localInstance.connection.host}`);
-            try { fs.unlinkSync('c:\\Users\\rahul\\OneDrive\\Desktop\\Academy\\backend\\db_error.txt'); } catch (e) {}
+            clearErrorLog();
             return localInstance;
           } catch (localErr) {
-            fs.appendFileSync('c:\\Users\\rahul\\OneDrive\\Desktop\\Academy\\backend\\db_error.txt', `Local DB connection fallback failed: ${localErr.message}\n`);
+            writeErrorLog(`Local DB connection fallback failed: ${localErr.message}\n`, true);
           }
         }
 
@@ -72,10 +99,10 @@ const connectDB = async () => {
             }
             const fallbackInstance = await attemptConnect(fallbackUri);
             console.log(`MongoDB Connected via Direct Shards: ${fallbackInstance.connection.host}`);
-            try { fs.unlinkSync('c:\\Users\\rahul\\OneDrive\\Desktop\\Academy\\backend\\db_error.txt'); } catch (e) {}
+            clearErrorLog();
             return fallbackInstance;
           } catch (fallbackErr) {
-            fs.appendFileSync('c:\\Users\\rahul\\OneDrive\\Desktop\\Academy\\backend\\db_error.txt', `Direct shard fallback failed: ${fallbackErr.message}\n`);
+            writeErrorLog(`Direct shard fallback failed: ${fallbackErr.message}\n`, true);
           }
         }
 
