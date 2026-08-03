@@ -83,6 +83,9 @@ export default function MarketingAdminPage() {
       setLoading(true);
       const params: any = {};
       if (selectedSource && selectedSource !== "All Sources") params.platform = selectedSource;
+      if (selectedCampaign && selectedCampaign !== "All Campaigns") params.campaign = selectedCampaign;
+      if (selectedMedium && selectedMedium !== "All Mediums") params.medium = selectedMedium;
+      if (selectedCounsellor && selectedCounsellor !== "All Counsellors") params.counsellor = selectedCounsellor;
       if (searchQuery) params.search = searchQuery;
       if (timeRange) params.timeRange = timeRange;
 
@@ -104,7 +107,7 @@ export default function MarketingAdminPage() {
 
   useEffect(() => {
     loadData();
-  }, [timeRange, selectedSource, searchQuery]);
+  }, [timeRange, selectedSource, selectedCampaign, selectedMedium, selectedCounsellor, searchQuery]);
 
   // Listen to sidebar custom event "open-create-campaign"
   useEffect(() => {
@@ -113,87 +116,140 @@ export default function MarketingAdminPage() {
     return () => window.removeEventListener("open-create-campaign", handleOpenCreate);
   }, []);
 
+  const handleDeleteCampaign = async (id: string) => {
+    if (!id) return;
+    if (!window.confirm("Are you sure you want to delete this campaign?")) return;
+
+    try {
+      await api.delete(`/marketing/${id}`);
+      showToast("Campaign deleted successfully!");
+      loadData();
+    } catch (err: any) {
+      showToast(err.message || "Failed to delete campaign");
+    }
+  };
+
+  const handleCreateCampaignSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newCampaign.name) return;
+
+    try {
+      await api.post("/marketing", newCampaign);
+      setIsCreateCampaignOpen(false);
+      showToast(`Campaign "${newCampaign.name}" launched successfully!`);
+      setNewCampaign({
+        name: "",
+        platform: "Google Ads",
+        targetCountry: "MBBS in India",
+        budget: "",
+        objective: "Lead Generation",
+      });
+      loadData();
+    } catch (err: any) {
+      showToast(err.message || `Failed to launch Campaign "${newCampaign.name}"`);
+    }
+  };
+
+  const handleAddBudgetSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!budgetData.amount) return;
+
+    try {
+      await api.post("/marketing/budget", {
+        channel: budgetData.channel,
+        amount: Number(budgetData.amount),
+      });
+      setIsAddBudgetOpen(false);
+      showToast(`₹${budgetData.amount} added to ${budgetData.channel} budget!`);
+      setBudgetData({ channel: "Google Ads", amount: "" });
+      loadData();
+    } catch (err: any) {
+      setIsAddBudgetOpen(false);
+      showToast(err.message || `Failed to add budget to ${budgetData.channel}`);
+    }
+  };
+
   // Top Stat Cards Data (Derived 100% dynamically from DB)
   const statCards = [
     {
       id: "leads",
       title: "Total Leads Generated",
-      value: apiStats ? (typeof apiStats.totalLeads === "number" ? apiStats.totalLeads.toLocaleString("en-IN") : apiStats.totalLeads) : "12,458",
-      change: "12.5%",
-      isPositive: true,
+      value: apiStats ? (typeof apiStats.totalLeads === "number" ? apiStats.totalLeads.toLocaleString("en-IN") : apiStats.totalLeads) : "0",
+      change: apiStats?.leadsChange ? `${apiStats.leadsChange}%` : "0%",
+      isPositive: apiStats?.leadsChange ? !apiStats.leadsChange.startsWith("-") : true,
       icon: <FaUsers className="text-[#10b981] text-[15px]" />,
       iconBg: "bg-[#e6f9f0]",
       lineColor: "#10b981",
       fillGradient: "rgba(16, 185, 129, 0.12)",
-      points: [18, 35, 25, 42, 38, 55, 48, 62],
+      points: trend?.totalLeadsSeries || [0, 0, 0, 0, 0, 0, 0],
     },
     {
       id: "cpl",
       title: "Cost Per Lead",
-      value: apiStats ? `₹ ${apiStats.costPerLead}` : "₹ 164",
-      change: "8.6%",
-      isPositive: false,
+      value: apiStats ? `₹ ${apiStats.costPerLead}` : "₹ 0",
+      change: apiStats?.cplChange ? `${apiStats.cplChange}%` : "0%",
+      isPositive: apiStats?.cplChange ? apiStats.cplChange.startsWith("-") : true, // Lower CPL is positive
       icon: <span className="text-[#f59e0b] font-bold text-[14px]">₹</span>,
       iconBg: "bg-[#fff6e5]",
       lineColor: "#f59e0b",
       fillGradient: "rgba(245, 158, 11, 0.12)",
-      points: [52, 45, 48, 38, 42, 30, 34, 28],
+      points: trend?.cplSeries || [0, 0, 0, 0, 0, 0, 0],
     },
     {
       id: "spend",
       title: "Total Ad Spend",
-      value: apiStats ? `₹ ${typeof apiStats.totalSpend === "number" ? apiStats.totalSpend.toLocaleString("en-IN") : apiStats.totalSpend}` : "₹ 2,04,580",
-      change: "4.2%",
-      isPositive: false,
+      value: apiStats ? `₹ ${typeof apiStats.totalSpend === "number" ? apiStats.totalSpend.toLocaleString("en-IN") : apiStats.totalSpend}` : "₹ 0",
+      change: apiStats?.spendChange ? `${apiStats.spendChange}%` : "0%",
+      isPositive: apiStats?.spendChange ? apiStats.spendChange.startsWith("-") : true,
       icon: <FaWallet className="text-[#9333ea] text-[14px]" />,
       iconBg: "bg-[#f3e8ff]",
       lineColor: "#9333ea",
       fillGradient: "rgba(147, 51, 234, 0.12)",
-      points: [30, 42, 38, 48, 40, 52, 46, 58],
+      points: trend?.spendSeries || [0, 0, 0, 0, 0, 0, 0],
     },
     {
       id: "applications",
       title: "Applications Generated",
-      value: apiStats ? (typeof apiStats.applications === "number" ? apiStats.applications.toLocaleString("en-IN") : apiStats.applications) : "1,987",
-      change: "11.8%",
-      isPositive: true,
+      value: apiStats ? (typeof apiStats.applications === "number" ? apiStats.applications.toLocaleString("en-IN") : apiStats.applications) : "0",
+      change: apiStats?.appsChange ? `${apiStats.appsChange}%` : "0%",
+      isPositive: apiStats?.appsChange ? !apiStats.appsChange.startsWith("-") : true,
       icon: <FaFileAlt className="text-[#0284c7] text-[14px]" />,
       iconBg: "bg-[#e0f2fe]",
       lineColor: "#0284c7",
       fillGradient: "rgba(2, 132, 199, 0.12)",
-      points: [22, 30, 28, 38, 35, 48, 44, 54],
+      points: trend?.applicationsSeries || [0, 0, 0, 0, 0, 0, 0],
     },
     {
       id: "admissions",
       title: "Admission (Success)",
-      value: apiStats ? (typeof apiStats.admissions === "number" ? apiStats.admissions.toLocaleString("en-IN") : apiStats.admissions) : "876",
-      change: "15.7%",
-      isPositive: true,
+      value: apiStats ? (typeof apiStats.admissions === "number" ? apiStats.admissions.toLocaleString("en-IN") : apiStats.admissions) : "0",
+      change: apiStats?.admissionsChange ? `${apiStats.admissionsChange}%` : "0%",
+      isPositive: apiStats?.admissionsChange ? !apiStats.admissionsChange.startsWith("-") : true,
       icon: <FaGraduationCap className="text-[#0d9488] text-[15px]" />,
       iconBg: "bg-[#e6fffa]",
       lineColor: "#0d9488",
       fillGradient: "rgba(13, 148, 136, 0.12)",
-      points: [15, 22, 20, 32, 28, 38, 36, 46],
+      points: trend?.admissionsSeries || [0, 0, 0, 0, 0, 0, 0],
     },
     {
       id: "roi",
       title: "ROI (Return on Ad Spend)",
-      value: apiStats ? apiStats.roi : "3.42x",
-      change: "9.4%",
-      isPositive: true,
+      value: apiStats ? apiStats.roi : "0.00x",
+      change: apiStats?.roiChange ? `${apiStats.roiChange}%` : "0%",
+      isPositive: apiStats?.roiChange ? !apiStats.roiChange.startsWith("-") : true,
       icon: <FaBullseye className="text-[#e11d48] text-[14px]" />,
       iconBg: "bg-[#ffe4e6]",
       lineColor: "#e11d48",
       fillGradient: "rgba(225, 29, 72, 0.12)",
-      points: [25, 28, 32, 30, 38, 42, 40, 50],
+      points: trend?.roiSeries || [0, 0, 0, 0, 0, 0, 0],
     },
   ];
 
   // Graph Data for Lead Generation Trend (Dynamic from DB)
-  const trendDates = trend?.dates || ["01 May", "06 May", "11 May", "16 May", "21 May", "26 May", "31 May"];
-  const totalLeadsSeries = trend?.totalLeadsSeries || [10, 12, 14, 15, 18, 20, 22];
-  const applicationsSeries = trend?.applicationsSeries || [5, 6, 8, 9, 10, 12, 14];
-  const admissionsSeries = trend?.admissionsSeries || [1, 2, 2, 3, 4, 5, 6];
+  const trendDates = trend?.dates || ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7"];
+  const totalLeadsSeries = trend?.totalLeadsSeries || [0, 0, 0, 0, 0, 0, 0];
+  const applicationsSeries = trend?.applicationsSeries || [0, 0, 0, 0, 0, 0, 0];
+  const admissionsSeries = trend?.admissionsSeries || [0, 0, 0, 0, 0, 0, 0];
 
   // Helper for generating smooth SVG curve
   const maxTrendVal = Math.max(...totalLeadsSeries, ...applicationsSeries, ...admissionsSeries, 20);
@@ -263,43 +319,6 @@ export default function MarketingAdminPage() {
     { label: "Applications", value: (apiStats?.applications || 0).toLocaleString("en-IN"), color: "#f97316", width: "48%" },
     { label: "Admissions", value: (apiStats?.admissions || 0).toLocaleString("en-IN"), color: "#ef4444", width: "32%" },
   ];
-
-  const handleCreateCampaignSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newCampaign.name) return;
-
-    try {
-      await api.post("/marketing", newCampaign);
-      setIsCreateCampaignOpen(false);
-      showToast(`Campaign "${newCampaign.name}" launched successfully!`);
-      setNewCampaign({
-        name: "",
-        platform: "Google Ads",
-        targetCountry: "MBBS in India",
-        budget: "",
-        objective: "Lead Generation",
-      });
-      loadData();
-    } catch (err) {
-      showToast(`Campaign "${newCampaign.name}" launched!`);
-      setIsCreateCampaignOpen(false);
-    }
-  };
-
-  const handleAddBudgetSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!budgetData.amount) return;
-
-    try {
-      setIsAddBudgetOpen(false);
-      showToast(`₹${budgetData.amount} added to ${budgetData.channel} budget!`);
-      setBudgetData({ channel: "Google Ads", amount: "" });
-      loadData();
-    } catch (err) {
-      setIsAddBudgetOpen(false);
-      showToast(`₹${budgetData.amount} added to budget!`);
-    }
-  };
 
   // CSV Export for Marketing Campaigns
   const exportMarketingCSV = () => {
@@ -845,7 +864,7 @@ export default function MarketingAdminPage() {
               </div>
 
               {/* Insight 2 */}
-              <div className="bg-[#fffbeeb] border border-[#fef3c7] rounded-xl p-3 flex items-start gap-2.5">
+              <div className="bg-[#fffbeb] border border-[#fef3c7] rounded-xl p-3 flex items-start gap-2.5">
                 <div className="w-7 h-7 rounded-lg bg-[#f59e0b]/15 text-[#d97706] flex items-center justify-center flex-shrink-0 mt-0.5">
                   <FaBullseye className="text-xs" />
                 </div>
@@ -1214,11 +1233,22 @@ export default function MarketingAdminPage() {
                         </div>
                       </div>
                     </div>
-                    <div className="text-right">
+                    <div className="text-right flex flex-col items-end gap-1">
                       <div className="text-[13px] font-bold text-[#0f172a]">{cmp.spend} Spend</div>
-                      <span className="text-[10px] px-2 py-0.5 bg-[#e6f9f0] text-[#10b981] font-bold rounded-full">
-                        {cmp.roi} ROI
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] px-2 py-0.5 bg-[#e6f9f0] text-[#10b981] font-bold rounded-full">
+                          {cmp.roi} ROI
+                        </span>
+                        {isManageAdsOpen && (
+                          <button
+                            onClick={() => handleDeleteCampaign(cmp.id)}
+                            className="p-1 text-red-500 hover:bg-red-50 rounded transition-colors"
+                            title="Delete Campaign"
+                          >
+                            <FaTrash className="text-xs" />
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
                 ))}

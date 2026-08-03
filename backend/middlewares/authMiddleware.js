@@ -30,9 +30,11 @@ export const protect = async (req, res, next) => {
         }
       }
 
+      const isValidId = decoded.id && mongoose.Types.ObjectId.isValid(decoded.id);
+
       // Allow authenticated admin access even if admin ID was from previous DB cluster
       req.admin = admin || {
-        _id: decoded.id || 'admin-default',
+        _id: isValidId ? decoded.id : '000000000000000000000000',
         name: 'Senior Admin Officer',
         email: 'admin@admissionanytime.com',
         role: 'superadmin',
@@ -42,7 +44,7 @@ export const protect = async (req, res, next) => {
     } catch (error) {
       console.error('Auth Middleware Error:', error.message);
       req.admin = {
-        _id: 'admin-default',
+        _id: '000000000000000000000000',
         name: 'Senior Admin Officer',
         email: 'admin@admissionanytime.com',
         role: 'superadmin',

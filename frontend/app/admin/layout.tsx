@@ -24,6 +24,7 @@ import {
   FaTimes,
 } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
+import api from "@/services/api";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -45,13 +46,38 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       return;
     }
     const token = localStorage.getItem("adminToken");
-    const user = localStorage.getItem("adminUser");
     if (!token) {
       router.push("/admin/login");
-    } else {
-      setAuthorized(true);
-      if (user) setAdminUser(JSON.parse(user));
+      return;
     }
+
+    // Call /auth/me to verify token validity on mount/refresh
+    api.get("/auth/me")
+      .then((res: any) => {
+        if (res && res.success) {
+          setAuthorized(true);
+          setAdminUser(res.admin);
+          localStorage.setItem("adminUser", JSON.stringify(res.admin));
+        } else {
+          localStorage.removeItem("adminToken");
+          localStorage.removeItem("adminUser");
+          router.push("/admin/login");
+        }
+      })
+      .catch((err: any) => {
+        console.error("Token verification failed:", err);
+        const isUnauthorized = err.message?.includes("401") || err.message?.includes("Unauthorized") || err.message?.includes("token");
+        if (isUnauthorized) {
+          localStorage.removeItem("adminToken");
+          localStorage.removeItem("adminUser");
+          router.push("/admin/login");
+        } else {
+          // If offline or network error, fallback to cached user
+          setAuthorized(true);
+          const cachedUser = localStorage.getItem("adminUser");
+          if (cachedUser) setAdminUser(JSON.parse(cachedUser));
+        }
+      });
   }, [router, pathname, isLoginPage]);
 
   // Close sidebar on route change (mobile)
@@ -79,8 +105,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     { label: "Dashboard", href: "/admin", icon: <FaThLarge />, exact: true },
     { label: "Leads", href: "/admin/admission-forms", icon: <FaUserFriends /> },
     { label: "Applications", href: "/admin/students", icon: <FaFileAlt /> },
-    { label: "Admissions", href: "/admin/admissions", icon: <FaGraduationCap /> },
-    { label: "Counselling", href: "/admin/contact-requests", icon: <FaHeadset /> },
     { label: "Marketing", href: "/admin/marketing", icon: <FaBullhorn /> },
     { label: "Reports", href: "/admin/reports", icon: <FaChartBar /> },
     { label: "Users", href: "/admin/users", icon: <FaUsers /> },
@@ -92,9 +116,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     l.exact ? pathname === l.href : pathname.startsWith(l.href) && l.href !== "/admin"
   );
   const pageTitle =
-    pathname === "/admin/contact-requests"
-      ? "Counselling Management"
-      : pathname === "/admin/reports"
+    pathname === "/admin/reports"
       ? "Reports & Analytics"
       : pathname === "/admin/users"
       ? "Users Management"
@@ -180,94 +202,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           </nav>
         </div>
 
-        {/* Sidebar Bottom */}
-        <div className="px-4 pb-5 space-y-3 hidden lg:block">
-          {pathname === "/admin/marketing" ? (
-            /* Promote Smarter Card for Marketing */
-            <div className="bg-gradient-to-br from-[#122347] to-[#0e1b36] rounded-xl p-4 border border-[#1d355c]">
-              <div className="flex items-center justify-between mb-1">
-                <h4 className="text-white text-[13px] font-bold">Promote Smarter</h4>
-                <span className="text-xs">📈</span>
-              </div>
-              <p className="text-[#7d9bbd] text-[11px] leading-relaxed mb-3">
-                Create high performing campaigns and get more admissions.
-              </p>
-              <button
-                onClick={() => {
-                  if (typeof window !== "undefined") {
-                    window.dispatchEvent(new CustomEvent("open-create-campaign"));
-                  }
-                }}
-                className="w-full bg-[#1a6de1] hover:bg-[#1558c0] text-white text-[12px] font-semibold py-2 rounded-lg transition-all flex items-center justify-center gap-1.5 shadow-sm active:scale-95"
-              >
-                <span className="text-[13px] font-bold">+</span> Create Campaign
-              </button>
-            </div>
-          ) : pathname === "/admin/reports" ? (
-            /* Grow Admissions Smarter Card for Reports */
-            <div className="bg-gradient-to-br from-[#122347] to-[#1e144a] rounded-xl p-4 border border-[#2b2168]">
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-[14px]">📊</span>
-                <h4 className="text-white text-[13px] font-bold">Grow Admissions Smarter</h4>
-              </div>
-              <p className="text-[#8e9bc5] text-[11px] leading-relaxed mb-3">
-                Track, analyze and grow your admissions with powerful insights.
-              </p>
-              <button className="w-full bg-[#1a6de1] hover:bg-[#1558c0] text-white text-[12px] font-semibold py-2 rounded-lg transition-all flex items-center justify-center gap-1 shadow-sm">
-                Explore Insights →
-              </button>
-            </div>
-          ) : pathname === "/admin/users" ? (
-            /* Manage Smarter Card for Users */
-            <div className="bg-gradient-to-br from-[#0f1d38] to-[#12192e] rounded-xl p-4 border border-[#1b2a4a]">
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-[14px]">🛡️</span>
-                <h4 className="text-white text-[13px] font-bold">Manage Smarter</h4>
-              </div>
-              <p className="text-[#728cb0] text-[11px] leading-relaxed mb-3">
-                Secure your data and empower your team with the right access.
-              </p>
-              <button className="w-full bg-[#1a6de1] hover:bg-[#1558c0] text-white text-[12px] font-semibold py-2 rounded-lg transition-all flex items-center justify-center gap-1 shadow-sm">
-                Explore Roles
-              </button>
-            </div>
-          ) : pathname === "/admin/settings" ? (
-            /* Stay Updated Card for Settings Notifications */
-            <div className="bg-gradient-to-br from-[#0c1527] via-[#121f3d] to-[#1e144a] rounded-xl p-4 border border-[#1b2a4a]">
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-[14px]">🔔</span>
-                <h4 className="text-white text-[13px] font-bold">Stay Updated</h4>
-              </div>
-              <p className="text-[#728cb0] text-[11px] leading-relaxed mb-3">
-                Enable smart notifications to never miss important updates.
-              </p>
-              <button
-                onClick={() => {
-                  if (typeof window !== "undefined") {
-                    alert("Notification Settings opened");
-                  }
-                }}
-                className="w-full bg-[#1a6de1] hover:bg-[#1558c0] text-white text-[12px] font-semibold py-2 rounded-lg transition-all flex items-center justify-center gap-1.5 shadow-sm"
-              >
-                Manage Notifications ↗
-              </button>
-            </div>
-          ) : (
-            /* Standard Need Help Card for Counselling & Others */
-            <div className="bg-[#111d33] rounded-xl p-4 border border-[#1a2a45]">
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-[14px]">🎧</span>
-                <h4 className="text-white text-[13px] font-bold">Need Help?</h4>
-              </div>
-              <p className="text-[#6b84a3] text-[11px] leading-relaxed mb-3">
-                Our counseling experts are here to support you.
-              </p>
-              <button className="w-full bg-[#1a6de1] hover:bg-[#1558c0] text-white text-[12px] font-semibold py-2 rounded-lg transition-colors flex items-center justify-center gap-1.5 shadow-sm">
-                <span className="text-[12px]">📅</span> Book a Demo
-              </button>
-            </div>
-          )}
-        </div>
+
       </aside>
 
       {/* ═══════════════════ RIGHT CONTENT AREA ═══════════════════ */}

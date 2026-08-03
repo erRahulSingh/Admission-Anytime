@@ -53,8 +53,8 @@ export default function Navbar() {
     setIsOpen(false);
   }, [pathname]);
 
-  // Hide Navbar on admin and landing pages
-  if (pathname && (pathname.startsWith("/admin") || pathname.startsWith("/lp"))) {
+  // Hide Navbar on admin pages
+  if (pathname && pathname.startsWith("/admin")) {
     return null;
   }
 
@@ -136,8 +136,16 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* ─── Mobile Action (Only Hamburger) ─── */}
-        <div className="flex items-center lg:hidden">
+        {/* ─── Mobile Action (Calling Icon + Hamburger) ─── */}
+        <div className="flex items-center gap-2 lg:hidden">
+          <a
+            href="tel:+916284063840"
+            className="w-9 h-9 rounded-full bg-gradient-to-r from-[#16a34a] to-[#22c55e] text-white flex items-center justify-center shadow-md shadow-green-600/20 active:scale-95 transition-transform"
+            aria-label="Call Us Now"
+            title="Call +91 62840 63840"
+          >
+            <FaPhoneAlt size={14} />
+          </a>
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 text-[#0F4C81] hover:bg-blue-50 transition-colors"

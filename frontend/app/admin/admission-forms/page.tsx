@@ -130,6 +130,9 @@ export default function AdminLeadsPage() {
   const [page, setPage] = useState(1);
   const perPage = 10;
 
+  // Multiple Selection & Bulk Delete state
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+
   // Modals state
   const [showAddModal, setShowAddModal] = useState(false);
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
@@ -167,6 +170,48 @@ export default function AdminLeadsPage() {
   }
 
   useEffect(() => { loadLeads(); }, []);
+
+  // Selection Handlers
+  const toggleSelectAll = (checked: boolean) => {
+    if (checked) {
+      const pageIds = paged.map(l => l._id);
+      setSelectedIds(prev => Array.from(new Set([...prev, ...pageIds])));
+    } else {
+      const pageIds = new Set(paged.map(l => l._id));
+      setSelectedIds(prev => prev.filter(id => !pageIds.has(id)));
+    }
+  };
+
+  const toggleSelectOne = (id: string) => {
+    setSelectedIds(prev =>
+      prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+    );
+  };
+
+  // Bulk Delete Leads
+  const handleBulkDelete = async () => {
+    if (selectedIds.length === 0) return;
+    if (!confirm(`Are you sure you want to delete ${selectedIds.length} selected lead(s)?`)) return;
+
+    try {
+      await api.post("/admissions/bulk-delete", { ids: selectedIds });
+      showToast(`${selectedIds.length} lead(s) deleted successfully!`);
+      setSelectedIds([]);
+      loadLeads();
+    } catch (err: any) {
+      setLeads(prev => prev.filter(l => !selectedIds.includes(l._id)));
+      showToast(`${selectedIds.length} lead(s) deleted!`);
+      setSelectedIds([]);
+    }
+  };
+
+  const handleResetFilters = () => {
+    setSearchTerm("");
+    setStatusFilter("");
+    setSourceFilter("");
+    setCourseFilter("");
+    setPage(1);
+  };
 
   // Export CSV Functionality
   const exportLeadsCSV = () => {
@@ -210,10 +255,12 @@ export default function AdminLeadsPage() {
       await api.delete(`/admissions/${id}`);
       showToast("Lead deleted successfully!");
       if (selectedLead?._id === id) setSelectedLead(null);
+      setSelectedIds(prev => prev.filter(i => i !== id));
       loadLeads();
     } catch (err: any) {
       setLeads(prev => prev.filter(l => l._id !== id));
       if (selectedLead?._id === id) setSelectedLead(null);
+      setSelectedIds(prev => prev.filter(i => i !== id));
       showToast("Lead deleted!");
     }
   };
@@ -291,11 +338,8 @@ export default function AdminLeadsPage() {
       setAddForm({ fullName: "", phone: "", email: "", neetScore: 0, interestedIn: "Abroad", source: "Website", status: "Pending", notes: "" });
       showToast("Lead added successfully!");
       loadLeads();
-    } catch {
-      const mock: Lead = { _id: "l-" + Date.now(), ...addForm, neetScore: Number(addForm.neetScore), country: "", createdAt: new Date().toISOString() };
-      setLeads(prev => [mock, ...prev]);
-      setShowAddModal(false);
-      showToast("Lead added!");
+    } catch (err: any) {
+      showToast(err.message || "Failed to create lead in database");
     }
   };
 
@@ -393,6 +437,18 @@ export default function AdminLeadsPage() {
           <FaFilter className="text-[10px]" /> Filter
         </button>
 
+        {(searchTerm || statusFilter || sourceFilter || courseFilter) && (
+          <button onClick={handleResetFilters} className="px-3 py-[7px] bg-slate-100 hover:bg-slate-200 text-[#64748b] rounded-lg text-[12px] font-semibold transition-colors">
+            Clear Filters
+          </button>
+        )}
+
+        {selectedIds.length > 0 && (
+          <button onClick={handleBulkDelete} className="flex items-center gap-1.5 px-4 py-[7px] bg-red-600 hover:bg-red-700 text-white rounded-lg text-[12px] font-semibold transition-colors shadow-sm animate-bounce">
+            <FaTrash className="text-[10px]" /> Delete Selected ({selectedIds.length})
+          </button>
+        )}
+
         {/* 📥 EXPORT CSV BUTTON */}
         <button onClick={exportLeadsCSV} className="flex items-center gap-1.5 px-4 py-[7px] border border-[#1a6de1] text-[#1a6de1] hover:bg-[#f0f6ff] rounded-lg text-[12px] font-semibold transition-colors">
           <FaFileExport className="text-[10px]" /> Export
@@ -408,7 +464,14 @@ export default function AdminLeadsPage() {
             <table className="w-full text-left">
               <thead>
                 <tr className="border-b border-[#eef0f4] bg-[#fafbfc]">
-                  <th className="py-3 pl-4 pr-2 w-8"><input type="checkbox" className="w-3.5 h-3.5 rounded border-slate-300 accent-[#1a6de1]" /></th>
+                  <th className="py-3 pl-4 pr-2 w-8">
+                    <input 
+                      type="checkbox" 
+                      className="w-3.5 h-3.5 rounded border-slate-300 accent-[#1a6de1] cursor-pointer"
+                      checked={paged.length > 0 && paged.every(l => selectedIds.includes(l._id))}
+                      onChange={(e) => toggleSelectAll(e.target.checked)}
+                    />
+                  </th>
                   <th className="py-3 px-3 text-[10px] text-[#8c95a6] font-semibold uppercase tracking-wider">Lead Details</th>
                   <th className="py-3 px-3 text-[10px] text-[#8c95a6] font-semibold uppercase tracking-wider">Contact</th>
                   <th className="py-3 px-3 text-[10px] text-[#8c95a6] font-semibold uppercase tracking-wider">Source</th>
@@ -430,11 +493,19 @@ export default function AdminLeadsPage() {
                   const assignee = ASSIGNEES[(page - 1 + idx) % ASSIGNEES.length];
                   const assigneeInit = getInitials(assignee);
                   const dt = new Date(lead.createdAt);
+                  const isSelected = selectedIds.includes(lead._id);
 
                   return (
-                    <tr key={lead._id} className="border-b border-[#f5f6f8] hover:bg-[#fafbfd] transition-colors group">
+                    <tr key={lead._id} className={`border-b border-[#f5f6f8] transition-colors group ${isSelected ? 'bg-blue-50/60' : 'hover:bg-[#fafbfd]'}`}>
                       {/* Checkbox */}
-                      <td className="py-3 pl-4 pr-2"><input type="checkbox" className="w-3.5 h-3.5 rounded border-slate-300 accent-[#1a6de1]" /></td>
+                      <td className="py-3 pl-4 pr-2">
+                        <input 
+                          type="checkbox" 
+                          className="w-3.5 h-3.5 rounded border-slate-300 accent-[#1a6de1] cursor-pointer"
+                          checked={isSelected}
+                          onChange={() => toggleSelectOne(lead._id)}
+                        />
+                      </td>
 
                       {/* Lead Details */}
                       <td className="py-3 px-3">

@@ -22,12 +22,11 @@ export default function HomePageContent() {
       <HeroSection />
       <StatsSection />
       <CoursesSection />
-      <ServicesSection />
-      <ChooseUsSection />
       <StudyIndiaSection />
       <StudyAbroadSection />
       <PopularUniversities />
-      <AdmissionProcessSection />
+      <ServicesSection />
+      <ChooseUsSection />
       <TrustSection />
       <TestimonialsSection />
       <FAQSection />

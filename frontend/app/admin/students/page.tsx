@@ -134,6 +134,9 @@ export default function AdminStudentsPage() {
   const [page, setPage] = useState(1);
   const perPage = 10;
 
+  // Multiple selection & Bulk Delete state
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+
   // Modals state
   const [showAddModal, setShowAddModal] = useState(false);
   const [selectedApp, setSelectedApp] = useState<ApplicationModel | null>(null);
@@ -205,6 +208,48 @@ export default function AdminStudentsPage() {
   }
 
   useEffect(() => { loadData(); }, []);
+
+  // Selection Handlers
+  const toggleSelectAll = (checked: boolean) => {
+    if (checked) {
+      const pageIds = paged.map(a => a._id);
+      setSelectedIds(prev => Array.from(new Set([...prev, ...pageIds])));
+    } else {
+      const pageIds = new Set(paged.map(a => a._id));
+      setSelectedIds(prev => prev.filter(id => !pageIds.has(id)));
+    }
+  };
+
+  const toggleSelectOne = (id: string) => {
+    setSelectedIds(prev =>
+      prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+    );
+  };
+
+  // Bulk Delete Applications
+  const handleBulkDelete = async () => {
+    if (selectedIds.length === 0) return;
+    if (!confirm(`Are you sure you want to delete ${selectedIds.length} selected application(s)?`)) return;
+
+    try {
+      await Promise.all(selectedIds.map(id => api.delete(`/students/${id}`)));
+      showToast(`${selectedIds.length} application(s) deleted successfully!`);
+      setSelectedIds([]);
+      loadData();
+    } catch (err: any) {
+      setApps(prev => prev.filter(a => !selectedIds.includes(a._id)));
+      showToast(`${selectedIds.length} application(s) deleted!`);
+      setSelectedIds([]);
+    }
+  };
+
+  const handleResetFilters = () => {
+    setSearchTerm("");
+    setStatusFilter("");
+    setSourceFilter("");
+    setCourseFilter("");
+    setPage(1);
+  };
 
   // Export CSV Functionality
   const exportAppsCSV = () => {
@@ -448,6 +493,18 @@ export default function AdminStudentsPage() {
           <FaFilter className="text-[10px]" /> Filter
         </button>
 
+        {(searchTerm || statusFilter || sourceFilter || courseFilter) && (
+          <button onClick={handleResetFilters} className="px-3 py-[7px] bg-slate-100 hover:bg-slate-200 text-[#64748b] rounded-lg text-[12px] font-semibold transition-colors">
+            Clear Filters
+          </button>
+        )}
+
+        {selectedIds.length > 0 && (
+          <button onClick={handleBulkDelete} className="flex items-center gap-1.5 px-4 py-[7px] bg-red-600 hover:bg-red-700 text-white rounded-lg text-[12px] font-semibold transition-colors shadow-sm animate-bounce">
+            <FaTrash className="text-[10px]" /> Delete Selected ({selectedIds.length})
+          </button>
+        )}
+
         {/* 📥 EXPORT CSV BUTTON */}
         <button onClick={exportAppsCSV} className="flex items-center gap-1.5 px-4 py-[7px] border border-[#1a6de1] text-[#1a6de1] hover:bg-[#f0f6ff] rounded-lg text-[12px] font-semibold transition-colors">
           <FaFileExport className="text-[10px]" /> Export
@@ -462,7 +519,14 @@ export default function AdminStudentsPage() {
             <table className="w-full text-left">
               <thead>
                 <tr className="border-b border-[#eef0f4] bg-[#fafbfc]">
-                  <th className="py-3 pl-4 pr-2 w-8"><input type="checkbox" className="w-3.5 h-3.5 rounded border-slate-300 accent-[#1a6de1]" /></th>
+                  <th className="py-3 pl-4 pr-2 w-8">
+                    <input 
+                      type="checkbox" 
+                      className="w-3.5 h-3.5 rounded border-slate-300 accent-[#1a6de1] cursor-pointer"
+                      checked={paged.length > 0 && paged.every(a => selectedIds.includes(a._id))}
+                      onChange={(e) => toggleSelectAll(e.target.checked)}
+                    />
+                  </th>
                   <th className="py-3 px-3 text-[10px] text-[#8c95a6] font-semibold uppercase tracking-wider">Application ID</th>
                   <th className="py-3 px-3 text-[10px] text-[#8c95a6] font-semibold uppercase tracking-wider">Applicant Name</th>
                   <th className="py-3 px-3 text-[10px] text-[#8c95a6] font-semibold uppercase tracking-wider">Contact Details</th>
@@ -479,10 +543,18 @@ export default function AdminStudentsPage() {
                   const initials = getInitials(app.applicantName);
                   const color = getAvatarColor(app.applicantName);
                   const dt = new Date(app.appliedOn);
+                  const isSelected = selectedIds.includes(app._id);
 
                   return (
-                    <tr key={app._id} className="border-b border-[#f5f6f8] hover:bg-[#fafbfd] transition-colors group">
-                      <td className="py-3 pl-4 pr-2"><input type="checkbox" className="w-3.5 h-3.5 rounded border-slate-300 accent-[#1a6de1]" /></td>
+                    <tr key={app._id} className={`border-b border-[#f5f6f8] transition-colors group ${isSelected ? 'bg-blue-50/60' : 'hover:bg-[#fafbfd]'}`}>
+                      <td className="py-3 pl-4 pr-2">
+                        <input 
+                          type="checkbox" 
+                          className="w-3.5 h-3.5 rounded border-slate-300 accent-[#1a6de1] cursor-pointer"
+                          checked={isSelected}
+                          onChange={() => toggleSelectOne(app._id)}
+                        />
+                      </td>
 
                       {/* Application ID */}
                       <td className="py-3 px-3 text-[12px] font-bold text-[#1a6de1] whitespace-nowrap">{app.applicationId}</td>

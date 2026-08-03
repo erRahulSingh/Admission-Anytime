@@ -22,37 +22,29 @@ import {
   FaUserTie,
   FaClipboardList,
   FaChevronDown,
+  FaChevronRight,
+  FaHandHoldingUsd,
+  FaHeadset,
+  FaPlane,
+  FaLock as FaLockIcon,
+  FaDollarSign,
+  FaArrowRight,
+  FaFileContract,
 } from "react-icons/fa";
 import api from "@/services/api";
 
-/* ─── Zod Schema (Single Step: Name, Phone, Email) ─── */
+/* ─── Zod Schema ─── */
 const leadSchema = z.object({
   fullName: z.string().min(2, "Full Name required"),
   phone: z.string().min(10, "Valid phone required"),
-  email: z.string().email("Valid email required"),
+  course: z.string().optional(),
 });
 type LeadFormValues = z.infer<typeof leadSchema>;
 
 /* ─── Static Data ─── */
-const trustBadges = [
-  "NEET UG Counselling Assistance",
-  "MCC & State Counselling Support",
-  "NMC Guidelines Based Guidance",
-  "India & Abroad MBBS Experts",
-];
-
-const highlightBoxes = [
-  { label: "Government Medical Colleges", icon: <FaUniversity /> },
-  { label: "Private Medical Colleges", icon: <FaBuilding /> },
-  { label: "Deemed Universities", icon: <FaGraduationCap /> },
-  { label: "NRI Quota Guidance", icon: <FaUserTie /> },
-  { label: "Management Quota Guidance", icon: <FaClipboardList /> },
-  { label: "MBBS Abroad", icon: <FaGlobe /> },
-];
-
 const flagCountries = [
-  { code: "ge", name: "GEORGIA" },
   { code: "ru", name: "RUSSIA" },
+  { code: "ge", name: "GEORGIA" },
   { code: "kz", name: "KAZAKHSTAN" },
   { code: "uz", name: "UZBEKISTAN" },
   { code: "kg", name: "KYRGYZSTAN" },
@@ -61,21 +53,10 @@ const flagCountries = [
 ];
 
 const stats = [
-  { value: "25+", label: "YEARS EXPERIENCE", icon: <FaStar /> },
-  { value: "25,000+", label: "STUDENTS GUIDED", icon: <FaUsers /> },
-  { value: "500+", label: "MEDICAL COLLEGES", icon: <FaGraduationCap /> },
-  { value: "100%", label: "ADMISSION ASSISTANCE", icon: <FaShieldAlt /> },
-];
-
-const descriptionBullets = [
-  "NEET UG Counselling Support",
-  "MCC Counselling",
-  "State Counselling",
-  "NRI Quota Guidance",
-  "Management Quota Guidance",
-  "Deemed Universities",
-  "Government & Private Medical Colleges",
-  "MBBS Abroad (NMC Compliant Universities)",
+  { value: "25+", label: "YEARS OF EXPERIENCE", icon: <FaStar />, color: "from-[#f9a825] to-[#ff8f00]" },
+  { value: "25,000+", label: "STUDENTS GUIDED", icon: <FaUsers />, color: "from-[#16a34a] to-[#22c55e]" },
+  { value: "500+", label: "MEDICAL COLLEGES", icon: <FaGraduationCap />, color: "from-[#1976d2] to-[#42a5f5]" },
+  { value: "100%", label: "ADMISSION ASSISTANCE", icon: <FaShieldAlt />, color: "from-[#7b1fa2] to-[#ab47bc]" },
 ];
 
 export default function HeroSection() {
@@ -83,6 +64,7 @@ export default function HeroSection() {
   const [success, setSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [submittedData, setSubmittedData] = useState<LeadFormValues | null>(null);
 
   const {
     register,
@@ -94,7 +76,7 @@ export default function HeroSection() {
     defaultValues: {
       fullName: "",
       phone: "",
-      email: "",
+      course: "",
     },
   });
 
@@ -105,14 +87,24 @@ export default function HeroSection() {
       await api.post("/admissions", {
         fullName: data.fullName,
         phone: data.phone,
-        email: data.email,
+        email: `${data.phone}@admissionanytime.com`,
         neetScore: 0,
-        interestedIn: "Both",
+        interestedIn: data.course || "MBBS India & Abroad",
         country: "India & Abroad",
-        source: "Website",
+        source: "Website - Hero Desktop",
       });
+      setSubmittedData(data);
       setSuccess(true);
       reset();
+
+      // Formatted WhatsApp message with filled details
+      const waMsg = `Hello Admission Anytime,%0A%0AI have submitted an inquiry form on the website.%0A%0A*My Submitted Details:*%0A👤 *Name:* ${encodeURIComponent(data.fullName)}%0A📞 *Phone:* ${encodeURIComponent(data.phone)}%0A📚 *Course:* ${encodeURIComponent(data.course || 'MBBS India & Abroad')}%0A%0APlease connect me with a Senior MBBS Counselor.`;
+      const whatsappUrl = `https://wa.me/916284063840?text=${waMsg}`;
+
+      // Auto-redirect to WhatsApp after 1 sec delay
+      setTimeout(() => {
+        window.open(whatsappUrl, "_blank");
+      }, 1000);
     } catch (error: any) {
       setErrorMsg(error.message || "Failed to submit.");
     } finally {
@@ -120,95 +112,117 @@ export default function HeroSection() {
     }
   };
 
-  /* ─── Single Step Form UI ─── */
-  const renderForm = (isDesktop: boolean) => {
+  /* ─── Render Desktop Form Card ─── */
+  const renderDesktopForm = () => {
     if (success) {
+      const waMsg = submittedData
+        ? `Hello Admission Anytime,%0A%0AI have submitted an inquiry form on the website.%0A%0A*My Submitted Details:*%0A👤 *Name:* ${encodeURIComponent(submittedData.fullName)}%0A📞 *Phone:* ${encodeURIComponent(submittedData.phone)}%0A📚 *Course:* ${encodeURIComponent(submittedData.course || 'MBBS India & Abroad')}%0A%0APlease connect me with a Senior MBBS Counselor.`
+        : `Hello Admission Anytime,%0A%0AI want to get free MBBS counseling guidance.`;
+      const whatsappUrl = `https://wa.me/916284063840?text=${waMsg}`;
+
       return (
-        <div className="py-7 px-2 text-center space-y-3.5 animate-fade-in">
-          <div className="w-16 h-16 bg-gradient-to-tr from-[#16a34a] to-[#22c55e] text-white rounded-full flex items-center justify-center text-2xl mx-auto shadow-lg shadow-green-500/20">
+        <div className="py-6 px-4 text-center space-y-3 animate-fade-in">
+          <div className="w-12 h-12 bg-gradient-to-tr from-[#16a34a] to-[#22c55e] text-white rounded-full flex items-center justify-center text-xl mx-auto shadow-md shadow-green-500/20">
             <FaCheckCircle />
           </div>
           <div className="space-y-1">
-            <h4 className="text-lg font-black text-[#0c2e60]">
+            <h4 className="text-sm font-black text-[#0c2e60]">
               Form Submitted Successfully! 🎉
             </h4>
-            <p className="text-xs font-semibold text-slate-600 leading-relaxed">
-              Thank you for contacting Admission Anytime. Our Senior MBBS Admission Counselor will call you very soon!
+            <p className="text-[11px] font-semibold text-slate-600 leading-relaxed">
+              Your details are saved! Redirecting to WhatsApp to chat with our Senior Counselor...
             </p>
           </div>
-          <button
-            onClick={() => {
-              setSuccess(false);
-              if (!isDesktop) setIsModalOpen(false);
-            }}
-            className="mt-2 bg-[#f9a825] hover:bg-[#f57f17] text-[#0c2e60] font-black py-2.5 px-6 rounded-xl text-xs shadow-md transition-all active:scale-95 cursor-pointer"
-          >
-            {isDesktop ? "Submit New Inquiry" : "Close Window"}
-          </button>
+          <div className="space-y-2 pt-1">
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#128C7E] text-white font-black py-2.5 px-4 rounded-xl text-xs shadow-md transition-all cursor-pointer"
+            >
+              <FaWhatsapp className="text-base" /> Chat on WhatsApp Now
+            </a>
+            <button
+              type="button"
+              onClick={() => {
+                setSuccess(false);
+                setSubmittedData(null);
+              }}
+              className="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2 px-4 rounded-xl text-[11px] transition-all cursor-pointer"
+            >
+              Submit New Inquiry
+            </button>
+          </div>
         </div>
       );
     }
 
     return (
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
-        {/* Full Name */}
-        <div className="relative">
-          <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 pointer-events-none">
-            <FaUser size={12} />
-          </span>
-          <input
-            type="text"
-            placeholder="Full Name *"
-            {...register("fullName")}
-            className={`w-full bg-slate-50 border rounded-xl pl-9 pr-3 py-2.5 text-[12px] text-[#1a1a2e] placeholder:text-slate-400 outline-none focus:border-[#0F4C81] focus:bg-white transition-all ${
-              errors.fullName ? "border-red-400" : "border-slate-200"
-            }`}
-          />
-          {errors.fullName && (
-            <p className="text-[9px] text-red-500 mt-0.5 pl-1">
-              {errors.fullName.message}
-            </p>
-          )}
+        {/* Row 1: Full Name & Mobile Number Side by Side */}
+        <div className="grid grid-cols-2 gap-3">
+          {/* Full Name */}
+          <div className="relative">
+            <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 pointer-events-none">
+              <FaUser size={11} />
+            </span>
+            <input
+              type="text"
+              placeholder="Full Name *"
+              {...register("fullName")}
+              className={`w-full bg-slate-50 border rounded-xl pl-9 pr-3 py-2.5 text-[12px] font-semibold text-[#1a1a2e] placeholder:text-slate-400 outline-none focus:border-[#0F4C81] focus:bg-white transition-all ${
+                errors.fullName ? "border-red-400" : "border-slate-200"
+              }`}
+            />
+          </div>
+
+          {/* Mobile Number */}
+          <div className="relative">
+            <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 pointer-events-none">
+              <FaPhoneAlt size={11} />
+            </span>
+            <input
+              type="tel"
+              placeholder="Mobile Number *"
+              {...register("phone")}
+              className={`w-full bg-slate-50 border rounded-xl pl-9 pr-3 py-2.5 text-[12px] font-semibold text-[#1a1a2e] placeholder:text-slate-400 outline-none focus:border-[#0F4C81] focus:bg-white transition-all ${
+                errors.phone ? "border-red-400" : "border-slate-200"
+              }`}
+            />
+          </div>
         </div>
 
-        {/* Mobile Number */}
+        {/* Row 2: Email Address */}
         <div className="relative">
           <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 pointer-events-none">
-            <FaPhoneAlt size={12} />
-          </span>
-          <input
-            type="tel"
-            placeholder="Mobile Number *"
-            {...register("phone")}
-            className={`w-full bg-slate-50 border rounded-xl pl-9 pr-3 py-2.5 text-[12px] text-[#1a1a2e] placeholder:text-slate-400 outline-none focus:border-[#0F4C81] focus:bg-white transition-all ${
-              errors.phone ? "border-red-400" : "border-slate-200"
-            }`}
-          />
-          {errors.phone && (
-            <p className="text-[9px] text-red-500 mt-0.5 pl-1">
-              {errors.phone.message}
-            </p>
-          )}
-        </div>
-
-        {/* Email Address */}
-        <div className="relative">
-          <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 pointer-events-none">
-            <FaEnvelope size={12} />
+            <FaEnvelope size={11} />
           </span>
           <input
             type="email"
-            placeholder="Email Address *"
+            placeholder="Email Address (Optional)"
             {...register("email")}
-            className={`w-full bg-slate-50 border rounded-xl pl-9 pr-3 py-2.5 text-[12px] text-[#1a1a2e] placeholder:text-slate-400 outline-none focus:border-[#0F4C81] focus:bg-white transition-all ${
-              errors.email ? "border-red-400" : "border-slate-200"
-            }`}
+            className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3 py-2.5 text-[12px] font-semibold text-[#1a1a2e] placeholder:text-slate-400 outline-none focus:border-[#0F4C81] focus:bg-white transition-all"
           />
-          {errors.email && (
-            <p className="text-[9px] text-red-500 mt-0.5 pl-1">
-              {errors.email.message}
-            </p>
-          )}
+        </div>
+
+        {/* Row 3: Select Course Dropdown */}
+        <div className="relative">
+          <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 pointer-events-none">
+            <FaGraduationCap size={13} />
+          </span>
+          <select
+            {...register("course")}
+            className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-8 py-2.5 text-[12px] font-semibold text-slate-700 outline-none focus:border-[#0F4C81] focus:bg-white transition-all appearance-none cursor-pointer"
+          >
+            <option value="">Select Course / Guidance Needed</option>
+            <option value="MBBS India (NEET UG)">MBBS in India (NEET UG)</option>
+            <option value="MBBS Abroad (NMC Compliant)">MBBS Abroad (NMC Compliant)</option>
+            <option value="Deemed / Management Quota">Deemed Universities / Management Quota</option>
+            <option value="NRI Quota Guidance">NRI Quota Guidance</option>
+          </select>
+          <div className="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-slate-400 text-[10px]">
+            <FaChevronDown />
+          </div>
         </div>
 
         {errorMsg && (
@@ -217,248 +231,311 @@ export default function HeroSection() {
           </p>
         )}
 
-        {/* Submit Button */}
+        {/* Row 3: Submit Button */}
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-[#f9a825] hover:bg-[#f57f17] text-[#0c2e60] font-black py-3 rounded-xl text-[12px] tracking-wider shadow-md active:scale-95 transition-all disabled:opacity-50 cursor-pointer"
+          className="w-full bg-[#00a651] hover:bg-[#008d44] text-white font-black py-3 rounded-xl text-[13px] tracking-wide shadow-md shadow-green-600/20 active:scale-98 transition-all disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer uppercase"
         >
-          {loading ? "PROCESSING..." : "SUBMIT NOW"}
+          {loading ? "PROCESSING..." : "BOOK FREE COUNSELLING"} <FaArrowRight size={12} />
         </button>
-
-        <p className="text-[9px] text-slate-400 text-center flex items-center justify-center gap-1 pt-1">
-          <FaLock size={8} /> Your information is safe with us
-        </p>
       </form>
     );
   };
 
   return (
-    <section className="relative w-full flex flex-col">
-      {/* ═══ HERO AREA ═══ */}
+    <section className="relative w-full flex flex-col bg-[#f4f8fe]/80 overflow-hidden font-sans">
+      
+      {/* ═══ 1. TOP HERO SECTION ═══ */}
       <div className="relative w-full overflow-hidden">
-        {/* Background */}
+        {/* Soft Background Graphic Layer */}
         <div className="absolute inset-0 z-0">
           <div
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-500"
+            className="absolute inset-0 bg-cover bg-right bg-no-repeat opacity-80"
             style={{ backgroundImage: "url('/hero_bg.png')" }}
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#e8f0fe]/90 via-[#eaf1fd]/85 to-[#e8f0fe]/90 lg:from-[#e8f0fe]/92 lg:via-[#eaf1fd]/35 lg:to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#f2f7ff]/95 via-[#f2f7ff]/40 to-transparent" />
         </div>
 
-        {/* Content */}
         <div className="relative z-10 max-w-[1280px] mx-auto px-4 sm:px-6 h-full">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-8 items-start pt-5 pb-6 sm:pt-6 sm:pb-8 lg:pt-8 lg:pb-8">
-            {/* ──── LEFT: Text + CTA ──── */}
-            <div className="lg:col-span-8 space-y-3 sm:space-y-4 relative z-[10]">
-              {/* Trust Badge - Desktop only */}
-              <div className="hidden sm:inline-flex items-center gap-2 bg-white/70 backdrop-blur-sm border border-slate-200/80 rounded-full px-4 py-1.5 shadow-sm">
-                <FaCheckCircle className="text-[#1976d2] text-sm" />
-                <span className="text-[12px] font-bold text-[#1a1a2e]">India&apos;s Most Trusted MBBS Admission Platform</span>
+          <div className="relative pt-4 pb-4 sm:pt-6 sm:pb-8 lg:pt-7 lg:pb-0">
+            
+            {/* ══════ MOBILE LAYOUT (< lg) ══════ */}
+            <div className="lg:hidden relative space-y-3">
+              {/* Doctor Image - Positioned further right and lower */}
+              <div className="absolute bottom-[-25px] right-[-50px] w-[55%] h-[380px] pointer-events-none z-[1]">
+                <img
+                  src="/hero_doctor.png"
+                  alt="MBBS Admission Counsellor"
+                  className="absolute bottom-0 right-0 h-full w-auto object-contain drop-shadow-xl"
+                />
               </div>
 
-              <div className="flex flex-row items-center justify-between gap-2">
-                <div className="space-y-2 sm:space-y-3 flex-1">
-                  {/* H1 Heading */}
+              {/* Mobile Content */}
+              <div className="relative z-[5] space-y-3">
+                {/* Trust Badge */}
+                <div className="inline-flex items-center gap-1.5 bg-[#0c2e60]/90 backdrop-blur-sm rounded-full px-3 py-1 shadow-md">
+                  <FaCheckCircle className="text-white text-[9px]" />
+                  <span className="text-[9px] font-bold text-white">Trusted by 25,000+ Students</span>
+                </div>
+
+                {/* Heading */}
+                <div className="pr-[42%] space-y-1 pt-1">
                   <div className="space-y-0 leading-none">
-                    <h1 className="text-[24px] sm:text-[36px] md:text-[44px] lg:text-[50px] xl:text-[56px] font-black text-[#0c2e60] tracking-tight leading-[1.05]">
+                    <h1 className="text-[26px] font-black text-[#0c2e60] tracking-tight leading-[1]">
                       MBBS ADMISSION
                     </h1>
-                    <p className="text-[32px] sm:text-[46px] md:text-[58px] lg:text-[66px] xl:text-[74px] font-black tracking-tight leading-[1] text-transparent bg-clip-text bg-gradient-to-r from-[#c62828] via-[#d32f2f] to-[#e65100]">
-                      2026-27
+                    <p className="text-[38px] font-black tracking-tight leading-[1.05] text-[#00a651]">
+                      2026–27
                     </p>
-                    <p className="text-[22px] sm:text-[34px] md:text-[42px] lg:text-[48px] xl:text-[54px] font-black text-[#0c2e60] tracking-tight leading-[1.05]">
+                    <p className="text-[22px] font-black text-[#0c2e60] tracking-tight leading-[1]">
                       INDIA & ABROAD
                     </p>
                   </div>
 
-                  {/* Sub Heading - Hidden on mobile */}
-                  <p className="hidden sm:block text-[#d97706] font-extrabold text-[13px] md:text-[14px] tracking-wide">
-                    Expert NEET UG Counselling | NMC Guidelines | MCC & State
-                    Counselling Assistance
+                  <div className="flex items-center gap-1.5 pt-1">
+                    <FaCheckCircle className="text-[#00a651] text-[11px] flex-shrink-0" />
+                    <span className="text-[11px] font-bold text-[#0c2e60]">NMC Approved Universities</span>
+                  </div>
+                </div>
+
+                {/* Country Flags */}
+                <div className="flex flex-wrap gap-x-1.5 gap-y-1.5 text-[9px] font-extrabold text-[#0c2e60]">
+                  {flagCountries.slice(0, 6).map((c) => (
+                    <span
+                      key={c.name}
+                      className="flex items-center gap-1.5 bg-white/90 px-2.5 py-1.5 rounded-lg border border-slate-200 shadow-sm"
+                    >
+                      <div className="w-4 h-3 rounded-[2px] overflow-hidden border border-slate-200/60 flex-shrink-0">
+                        <img
+                          src={`https://flagcdn.com/w80/${c.code}.png`}
+                          alt={`${c.name} Flag`}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <span>{c.name}</span>
+                    </span>
+                  ))}
+                </div>
+
+
+
+                {/* Mobile CTA Buttons */}
+                <div className="flex gap-2.5">
+                  <button
+                    type="button"
+                    onClick={() => setIsModalOpen(true)}
+                    className="flex-1 flex items-center justify-between bg-gradient-to-r from-[#0c2e60] to-[#1565c0] rounded-2xl px-3.5 py-3 shadow-lg shadow-blue-900/20 cursor-pointer active:scale-[0.97] transition-transform"
+                  >
+                    <div className="text-left leading-tight">
+                      <span className="text-[10px] font-black text-white tracking-wide block">FREE CAREER</span>
+                      <span className="text-[10px] font-black text-white tracking-wide block">COUNSELLING</span>
+                      <span className="text-[7px] font-semibold text-white/60 block mt-0.5">Get Expert Guidance</span>
+                    </div>
+                    <div className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 ml-1">
+                      <FaChevronRight className="text-white text-[9px]" />
+                    </div>
+                  </button>
+
+                  <a
+                    href="https://wa.me/916284063840"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 flex items-center justify-between bg-gradient-to-r from-[#25D366] to-[#128C7E] rounded-2xl px-3.5 py-3 shadow-lg shadow-green-600/20 active:scale-[0.97] transition-transform"
+                  >
+                    <div className="flex items-center gap-2">
+                      <FaWhatsapp className="text-white text-lg flex-shrink-0" />
+                      <div className="text-left leading-tight">
+                        <span className="text-[10px] font-black text-white tracking-wide block">WHATSAPP EXPERT</span>
+                        <span className="text-[7px] font-semibold text-white/60 block mt-0.5">Chat Now</span>
+                      </div>
+                    </div>
+                    <div className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 ml-1">
+                      <FaChevronRight className="text-white text-[9px]" />
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+            {/* ══════ END MOBILE LAYOUT ══════ */}
+
+
+            {/* ══════ DESKTOP LAYOUT (>= lg) — EXACT MATCH ══════ */}
+            <div className="hidden lg:grid grid-cols-12 gap-4 items-center">
+              
+              {/* ──── LEFT AREA (Span 7) ──── */}
+              <div className="col-span-7 space-y-3.5 pr-2">
+                
+                {/* 1. Tagline */}
+                <span className="text-[#1976d2] font-black text-[11px] uppercase tracking-widest block">
+                  YOUR DREAM, OUR GUIDANCE
+                </span>
+
+                {/* 2. Main Heading */}
+                <div className="space-y-0 leading-none">
+                  <h1 className="text-[44px] xl:text-[52px] font-black text-[#0c2e60] tracking-tight leading-[1.02]">
+                    MBBS ADMISSION
+                  </h1>
+                  <p className="text-[52px] xl:text-[62px] font-black tracking-tight leading-[1] text-[#00a651]">
+                    2026–27
+                  </p>
+                  <p className="text-[38px] xl:text-[46px] font-black text-[#0c2e60] tracking-tight leading-[1.02]">
+                    INDIA & ABROAD
                   </p>
                 </div>
 
-                {/* Doctor Image for Mobile & Tablet (< xl) */}
-                <div className="xl:hidden w-32 sm:w-52 md:w-64 lg:w-72 flex-shrink-0 pointer-events-none self-end">
+                {/* 3. Subtitle text */}
+                <p className="text-[13px] font-semibold text-slate-600 max-w-[560px] leading-relaxed">
+                  We help NEET qualified students secure admission in Top Medical Universities in India & Abroad.
+                </p>
+
+                {/* 4. 4 Checkmarks Row */}
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[11px] font-bold text-[#0c2e60]">
+                  <span className="flex items-center gap-1.5"><FaCheckCircle className="text-[#00a651] text-xs flex-shrink-0" /> NMC Approved Universities</span>
+                  <span className="flex items-center gap-1.5"><FaCheckCircle className="text-[#00a651] text-xs flex-shrink-0" /> No Donation</span>
+                  <span className="flex items-center gap-1.5"><FaCheckCircle className="text-[#00a651] text-xs flex-shrink-0" /> 100% Transparent Process</span>
+                  <span className="flex items-center gap-1.5"><FaCheckCircle className="text-[#00a651] text-xs flex-shrink-0" /> End to End Support</span>
+                </div>
+
+                {/* 5. Country Flag Pills */}
+                <div className="flex flex-wrap gap-1.5 pt-0.5 text-[10px] font-extrabold text-[#0c2e60]">
+                  {flagCountries.map((c) => (
+                    <span
+                      key={c.name}
+                      className="flex items-center gap-1.5 bg-white px-2.5 py-1.5 rounded-xl border border-slate-200/90 shadow-2xs hover:shadow-xs transition-shadow"
+                    >
+                      <div className="w-4 h-3 rounded-[2px] overflow-hidden border border-slate-200 flex-shrink-0">
+                        <img
+                          src={`https://flagcdn.com/w80/${c.code}.png`}
+                          alt={`${c.name} Flag`}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <span>{c.name}</span>
+                    </span>
+                  ))}
+                </div>
+
+                {/* 6. Two CTA Buttons Row */}
+                <div className="flex items-center gap-3 pt-2">
+                  {/* Button 1: Solid Green CTA */}
+                  <button
+                    type="button"
+                    onClick={() => setIsModalOpen(true)}
+                    className="inline-flex items-center gap-3 bg-[#00a651] hover:bg-[#008d44] text-white font-black px-5 py-3 rounded-2xl shadow-lg shadow-green-600/20 transition-all hover:-translate-y-0.5 cursor-pointer"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white text-base">
+                      <FaGraduationCap />
+                    </div>
+                    <div className="text-left leading-tight">
+                      <span className="text-[12px] font-black tracking-wide block uppercase">FREE CAREER COUNSELLING</span>
+                      <span className="text-[9px] font-semibold text-white/80 block">Get Expert Guidance</span>
+                    </div>
+                  </button>
+
+                  {/* Button 2: White WhatsApp CTA */}
+                  <a
+                    href="https://wa.me/916284063840"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-3 bg-white border-2 border-[#00a651] hover:bg-green-50/50 text-[#0c2e60] font-black px-5 py-3 rounded-2xl shadow-md transition-all hover:-translate-y-0.5"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-[#25D366] text-white flex items-center justify-center text-base shadow-sm">
+                      <FaWhatsapp />
+                    </div>
+                    <div className="text-left leading-tight">
+                      <span className="text-[12px] font-black tracking-wide block uppercase text-[#00a651]">WHATSAPP EXPERT</span>
+                      <span className="text-[9px] font-semibold text-slate-500 block">Chat with Our Counsellor</span>
+                    </div>
+                  </a>
+                </div>
+
+              </div>
+
+              {/* ──── RIGHT AREA (Span 5) — Badges + Doctor Image ──── */}
+              <div className="col-span-5 relative flex items-end justify-end min-h-[460px]">
+                
+                {/* Badges overlay stack on left of doctor */}
+                <div className="absolute top-4 left-[-40px] xl:left-[-60px] z-20 flex flex-col gap-3">
+                  {/* Badge 1: Golden Laurel Wreath Arch Badge */}
+                  <div className="bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-3xl p-3 shadow-xl flex flex-col items-center justify-center text-center max-w-[200px] relative">
+                    {/* 3 Gold Stars on Top */}
+                    <div className="flex items-center justify-center gap-1 mb-0.5">
+                      <FaStar className="text-amber-400 text-[10px]" />
+                      <FaStar className="text-amber-400 text-[14px] -mt-1" />
+                      <FaStar className="text-amber-400 text-[10px]" />
+                    </div>
+
+                    {/* Laurel Wreath Curve & Text */}
+                    <div className="relative w-full px-2">
+                      <div className="text-center leading-none space-y-0.5 my-1">
+                        <span className="text-[10px] font-extrabold text-[#0c2e60] block tracking-tight">
+                          Trusted by
+                        </span>
+                        <span className="text-[20px] font-black text-[#0c2e60] leading-none block tracking-tight">
+                          25,000+
+                        </span>
+                        <span className="text-[9px] font-extrabold text-[#0c2e60] block tracking-tight">
+                          Students Worldwide
+                        </span>
+                      </div>
+
+                      {/* Left Laurel Branch SVG */}
+                      <svg className="absolute left-[-2px] top-[-10px] h-[55px] w-[20px] text-amber-500 fill-current opacity-90 pointer-events-none" viewBox="0 0 40 100">
+                        <path d="M35,90 C25,70 15,45 25,20 C18,30 12,45 15,65 C18,78 26,88 35,90 Z" />
+                        <path d="M25,85 C15,80 8,70 12,60 C18,65 24,75 25,85 Z" />
+                        <path d="M22,70 C10,65 5,52 10,42 C16,48 21,58 22,70 Z" />
+                        <path d="M22,50 C12,42 8,30 15,20 C20,28 22,38 22,50 Z" />
+                        <path d="M26,30 C18,20 15,10 24,2 C27,10 27,20 26,30 Z" />
+                      </svg>
+
+                      {/* Right Laurel Branch SVG */}
+                      <svg className="absolute right-[-2px] top-[-10px] h-[55px] w-[20px] text-amber-500 fill-current opacity-90 pointer-events-none transform scale-x-[-1]" viewBox="0 0 40 100">
+                        <path d="M35,90 C25,70 15,45 25,20 C18,30 12,45 15,65 C18,78 26,88 35,90 Z" />
+                        <path d="M25,85 C15,80 8,70 12,60 C18,65 24,75 25,85 Z" />
+                        <path d="M22,70 C10,65 5,52 10,42 C16,48 21,58 22,70 Z" />
+                        <path d="M22,50 C12,42 8,30 15,20 C20,28 22,38 22,50 Z" />
+                        <path d="M26,30 C18,20 15,10 24,2 C27,10 27,20 26,30 Z" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Main Doctor Image - Touch bottom dark line flush */}
+                <div className="w-full h-[500px] pointer-events-none flex justify-end items-end">
                   <img
                     src="/hero_doctor.png"
                     alt="MBBS Admission Counsellor"
-                    className="w-full h-auto object-contain max-h-[200px] sm:max-h-[300px] md:max-h-[360px] drop-shadow-xl"
+                    className="h-full w-auto object-contain object-bottom drop-shadow-2xl"
                   />
                 </div>
+
               </div>
 
-              {/* Description - Hidden on mobile */}
-              <p className="hidden sm:block text-[11px] sm:text-[12px] md:text-[13px] text-slate-600 font-semibold leading-relaxed max-w-[600px]">
-                We make your MBBS journey smooth and successful with
-                personalized guidance and end-to-end support.
-              </p>
-
-              {/* Service Tags - Hidden on mobile */}
-              <div className="hidden sm:flex flex-wrap gap-2.5 max-w-[650px]">
-                {[
-                  "NEET UG\nCounselling",
-                  "MCC & State\nCounselling",
-                  "NRI Quota\nGuidance",
-                  "Deemed\nUniversities",
-                  "MBBS Abroad\n(MCC Compliant)",
-                ].map((tag) => (
-                  <div
-                    key={tag}
-                    className="inline-flex items-center gap-2 bg-white/60 border border-slate-200/80 rounded-xl px-3.5 py-2 text-[10px] sm:text-[11px] font-bold text-[#0c2e60]"
-                  >
-                    <FaCheckCircle className="text-[#0c2e60] text-[11px] flex-shrink-0" />
-                    <span className="whitespace-pre-line leading-tight">{tag}</span>
-                  </div>
-                ))}
-              </div>
-
-              {/* Country Flag Pills */}
-              <div className="flex flex-wrap gap-x-1.5 gap-y-1.5 text-[9px] sm:text-[10px] font-extrabold text-[#0c2e60]">
-                {flagCountries.map((c, i) => (
-                  <span
-                    key={c.name}
-                    className={`flex items-center gap-1.5 bg-white/80 px-2 sm:px-2.5 py-1 rounded-lg border border-slate-200/80 shadow-2xs ${i >= 5 ? "sm:hidden" : ""}`}
-                  >
-                    <div className="w-3.5 h-3.5 rounded-full overflow-hidden border border-slate-200 flex-shrink-0 flex items-center justify-center">
-                      <img
-                        src={`https://flagcdn.com/w80/${c.code}.png`}
-                        alt={`${c.name} Flag`}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <span>{c.name}</span>
-                  </span>
-                ))}
-                {/* MORE button - Desktop only */}
-                <button
-                  type="button"
-                  className="hidden sm:flex items-center gap-1 bg-white/80 px-2.5 py-1 rounded-lg border border-slate-200/80 shadow-2xs text-[10px] font-extrabold text-[#0c2e60] cursor-pointer hover:bg-white transition-colors"
-                >
-                  MORE <FaChevronDown size={8} />
-                </button>
-              </div>
-
-              {/* CTA Buttons */}
-              <div className="flex flex-row flex-wrap gap-2 sm:gap-2.5 pt-1">
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(true)}
-                  className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 bg-[#16a34a] hover:bg-[#15803d] text-white font-black px-3.5 sm:px-4.5 py-1.5 sm:py-2 rounded-full text-[10px] sm:text-[11px] tracking-wide shadow-md shadow-green-600/20 transition-all hover:-translate-y-0.5 cursor-pointer"
-                >
-                  <FaUser size={10} /> FREE CAREER COUNSELLING
-                </button>
-                <a
-                  href="https://wa.me/916284063840"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 bg-[#25D366] sm:bg-[#f57c00] hover:bg-[#128C7E] sm:hover:bg-[#e65100] text-white font-black px-3.5 sm:px-4.5 py-1.5 sm:py-2 rounded-full text-[10px] sm:text-[11px] tracking-wide shadow-md shadow-green-600/20 sm:shadow-orange-600/20 transition-all hover:-translate-y-0.5"
-                >
-                  <FaWhatsapp size={12} /> WHATSAPP EXPERT
-                </a>
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(true)}
-                  className="hidden sm:inline-flex items-center justify-center gap-1.5 bg-white hover:bg-slate-50 text-[#0c2e60] font-black px-4 sm:px-4.5 py-2 rounded-full text-[10px] sm:text-[11px] tracking-wide border-2 border-[#0c2e60] shadow-md transition-all hover:-translate-y-0.5 cursor-pointer"
-                >
-                  <FaPhoneAlt size={10} /> REQUEST CALL BACK
-                </button>
-              </div>
             </div>
+            {/* ══════ END DESKTOP LAYOUT ══════ */}
 
-            {/* ──── DOCTOR (XL only float) ──── */}
-            <div className="hidden xl:block absolute bottom-0 right-[22%] w-[440px] h-[120%] pointer-events-none z-[5]">
-              <style>{`
-                @keyframes floatHeroDoctor {
-                  0%, 100% { transform: translateY(0); }
-                  50% { transform: translateY(-8px); }
-                }
-                .hero-doc-float {
-                  animation: floatHeroDoctor 6s ease-in-out infinite;
-                }
-              `}</style>
-              <img
-                src="/hero_doctor.png"
-                alt="MBBS Admission Counsellor"
-                className="w-full h-full object-contain object-bottom drop-shadow-2xl hero-doc-float"
-              />
-            </div>
-
-            {/* ──── RIGHT: Single Step Lead Form ──── */}
-            <div
-              id="free-counseling-form"
-              className="hidden lg:block lg:col-span-4 relative z-20"
-            >
-              <div className="w-full max-w-[310px] mx-auto bg-white/85 backdrop-blur-md border border-white/80 rounded-2xl overflow-hidden shadow-2xl shadow-slate-900/15">
-                {/* Header */}
-                <div className="bg-gradient-to-r from-[#0c2e60] via-[#0F4C81] to-[#0c2e60] py-3.5 text-center">
-                  <span className="text-white/80 text-[10px] font-bold uppercase tracking-widest block">
-                    GET FREE
-                  </span>
-                  <h3 className="text-[17px] font-black text-[#f9a825] tracking-wide mt-0.5 italic">
-                    MBBS COUNSELLING
-                  </h3>
-                </div>
-
-                {/* Body */}
-                <div className="p-4 sm:p-5">{renderForm(true)}</div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
 
-      {/* ═══ TRUST BADGES BAR — Hidden on Mobile ═══ */}
-      <div className="hidden sm:block relative z-20 bg-gradient-to-r from-[#0c2e60] via-[#0F4C81] to-[#0c2e60] border-t border-white/10 py-3 sm:py-4">
-        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 flex flex-wrap justify-center gap-x-6 gap-y-2 sm:gap-x-10">
-          {trustBadges.map((badge) => (
-            <div
-              key={badge}
-              className="flex items-center gap-2 text-[10px] sm:text-[11px] font-bold text-white/90"
-            >
-              <FaCheckCircle className="text-[#f9a825] text-[11px] flex-shrink-0" />
-              <span>{badge}</span>
-            </div>
-          ))}
-        </div>
-      </div>
 
-      {/* ═══ HIGHLIGHT BOXES — Hidden on Mobile ═══ */}
-      <div className="hidden sm:block relative z-20 bg-[#07132b] sm:bg-gradient-to-r sm:from-[#071838] sm:via-[#0c2e60] sm:to-[#071838] border-t border-[#f9a825]/30 py-4 sm:py-6 shadow-2xl">
-        <div className="max-w-[1280px] mx-auto px-3.5 sm:px-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2.5 sm:gap-4">
-          {highlightBoxes.map((box) => (
-            <div
-              key={box.label}
-              className="bg-[#0b1b36] border border-[#f9a825]/40 hover:border-[#f9a825] rounded-xl sm:rounded-2xl p-3 sm:p-3.5 flex flex-col items-center justify-center text-center gap-2 transition-all duration-300 group hover:-translate-y-0.5 shadow-md min-h-[95px] sm:min-h-[105px]"
-            >
-              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#f9a825]/10 border border-[#f9a825]/50 flex items-center justify-center text-[#f9a825] text-base sm:text-lg flex-shrink-0 shadow-sm group-hover:scale-105 transition-transform">
-                {box.icon}
-              </div>
-              <span className="text-[9px] sm:text-[10px] font-extrabold text-[#f9a825] tracking-wider uppercase leading-tight text-center">
-                {box.label}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* ═══ STATS BAR ═══ */}
-      <div className="relative z-20 bg-gradient-to-r from-[#071838] via-[#0a2245] to-[#071838] border-t border-white/5 py-4 sm:py-5">
-        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-5">
+      {/* ═══ 2. DARK NAVY STATS BANNER ═══ */}
+      <div className="relative z-20 bg-[#06152e] border-t border-b border-[#162744] py-4 shadow-xl">
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 grid grid-cols-2 md:grid-cols-4 gap-4">
           {stats.map((stat, i) => (
             <div
               key={i}
-              className="bg-white/[0.05] backdrop-blur-xs border border-white/10 hover:border-[#f9a825]/40 rounded-2xl p-3 sm:p-3.5 flex items-center gap-3 sm:gap-4 transition-all duration-300 group hover:-translate-y-0.5 shadow-sm"
+              className="flex items-center gap-3.5 bg-white/[0.04] border border-white/10 rounded-2xl p-3 hover:border-white/20 transition-all shadow-inner"
             >
-              <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-[#f9a825]/25 to-[#f9a825]/5 border border-[#f9a825]/50 flex items-center justify-center text-[#f9a825] text-base sm:text-lg flex-shrink-0 shadow-sm group-hover:scale-105 transition-transform">
+              <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center text-white text-lg flex-shrink-0 shadow-md`}>
                 {stat.icon}
               </div>
               <div className="min-w-0 flex-1">
-                <span className="text-[20px] sm:text-[24px] md:text-[26px] font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-amber-200 leading-none block tracking-tight">
+                <span className="text-[24px] xl:text-[28px] font-black text-white leading-none block tracking-tight">
                   {stat.value}
                 </span>
-                <span className="text-[8px] sm:text-[9px] font-extrabold text-[#f9a825]/90 tracking-wider block mt-1 uppercase truncate">
+                <span className="text-[9px] font-extrabold text-slate-300 tracking-wider block mt-1 uppercase truncate">
                   {stat.label}
                 </span>
               </div>
@@ -467,18 +544,188 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* ═══ POP-UP COUNSELING MODAL ═══ */}
+
+      {/* ═══ 3. DESKTOP GRID BELOW STATS (Programs + Free Counselling Form) ═══ */}
+      <div className="relative z-20 max-w-[1280px] mx-auto px-4 sm:px-6 py-8 sm:py-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          {/* ──── LEFT SPAN 8: 6 KEY FEATURES CARDS (3 Cards per Line, 2 Lines Total) ──── */}
+          <div className="lg:col-span-7 xl:col-span-8 space-y-4">
+            
+            {/* ── OUR ADMISSION PROCESS (Above Feature Cards) ── */}
+            <div className="bg-white border border-slate-200/90 rounded-2xl p-4 shadow-sm space-y-3.5">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-0.5 bg-[#00a651]"></div>
+                  <h3 className="text-xs sm:text-sm font-black text-[#0c2e60] tracking-wide uppercase">
+                    OUR ADMISSION PROCESS
+                  </h3>
+                </div>
+                <span className="text-[10px] font-extrabold text-[#00a651] uppercase tracking-wider">
+                  5 Simple Steps
+                </span>
+              </div>
+
+              {/* 5 Compact Process Steps Grid */}
+              <div className="grid grid-cols-5 gap-1.5 items-center text-center">
+                {[
+                  { step: 1, title: "Submit Enquiry", icon: <FaClipboardList />, bg: "bg-[#0c2e60]" },
+                  { step: 2, title: "Free Counselling", icon: <FaHeadset />, bg: "bg-[#00a651]" },
+                  { step: 3, title: "University Selection", icon: <FaUniversity />, bg: "bg-[#1976d2]" },
+                  { step: 4, title: "Documentation", icon: <FaFileContract />, bg: "bg-[#7b1fa2]" },
+                  { step: 5, title: "Admission Done", icon: <FaCheckCircle />, bg: "bg-[#f57c00]" },
+                ].map((s, i) => (
+                  <div key={i} className="flex flex-col items-center text-center relative group p-1">
+                    <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl ${s.bg} text-white flex items-center justify-center text-sm sm:text-base shadow-sm group-hover:scale-105 transition-transform`}>
+                      {s.icon}
+                    </div>
+                    <span className="text-[8px] font-extrabold text-slate-400 uppercase tracking-wider mt-1.5">
+                      Step {s.step}
+                    </span>
+                    <span className="text-[9px] font-black text-[#0c2e60] leading-tight mt-0.5">
+                      {s.title}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 6 Feature Cards Grid — 2 per line on mobile, 3 per line on desktop */}
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5 sm:gap-4">
+              
+              {/* Card 1: No Donation */}
+              <div className="bg-white border border-slate-200/90 rounded-2xl p-2.5 sm:p-4 shadow-sm hover:shadow-md transition-all flex items-center gap-2 sm:gap-3">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-green-100/80 text-[#00a651] flex items-center justify-center text-sm sm:text-lg flex-shrink-0 shadow-2xs">
+                  <FaShieldAlt />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h4 className="text-xs sm:text-sm font-black text-[#0c2e60] truncate">No Donation</h4>
+                  <p className="text-[9px] sm:text-[11px] text-slate-500 font-semibold mt-0.5 leading-snug truncate">
+                    100% Transparent Process
+                  </p>
+                </div>
+              </div>
+
+              {/* Card 2: Visa Support */}
+              <div className="bg-white border border-slate-200/90 rounded-2xl p-2.5 sm:p-4 shadow-sm hover:shadow-md transition-all flex items-center gap-2 sm:gap-3">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-blue-100/80 text-[#1976d2] flex items-center justify-center text-sm sm:text-lg flex-shrink-0 shadow-2xs">
+                  <FaPlane />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h4 className="text-xs sm:text-sm font-black text-[#0c2e60] truncate">Visa Support</h4>
+                  <p className="text-[9px] sm:text-[11px] text-slate-500 font-semibold mt-0.5 leading-snug truncate">
+                    End to End Assistance
+                  </p>
+                </div>
+              </div>
+
+              {/* Card 3: Education Loan */}
+              <div className="bg-white border border-slate-200/90 rounded-2xl p-2.5 sm:p-4 shadow-sm hover:shadow-md transition-all flex items-center gap-2 sm:gap-3">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-green-100/80 text-[#00a651] flex items-center justify-center text-sm sm:text-lg flex-shrink-0 shadow-2xs">
+                  <FaUniversity />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h4 className="text-xs sm:text-sm font-black text-[#0c2e60] truncate">Education Loan</h4>
+                  <p className="text-[9px] sm:text-[11px] text-slate-500 font-semibold mt-0.5 leading-snug truncate">
+                    Easy Loan Assistance
+                  </p>
+                </div>
+              </div>
+
+              {/* Card 4: 24/7 Support */}
+              <div className="bg-white border border-slate-200/90 rounded-2xl p-2.5 sm:p-4 shadow-sm hover:shadow-md transition-all flex items-center gap-2 sm:gap-3">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-blue-100/80 text-[#1976d2] flex items-center justify-center text-sm sm:text-lg flex-shrink-0 shadow-2xs">
+                  <FaHeadset />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h4 className="text-xs sm:text-sm font-black text-[#0c2e60] truncate">24/7 Support</h4>
+                  <p className="text-[9px] sm:text-[11px] text-slate-500 font-semibold mt-0.5 leading-snug truncate">
+                    Always With You
+                  </p>
+                </div>
+              </div>
+
+              {/* Card 5: Low Cost */}
+              <div className="bg-white border border-slate-200/90 rounded-2xl p-2.5 sm:p-4 shadow-sm hover:shadow-md transition-all flex items-center gap-2 sm:gap-3">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-green-100/80 text-[#00a651] flex items-center justify-center text-sm sm:text-lg flex-shrink-0 shadow-2xs">
+                  <FaDollarSign />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h4 className="text-xs sm:text-sm font-black text-[#0c2e60] truncate">Low Cost</h4>
+                  <p className="text-[9px] sm:text-[11px] text-slate-500 font-semibold mt-0.5 leading-snug truncate">
+                    Affordable Fees Structure
+                  </p>
+                </div>
+              </div>
+
+              {/* Card 6: Safe & Secure */}
+              <div className="bg-white border border-slate-200/90 rounded-2xl p-2.5 sm:p-4 shadow-sm hover:shadow-md transition-all flex items-center gap-2 sm:gap-3">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-green-100/80 text-[#00a651] flex items-center justify-center text-sm sm:text-lg flex-shrink-0 shadow-2xs">
+                  <FaLockIcon />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h4 className="text-xs sm:text-sm font-black text-[#0c2e60] truncate">Safe & Secure</h4>
+                  <p className="text-[9px] sm:text-[11px] text-slate-500 font-semibold mt-0.5 leading-snug truncate">
+                    Your Future, Our Priority
+                  </p>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+          {/* ──── RIGHT SPAN 4: BOOK YOUR FREE COUNSELLING FORM CARD ──── */}
+          <div className="lg:col-span-5 xl:col-span-4" id="free-counseling-form">
+            <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl overflow-hidden">
+              
+              {/* Form Header */}
+              <div className="bg-gradient-to-r from-[#0c2e60] via-[#0f3d7a] to-[#0c2e60] p-4 text-center text-white">
+                <h3 className="text-sm sm:text-base font-black uppercase tracking-wide text-white">
+                  BOOK YOUR FREE COUNSELLING
+                </h3>
+                <p className="text-[10px] text-slate-300 font-semibold mt-0.5">
+                  Take the first step towards your dream career
+                </p>
+              </div>
+
+              {/* Form Body */}
+              <div className="p-4 sm:p-5 space-y-3.5">
+                {renderDesktopForm()}
+
+                {/* Footer Student Counter */}
+                <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
+                  <div className="flex -space-x-2 overflow-hidden">
+                    <img className="inline-block h-6 w-6 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" alt="Student" />
+                    <img className="inline-block h-6 w-6 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80" alt="Student" />
+                    <img className="inline-block h-6 w-6 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80" alt="Student" />
+                    <img className="inline-block h-6 w-6 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80" alt="Student" />
+                  </div>
+                  <span className="text-[10px] font-black text-[#0c2e60] flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-[#00a651] animate-pulse"></span>
+                    500+ Students Enrolled This Month
+                  </span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+
+
+      {/* ═══ 5. POP-UP COUNSELING MODAL (MOBILE ONLY) ═══ */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/30 backdrop-blur-[2px] animate-fade-in">
-          {/* Backdrop overlay click */}
           <div
             className="absolute inset-0"
             onClick={() => setIsModalOpen(false)}
           />
 
-          {/* Modal Card Box */}
           <div className="relative z-10 w-full max-w-[340px] sm:max-w-[370px] max-h-[90vh] overflow-y-auto bg-white/90 backdrop-blur-md border border-white/80 rounded-3xl shadow-2xl transform transition-all">
-            {/* Header */}
             <div className="bg-gradient-to-r from-[#0c2e60] via-[#0F4C81] to-[#0c2e60] px-6 py-4 flex justify-between items-center">
               <div>
                 <span className="text-[#f9a825] text-[10px] font-extrabold uppercase tracking-widest block">
@@ -498,16 +745,11 @@ export default function HeroSection() {
               </button>
             </div>
 
-            {/* Modal Body */}
-            <div className="p-5 sm:p-6 bg-white/85">{renderForm(false)}</div>
+            <div className="p-5 sm:p-6 bg-white/85">{renderDesktopForm()}</div>
 
-            {/* Modal Disclaimer */}
             <div className="px-5 pb-4">
               <p className="text-[8px] text-slate-400 text-center leading-relaxed font-medium">
-                Admissions are processed only through NEET eligibility and
-                official counselling procedures as applicable. We provide
-                counselling and admission guidance in accordance with prevailing
-                NMC, MCC and State Counselling regulations.
+                Admissions are processed only through NEET eligibility and official counselling procedures as applicable.
               </p>
             </div>
           </div>

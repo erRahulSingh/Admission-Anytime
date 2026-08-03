@@ -20,7 +20,6 @@ import {
   FaHeadset,
   FaArrowRight,
 } from "react-icons/fa";
-import { FcGoogle } from "react-icons/fc";
 import { motion } from "framer-motion";
 import api from "@/services/api";
 
@@ -80,11 +79,6 @@ export default function AdminLoginPage() {
     }
   };
 
-  const handleGoogleSignIn = () => {
-    localStorage.setItem("adminToken", "google-admin-token-12345");
-    localStorage.setItem("adminUser", JSON.stringify({ name: "Admin User", role: "Super Admin", email: "admin@admissionanytime.com" }));
-    router.push("/admin");
-  };
 
   return (
     <div className="min-h-screen bg-[#f8fafc] grid grid-cols-1 lg:grid-cols-2 font-sans text-[#1a1f36]">
@@ -358,23 +352,6 @@ export default function AdminLoginPage() {
               </button>
             </form>
 
-            {/* OR Divider */}
-            <div className="relative my-4 text-center">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-[#e2e8f0]" />
-              </div>
-              <span className="relative px-3 bg-white text-[10px] font-bold text-[#94a3b8] uppercase">OR</span>
-            </div>
-
-            {/* Google Sign-In Button */}
-            <button
-              type="button"
-              onClick={handleGoogleSignIn}
-              className="w-full py-2.5 bg-white hover:bg-[#f8fafc] border border-[#cbd5e1] text-[#334155] text-[12px] font-bold rounded-lg transition-colors flex items-center justify-center gap-2 shadow-2xs"
-            >
-              <FcGoogle className="text-base" />
-              <span>Sign in with Google</span>
-            </button>
           </motion.div>
         </div>
 

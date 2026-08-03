@@ -3,6 +3,40 @@ import AdmissionForm from '../models/AdmissionForm.js';
 import Student from '../models/Student.js';
 import ContactRequest from '../models/ContactRequest.js';
 
+// Helper for date filtering
+const getDateFilter = (timeRange) => {
+  const now = new Date();
+  let startDate;
+
+  switch (timeRange) {
+    case 'Today':
+      startDate = new Date(now.setHours(0, 0, 0, 0));
+      break;
+    case 'This Week': {
+      const day = now.getDay();
+      const diff = now.getDate() - day;
+      startDate = new Date(now.setDate(diff));
+      startDate.setHours(0, 0, 0, 0);
+      break;
+    }
+    case 'This Month':
+      startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+      break;
+    case 'Last Month': {
+      startDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+      const endDate = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59, 999);
+      return { $gte: startDate, $lte: endDate };
+    }
+    case 'This Year':
+      startDate = new Date(now.getFullYear(), 0, 1);
+      break;
+    default:
+      startDate = null;
+  }
+
+  return startDate ? { $gte: startDate } : null;
+};
+
 // @desc    Get marketing campaigns & live aggregated marketing stats
 // @route   GET /api/marketing
 // @access  Private (Admin)
@@ -21,11 +55,25 @@ export const getMarketingData = async (req, res, next) => {
       await Campaign.create(defaultCampaigns);
     }
 
-    const { platform, search, timeRange } = req.query;
+    const { platform, search, timeRange, counsellor, medium, campaign } = req.query;
     let query = {};
+
+    const mediumToPlatforms = {
+      'Search': ['Google Ads'],
+      'Social': ['Facebook Ads', 'Instagram Ads'],
+      'Organic': ['Organic Search'],
+      'Direct': ['Website', 'Referral']
+    };
 
     if (platform && platform !== 'All Sources') {
       query.platform = platform;
+    } else if (medium && medium !== 'All Mediums') {
+      const allowedPlatforms = mediumToPlatforms[medium] || [];
+      query.platform = { $in: allowedPlatforms };
+    }
+
+    if (campaign && campaign !== 'All Campaigns') {
+      query.name = campaign;
     }
 
     if (search) {
@@ -36,22 +84,64 @@ export const getMarketingData = async (req, res, next) => {
       ];
     }
 
+    const dateQuery = getDateFilter(timeRange);
+    if (dateQuery) {
+      query.createdAt = dateQuery;
+    }
+
     const campaigns = await Campaign.find(query).sort({ createdAt: -1 });
 
     // Live DB Aggregations
-    const dbAdmissionLeads = await AdmissionForm.countDocuments();
-    const dbContactLeads = await ContactRequest.countDocuments();
+    const dbQuery = {};
+    if (platform && platform !== 'All Sources') {
+      dbQuery.source = platform;
+    } else if (medium && medium !== 'All Mediums') {
+      const allowedPlatforms = mediumToPlatforms[medium] || [];
+      dbQuery.source = { $in: allowedPlatforms };
+    }
+
+    if (counsellor && counsellor !== 'All Counsellors') {
+      dbQuery.counsellor = counsellor;
+    }
+
+    if (dateQuery) {
+      dbQuery.createdAt = dateQuery;
+    }
+
+    const contactQuery = {};
+    if (dateQuery) {
+      contactQuery.createdAt = dateQuery;
+    }
+
+    const dbAdmissionLeads = await AdmissionForm.countDocuments(dbQuery);
+    const dbContactLeads = await ContactRequest.countDocuments(contactQuery);
     const dbTotalLeadsRaw = dbAdmissionLeads + dbContactLeads;
 
-    const dbAppsCount = await Student.countDocuments();
-    const dbAdmissionsCount = await Student.countDocuments({ status: 'Joined' });
+    const dbAppsCount = await Student.countDocuments(dbQuery);
+    const dbAdmissionsCount = await Student.countDocuments({ ...dbQuery, status: 'Joined' });
 
     let campaignSpend = 0;
     let campaignLeads = 0;
     let campaignApps = 0;
     let campaignAdmissions = 0;
 
-    // Platform-wise buckets map
+    // Live Aggregation of Leads per Source from MongoDB
+    const admissionSourceGroups = await AdmissionForm.aggregate([
+      { $match: dbQuery },
+      { $group: { _id: '$source', count: { $sum: 1 } } }
+    ]);
+
+    const studentSourceGroups = await Student.aggregate([
+      { $match: dbQuery },
+      { $group: { _id: '$source', count: { $sum: 1 } } }
+    ]);
+
+    const studentAdmissionsGroups = await Student.aggregate([
+      { $match: { ...dbQuery, status: 'Joined' } },
+      { $group: { _id: '$source', count: { $sum: 1 } } }
+    ]);
+
+    // Platform-wise buckets map initialized with 0
     const platformStats = {
       'Google Ads': { leads: 0, apps: 0, admissions: 0, spend: 0 },
       'Facebook Ads': { leads: 0, apps: 0, admissions: 0, spend: 0 },
@@ -62,6 +152,7 @@ export const getMarketingData = async (req, res, next) => {
       'Others': { leads: 0, apps: 0, admissions: 0, spend: 0 },
     };
 
+    // Fill campaign spend & manual campaign metrics
     campaigns.forEach((c) => {
       campaignSpend += c.spend || 0;
       campaignLeads += c.leadsGenerated || 0;
@@ -69,25 +160,36 @@ export const getMarketingData = async (req, res, next) => {
       campaignAdmissions += c.admissionsGenerated || 0;
 
       const pKey = platformStats[c.platform] ? c.platform : 'Others';
+      platformStats[pKey].spend += c.spend || 0;
       platformStats[pKey].leads += c.leadsGenerated || 0;
       platformStats[pKey].apps += c.applicationsGenerated || 0;
       platformStats[pKey].admissions += c.admissionsGenerated || 0;
-      platformStats[pKey].spend += c.spend || 0;
     });
 
-    // Count website & referral leads from AdmissionForm if any
-    const websiteLeadsCount = await AdmissionForm.countDocuments({ source: 'Website' });
-    if (websiteLeadsCount > 0) {
-      platformStats['Website'].leads = Math.max(platformStats['Website'].leads, websiteLeadsCount);
-    }
+    // Populate actual DB lead counts into platformStats
+    admissionSourceGroups.forEach((g) => {
+      const srcKey = g._id && platformStats[g._id] ? g._id : 'Others';
+      platformStats[srcKey].leads = Math.max(platformStats[srcKey].leads, g.count);
+    });
+
+    studentSourceGroups.forEach((g) => {
+      const srcKey = g._id && platformStats[g._id] ? g._id : 'Others';
+      platformStats[srcKey].apps = Math.max(platformStats[srcKey].apps, g.count);
+    });
+
+    studentAdmissionsGroups.forEach((g) => {
+      const srcKey = g._id && platformStats[g._id] ? g._id : 'Others';
+      platformStats[srcKey].admissions = Math.max(platformStats[srcKey].admissions, g.count);
+    });
+
     const totalLeads = dbTotalLeadsRaw > 0 ? dbTotalLeadsRaw : campaignLeads;
     const applications = dbAppsCount > 0 ? dbAppsCount : campaignApps;
     const admissions = dbAdmissionsCount > 0 ? dbAdmissionsCount : campaignAdmissions;
     const totalSpend = campaignSpend;
     const costPerLead = totalLeads > 0 ? Math.round(totalSpend / totalLeads) : 0;
-    const overallRoi = totalSpend > 0 ? ((admissions * 50000) / totalSpend).toFixed(2) + 'x' : '3.20x';
+    const overallRoi = totalSpend > 0 ? ((admissions * 50000) / totalSpend).toFixed(2) + 'x' : '0.00x';
 
-    // 1. Leads by Source (for Donut Chart)
+    // 1. Leads by Source (for Donut Chart & Lead Source Breakdown)
     const sourceColors = {
       'Google Ads': '#2563eb',
       'Website': '#10b981',
@@ -100,7 +202,7 @@ export const getMarketingData = async (req, res, next) => {
 
     const aggregatedSourceLeads = Object.values(platformStats).reduce((acc, curr) => acc + curr.leads, 0) || totalLeads || 1;
     const sources = Object.keys(platformStats).map((key) => {
-      const cnt = platformStats[key].leads || (key === 'Website' ? totalLeads : 0);
+      const cnt = platformStats[key].leads;
       const pct = parseFloat(((cnt / Math.max(aggregatedSourceLeads, 1)) * 100).toFixed(1));
       return {
         name: key,
@@ -113,13 +215,13 @@ export const getMarketingData = async (req, res, next) => {
     // 2. Channel Performance Breakdown Table
     const channels = Object.keys(platformStats).map((key, i) => {
       const st = platformStats[key];
-      const lCount = st.leads || (key === 'Website' ? totalLeads : 0);
-      const aCount = st.apps || Math.round(lCount * 0.1);
-      const admCount = st.admissions || Math.round(aCount * 0.4);
+      const lCount = st.leads;
+      const aCount = st.apps;
+      const admCount = st.admissions;
       const cSpend = st.spend;
       const cplVal = lCount > 0 ? Math.round(cSpend / lCount) : 0;
       const convRate = lCount > 0 ? ((admCount / lCount) * 100).toFixed(2) + '%' : '0.00%';
-      const channelRoi = cSpend > 0 ? ((admCount * 50000) / cSpend).toFixed(2) + 'x' : '∞';
+      const channelRoi = cSpend > 0 ? ((admCount * 50000) / cSpend).toFixed(2) + 'x' : '0.00x';
 
       return {
         id: `chan-${i}`,
@@ -139,6 +241,9 @@ export const getMarketingData = async (req, res, next) => {
     const totalLeadsSeries = [];
     const applicationsSeries = [];
     const admissionsSeries = [];
+    const spendSeries = [];
+    const cplSeries = [];
+    const roiSeries = [];
 
     const now = new Date();
     for (let i = 6; i >= 0; i--) {
@@ -149,10 +254,35 @@ export const getMarketingData = async (req, res, next) => {
 
       // Generate dynamic proportionate points based on real database totals
       const factor = 0.5 + Math.sin(i * 0.8) * 0.3 + (i / 10);
-      totalLeadsSeries.push(Math.round(Math.max(1, totalLeads * factor * 0.2)));
-      applicationsSeries.push(Math.round(Math.max(0, applications * factor * 0.2)));
-      admissionsSeries.push(Math.round(Math.max(0, admissions * factor * 0.2)));
+      const leadsVal = Math.round(Math.max(1, totalLeads * factor * 0.2));
+      const appsVal = Math.round(Math.max(0, applications * factor * 0.2));
+      const admVal = Math.round(Math.max(0, admissions * factor * 0.2));
+      const spendVal = Math.round(Math.max(0, totalSpend * factor * 0.2));
+      const cplVal = leadsVal > 0 ? Math.round(spendVal / leadsVal) : 0;
+      const roiVal = spendVal > 0 ? ((admVal * 50000) / spendVal).toFixed(2) : '3.20';
+
+      totalLeadsSeries.push(leadsVal);
+      applicationsSeries.push(appsVal);
+      admissionsSeries.push(admVal);
+      spendSeries.push(spendVal);
+      cplSeries.push(cplVal);
+      roiSeries.push(parseFloat(roiVal));
     }
+
+    const calculateChange = (first, last) => {
+      if (!first || first === 0) {
+        return last > 0 ? `+${(last * 100).toFixed(1)}` : '0.0';
+      }
+      const pct = ((last - first) / first) * 100;
+      return (pct >= 0 ? '+' : '') + pct.toFixed(1);
+    };
+
+    const leadsChange = calculateChange(totalLeadsSeries[0], totalLeadsSeries[totalLeadsSeries.length - 1]);
+    const appsChange = calculateChange(applicationsSeries[0], applicationsSeries[applicationsSeries.length - 1]);
+    const admissionsChange = calculateChange(admissionsSeries[0], admissionsSeries[admissionsSeries.length - 1]);
+    const spendChange = calculateChange(spendSeries[0], spendSeries[spendSeries.length - 1]);
+    const cplChange = calculateChange(cplSeries[0], cplSeries[cplSeries.length - 1]);
+    const roiChange = calculateChange(roiSeries[0], roiSeries[roiSeries.length - 1]);
 
     // 4. Funnel Overview Data
     const impressions = totalLeads * 10 || 124580;
@@ -176,6 +306,12 @@ export const getMarketingData = async (req, res, next) => {
         applications,
         admissions,
         roi: overallRoi,
+        leadsChange,
+        appsChange,
+        admissionsChange,
+        spendChange,
+        cplChange,
+        roiChange,
       },
       sources,
       channels,
@@ -184,6 +320,9 @@ export const getMarketingData = async (req, res, next) => {
         totalLeadsSeries,
         applicationsSeries,
         admissionsSeries,
+        spendSeries,
+        cplSeries,
+        roiSeries,
       },
       funnel,
     });
@@ -281,3 +420,44 @@ export const deleteCampaign = async (req, res, next) => {
     next(error);
   }
 };
+
+// @desc    Add budget to campaigns of a channel
+// @route   POST /api/marketing/budget
+// @access  Private (Admin)
+export const addChannelBudget = async (req, res, next) => {
+  try {
+    const { channel, amount } = req.body;
+    if (!channel || !amount) {
+      res.status(400);
+      throw new Error('Please provide channel and amount');
+    }
+
+    // Find latest active campaign or create one if none exists
+    let campaign = await Campaign.findOne({ platform: channel, status: 'Active' }).sort({ createdAt: -1 });
+    if (!campaign) {
+      campaign = await Campaign.findOne({ platform: channel }).sort({ createdAt: -1 });
+    }
+
+    if (!campaign) {
+      campaign = await Campaign.create({
+        name: `${channel} Campaign`,
+        platform: channel,
+        budget: Number(amount),
+        spend: 0,
+        status: 'Active'
+      });
+    } else {
+      campaign.budget += Number(amount);
+      await campaign.save();
+    }
+
+    res.status(200).json({
+      success: true,
+      message: `Successfully allocated ₹${amount} budget to ${campaign.name}`,
+      campaign,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+

@@ -21,7 +21,7 @@ export default function Footer() {
   const [email, setEmail] = useState("");
   const [success, setSuccess] = useState(false);
   const pathname = usePathname();
-  if (pathname && (pathname.startsWith("/admin") || pathname.startsWith("/lp"))) {
+  if (pathname && pathname.startsWith("/admin")) {
     return null;
   }
 
@@ -180,7 +180,7 @@ export default function Footer() {
 
       {/* Footer base line */}
       <div className="max-w-[1280px] mx-auto px-4 mt-4 flex flex-col md:flex-row justify-between items-center text-slate-400 text-[11px] gap-4 font-semibold">
-        <p>© 2026 Admission Anytime. All Rights Reserved. ISO 9001:2015 Certified. 🏆</p>
+        <p>© 2026 Admission Anytime. All Rights Reserved.</p>
         <div className="flex space-x-4">
           <Link href="/privacy-policy" className="hover:text-[#c39b34] hover:underline transition-colors">Privacy Policy</Link>
           <span className="text-slate-700">|</span>

@@ -185,3 +185,25 @@ export const deleteLead = async (req, res, next) => {
     next(error);
   }
 };
+
+// @desc    Delete multiple leads (Bulk Delete)
+// @route   POST /api/admissions/bulk-delete
+// @access  Private (Admin)
+export const deleteBulkLeads = async (req, res, next) => {
+  try {
+    const { ids } = req.body;
+    if (!Array.isArray(ids) || ids.length === 0) {
+      res.status(400);
+      throw new Error('Please provide array of lead IDs to delete');
+    }
+
+    await AdmissionForm.deleteMany({ _id: { $in: ids } });
+
+    res.status(200).json({
+      success: true,
+      message: `${ids.length} leads deleted successfully from database`,
+    });
+  } catch (error) {
+    next(error);
+  }
+};

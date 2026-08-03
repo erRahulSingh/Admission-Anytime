@@ -11,6 +11,7 @@ import {
   FaLock,
   FaCheckCircle,
   FaTimes,
+  FaWhatsapp,
 } from "react-icons/fa";
 import api from "@/services/api";
 
@@ -74,6 +75,8 @@ export default function FormPopupWrapper({
   const [success, setSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
+  const [submittedData, setSubmittedData] = useState<LeadFormValues | null>(null);
+
   const {
     register,
     handleSubmit,
@@ -101,8 +104,18 @@ export default function FormPopupWrapper({
         country: "India & Abroad",
         source: "Website - Popup",
       });
+      setSubmittedData(data);
       setSuccess(true);
       reset();
+
+      // Formatted WhatsApp message with filled details
+      const waMsg = `Hello Admission Anytime,%0A%0AI have submitted an inquiry form on the website.%0A%0A*My Submitted Details:*%0A👤 *Name:* ${encodeURIComponent(data.fullName)}%0A📞 *Phone:* ${encodeURIComponent(data.phone)}%0A📧 *Email:* ${encodeURIComponent(data.email)}%0A%0APlease connect me with a Senior MBBS Counselor.`;
+      const whatsappUrl = `https://wa.me/916284063840?text=${waMsg}`;
+
+      // Auto-redirect to WhatsApp after 1 sec delay
+      setTimeout(() => {
+        window.open(whatsappUrl, "_blank");
+      }, 1000);
     } catch (error: any) {
       setErrorMsg(error.message || "Failed to submit.");
     } finally {
@@ -180,19 +193,38 @@ export default function FormPopupWrapper({
                       Form Submitted Successfully! 🎉
                     </h4>
                     <p className="text-xs font-semibold text-slate-600 leading-relaxed">
-                      Thank you for contacting Admission Anytime. Our Senior MBBS Admission Counselor will call you very soon!
+                      Your details have been saved in our system! Redirecting you to WhatsApp to connect with our Senior Counselor...
                     </p>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSuccess(false);
-                      setIsModalOpen(false);
-                    }}
-                    className="mt-2 bg-[#f9a825] hover:bg-[#f57f17] text-[#0c2e60] font-black py-2.5 px-6 rounded-xl text-xs shadow-md transition-all active:scale-95 cursor-pointer"
-                  >
-                    Close Window
-                  </button>
+                  <div className="space-y-2 pt-1">
+                    {(() => {
+                      const waMsg = submittedData
+                        ? `Hello Admission Anytime,%0A%0AI have submitted an inquiry form on the website.%0A%0A*My Submitted Details:*%0A👤 *Name:* ${encodeURIComponent(submittedData.fullName)}%0A📞 *Phone:* ${encodeURIComponent(submittedData.phone)}%0A📧 *Email:* ${encodeURIComponent(submittedData.email)}%0A%0APlease connect me with a Senior MBBS Counselor.`
+                        : `Hello Admission Anytime,%0A%0AI want to get free MBBS counseling guidance.`;
+                      const whatsappUrl = `https://wa.me/916284063840?text=${waMsg}`;
+                      return (
+                        <a
+                          href={whatsappUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-full inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#128C7E] text-white font-black py-2.5 px-4 rounded-xl text-xs shadow-md transition-all cursor-pointer"
+                        >
+                          <FaWhatsapp className="text-base" /> Chat on WhatsApp Now
+                        </a>
+                      );
+                    })()}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSuccess(false);
+                        setSubmittedData(null);
+                        setIsModalOpen(false);
+                      }}
+                      className="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2 px-4 rounded-xl text-[11px] transition-all cursor-pointer"
+                    >
+                      Close Window
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <form

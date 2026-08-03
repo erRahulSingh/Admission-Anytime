@@ -55,24 +55,8 @@ export default function AdminCountriesPage() {
         setCountries(data.countries);
       }
     } catch (err: unknown) {
-      console.warn("Failed fetching admin countries. Using fallback database.");
-      setCountries([
-        {
-          _id: "c-1",
-          name: "Georgia",
-          slug: "georgia",
-          flagImage: "https://images.unsplash.com/photo-1568515045052-f9a854d70bfd?q=80&w=200",
-          description: "Georgia is one of the top destinations for MBBS. The medical degrees are globally recognized by WHO, NMC (MCI), and FAIMER, and programs are offered 100% in English.",
-          benefits: ["100% English Medium Curriculum", "WHO and NMC Approved Universities"],
-          averageCost: "3.5 - 5.5 Lakhs / Year",
-          duration: "6 Years",
-          fmgePassingRate: "28.4%",
-          language: "English",
-          requirements: ["50% in PCB in 12th", "NEET Qualification mandatory"],
-          status: "Active",
-          createdAt: new Date().toISOString(),
-        }
-      ]);
+      console.error("Failed fetching admin countries:", err);
+      setCountries([]);
     } finally {
       setLoading(false);
     }
@@ -122,27 +106,9 @@ export default function AdminCountriesPage() {
       resetAddForm();
       setShowAddForm(false);
       loadCountries();
-    } catch (err: unknown) {
-      console.error(err);
-      // Local addition fallback
-      const mockCountry: Country = {
-        _id: "mock-id-" + Date.now(),
-        name,
-        slug: name.toLowerCase().replace(/\s+/g, "-"),
-        description: desc,
-        averageCost: cost,
-        duration,
-        fmgePassingRate: fmge,
-        language: lang,
-        benefits: benefitsArray,
-        requirements: reqsArray,
-        status: status as "Active" | "Inactive",
-        flagImage: payload.flagImage,
-        createdAt: new Date().toISOString(),
-      };
-      setCountries(prev => [...prev, mockCountry]);
-      setShowAddForm(false);
-      resetAddForm();
+    } catch (err: any) {
+      console.error("Failed to add country:", err);
+      alert(err.message || "Failed to add country to database.");
     }
   };
 

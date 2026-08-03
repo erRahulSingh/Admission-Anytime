@@ -30,6 +30,13 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response.data,
   (error) => {
+    if (error.response && error.response.status === 401) {
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("adminToken");
+        localStorage.removeItem("adminUser");
+        window.location.href = "/admin/login";
+      }
+    }
     const message =
       error.response?.data?.message ||
       error.message ||

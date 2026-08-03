@@ -76,54 +76,27 @@ interface DashboardPayload {
   recentLeads: RecentLead[];
 }
 
-/* ──────────────────── FALLBACK DATA ──────────────────── */
-const FALLBACK: DashboardPayload = {
+/* ──────────────────── INITIAL ZERO STATE ──────────────────── */
+const ZERO_STATE: DashboardPayload = {
   stats: {
-    totalLeads: 12458,
-    newLeads: 2345,
-    contactedLeads: 6543,
-    counsellingDone: 3245,
-    applications: 1987,
-    admissions: 876,
+    totalLeads: 0,
+    newLeads: 0,
+    contactedLeads: 0,
+    counsellingDone: 0,
+    applications: 0,
+    admissions: 0,
   },
-  trends: [
-    { date: "01 May", newLeads: 620, counsellingDone: 420, admissions: 180 },
-    { date: "06 May", newLeads: 710, counsellingDone: 530, admissions: 210 },
-    { date: "11 May", newLeads: 680, counsellingDone: 490, admissions: 190 },
-    { date: "16 May", newLeads: 750, counsellingDone: 560, admissions: 250 },
-    { date: "21 May", newLeads: 810, counsellingDone: 590, admissions: 270 },
-    { date: "26 May", newLeads: 780, counsellingDone: 510, admissions: 230 },
-    { date: "31 May", newLeads: 830, counsellingDone: 610, admissions: 280 },
-  ],
-  sources: { website: 5678, facebookAds: 2980, googleAds: 2345, referral: 1245, others: 210 },
-  admissionStatus: { success: 876, pending: 456, rejected: 123 },
-  topCourses: [
-    { course: "MBBS in India", percentage: 36.5 },
-    { course: "MBBS Abroad", percentage: 24.0 },
-    { course: "BDS", percentage: 16.5 },
-    { course: "Nursing", percentage: 11.2 },
-    { course: "Ayush", percentage: 7.2 },
-    { course: "Others", percentage: 4.6 },
-  ],
-  locations: [
-    { state: "Uttar Pradesh", percentage: 19.7, value: 2456 },
-    { state: "Maharashtra", percentage: 15.9, value: 1987 },
-    { state: "Bihar", percentage: 12.4, value: 1542 },
-    { state: "Rajasthan", percentage: 10.0, value: 1245 },
-    { state: "West Bengal", percentage: 8.2, value: 1023 },
-  ],
-  recentLeads: [
-    { fullName: "Amit Kumar", phone: "+91 98765 43210", source: "Google Ads", course: "MBBS in India", status: "New", createdAt: "2025-05-31T12:00:00Z" },
-    { fullName: "Priya Sharma", phone: "+91 87654 32109", source: "Website", course: "MBBS Abroad", status: "Contacted", createdAt: "2025-05-31T10:30:00Z" },
-    { fullName: "Rahul Verma", phone: "+91 76543 21098", source: "Facebook Ads", course: "BDS", status: "Counselling Done", createdAt: "2025-05-30T15:45:00Z" },
-    { fullName: "Sneha Singh", phone: "+91 65432 10987", source: "Referral", course: "Nursing", status: "Application", createdAt: "2025-05-30T09:15:00Z" },
-    { fullName: "Vikash Yadav", phone: "+91 54321 09876", source: "Google Ads", course: "MBBS in India", status: "Admission", createdAt: "2025-05-29T14:20:00Z" },
-  ],
+  trends: [],
+  sources: { website: 0, facebookAds: 0, googleAds: 0, referral: 0, others: 0 },
+  admissionStatus: { success: 0, pending: 0, rejected: 0 },
+  topCourses: [],
+  locations: [],
+  recentLeads: [],
 };
 
 /* ──────────────────── HELPERS ──────────────────── */
-const fmt = (n: number) => n.toLocaleString("en-IN");
-const pct = (v: number, total: number) => (total > 0 ? ((v / total) * 100).toFixed(1) : "0.0");
+const fmt = (n: number) => (n || 0).toLocaleString("en-IN");
+const pct = (v: number, total: number) => (total > 0 ? (((v || 0) / total) * 100).toFixed(1) : "0.0");
 
 /** SVG Donut ring component */
 function DonutChart({
@@ -139,22 +112,22 @@ function DonutChart({
   centerLabel: string;
   centerSub: string;
 }) {
+  const total = segments.reduce((acc, s) => acc + (s.value || 0), 0) || 1;
   const r = (size - strokeWidth) / 2;
   const cx = size / 2;
   const cy = size / 2;
   const C = 2 * Math.PI * r;
-  const total = segments.reduce((s, seg) => s + seg.value, 0) || 1;
 
   let accumulated = 0;
   return (
     <div className="relative" style={{ width: size, height: size }}>
       <svg width={size} height={size} className="transform -rotate-90">
         {segments.map((seg, i) => {
-          const frac = seg.value / total;
+          const frac = (seg.value || 0) / total;
           const dashLen = frac * C;
           const gap = C - dashLen;
           const offset = (accumulated / total) * C;
-          accumulated += seg.value;
+          accumulated += seg.value || 0;
           return (
             <circle
               key={i}
@@ -182,7 +155,7 @@ function DonutChart({
 
 /* ──────────────────── MAIN PAGE ──────────────────── */
 export default function AdminDashboardPage() {
-  const [d, setD] = useState<DashboardPayload>(FALLBACK);
+  const [d, setD] = useState<DashboardPayload>(ZERO_STATE);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -191,15 +164,15 @@ export default function AdminDashboardPage() {
         setLoading(true);
         const res: any = await api.get("/dashboard/stats");
         if (res?.success) {
-          setD((prev) => ({
-            stats: res.stats ?? prev.stats,
-            trends: res.trends ?? prev.trends,
-            sources: res.sources ?? prev.sources,
-            admissionStatus: res.admissionStatus ?? prev.admissionStatus,
-            topCourses: res.topCourses ?? prev.topCourses,
-            locations: res.locations ?? prev.locations,
-            recentLeads: res.recentLeads ?? prev.recentLeads,
-          }));
+          setD({
+            stats: res.stats ?? ZERO_STATE.stats,
+            trends: res.trends ?? ZERO_STATE.trends,
+            sources: res.sources ?? ZERO_STATE.sources,
+            admissionStatus: res.admissionStatus ?? ZERO_STATE.admissionStatus,
+            topCourses: res.topCourses ?? ZERO_STATE.topCourses,
+            locations: res.locations ?? ZERO_STATE.locations,
+            recentLeads: res.recentLeads ?? ZERO_STATE.recentLeads,
+          });
         }
       } catch {
         /* fallback stays */

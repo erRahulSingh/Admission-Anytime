@@ -11,6 +11,7 @@ import Testimonial from '../models/Testimonial.js';
 import Blog from '../models/Blog.js';
 import AdmissionForm from '../models/AdmissionForm.js';
 import Student from '../models/Student.js';
+import Campaign from '../models/Campaign.js';
 
 dotenv.config();
 
@@ -203,6 +204,7 @@ const seedDatabase = async () => {
     await Blog.deleteMany({});
     await AdmissionForm.deleteMany({});
     await Student.deleteMany({});
+    await Campaign.deleteMany({});
 
     console.log('Wiped out existing databases.');
 
@@ -344,6 +346,15 @@ const seedDatabase = async () => {
     ];
     await Student.create(sampleStudents);
     console.log('Seeded 5 sample student applications.');
+
+    // Seed Sample Campaigns
+    const sampleCampaigns = [
+      { name: 'Neet 2025 Georgia Special', platform: 'Google Ads', targetCountry: 'Georgia', budget: 150000, spend: 42000, objective: 'Lead Generation', leadsGenerated: 145, applicationsGenerated: 28, admissionsGenerated: 12, cpl: 289, roi: '4.2x', status: 'Active' },
+      { name: 'MBBS Russia Direct Admission', platform: 'Facebook Ads', targetCountry: 'Russia', budget: 100000, spend: 35000, objective: 'Lead Generation', leadsGenerated: 98, applicationsGenerated: 16, admissionsGenerated: 7, cpl: 357, roi: '3.1x', status: 'Active' },
+      { name: 'Instagram MBBS Counseling Campaign', platform: 'Instagram Ads', targetCountry: 'India', budget: 80000, spend: 24000, objective: 'Awareness', leadsGenerated: 62, applicationsGenerated: 8, admissionsGenerated: 3, cpl: 387, roi: '2.5x', status: 'Paused' }
+    ];
+    await Campaign.create(sampleCampaigns);
+    console.log('Seeded sample marketing campaigns.');
 
     console.log('Database seeded successfully!');
     process.exit(0);

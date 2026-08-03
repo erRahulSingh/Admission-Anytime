@@ -80,7 +80,7 @@ export const getMe = async (req, res, next) => {
     const admin = await Admin.findById(req.admin._id);
     res.status(200).json({
       success: true,
-      admin,
+      admin: admin || req.admin,
     });
   } catch (error) {
     next(error);

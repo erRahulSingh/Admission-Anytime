@@ -42,129 +42,7 @@ interface FollowUpModel {
   priority: "High" | "Medium" | "Low";
 }
 
-/* ──────── MOCK DATA MATCHING EXACT SCREENSHOT ──────── */
-const MOCK_FOLLOWUPS: FollowUpModel[] = [
-  {
-    _id: "fu-1",
-    leadId: "#L-12458",
-    name: "Amit Kumar",
-    phone: "+91 98765 43210",
-    nextFollowUpDate: "01 Jun 2025",
-    nextFollowUpTime: "10:00 AM",
-    dueLabel: "Due Today",
-    dueLabelColor: "bg-[#fef3c7] text-[#d97706]",
-    lastInteractionDate: "31 May 2025",
-    lastInteractionTime: "04:15 PM",
-    counsellor: "Neha Sharma",
-    status: "Pending",
-    priority: "High"
-  },
-  {
-    _id: "fu-2",
-    leadId: "#L-12457",
-    name: "Priya Sharma",
-    phone: "+91 87654 32109",
-    nextFollowUpDate: "02 Jun 2025",
-    nextFollowUpTime: "11:30 AM",
-    dueLabel: "Tomorrow",
-    dueLabelColor: "bg-[#d1fae5] text-[#059669]",
-    lastInteractionDate: "31 May 2025",
-    lastInteractionTime: "11:20 AM",
-    counsellor: "Rohit Verma",
-    status: "Upcoming",
-    priority: "Medium"
-  },
-  {
-    _id: "fu-3",
-    leadId: "#L-12456",
-    name: "Rahul Verma",
-    phone: "+91 76543 21098",
-    nextFollowUpDate: "03 Jun 2025",
-    nextFollowUpTime: "02:00 PM",
-    dueLabel: "In 2 Days",
-    dueLabelColor: "bg-[#f3e8ff] text-[#7c3aed]",
-    lastInteractionDate: "30 May 2025",
-    lastInteractionTime: "04:45 PM",
-    counsellor: "Neha Sharma",
-    status: "Upcoming",
-    priority: "High"
-  },
-  {
-    _id: "fu-4",
-    leadId: "#L-12455",
-    name: "Sneha Singh",
-    phone: "+91 65432 10987",
-    nextFollowUpDate: "31 May 2025",
-    nextFollowUpTime: "09:30 AM",
-    dueLabel: "Overdue",
-    dueLabelColor: "bg-[#fee2e2] text-[#dc2626]",
-    lastInteractionDate: "29 May 2025",
-    lastInteractionTime: "12:30 PM",
-    counsellor: "Rohit Verma",
-    status: "Overdue",
-    priority: "High"
-  },
-  {
-    _id: "fu-5",
-    leadId: "#L-12454",
-    name: "Vikash Yadav",
-    phone: "+91 54321 09876",
-    nextFollowUpDate: "04 Jun 2025",
-    nextFollowUpTime: "10:30 AM",
-    dueLabel: "In 3 Days",
-    dueLabelColor: "bg-[#f3e8ff] text-[#7c3aed]",
-    lastInteractionDate: "29 May 2025",
-    lastInteractionTime: "10:15 AM",
-    counsellor: "Anjali Mehta",
-    status: "Upcoming",
-    priority: "Medium"
-  },
-  {
-    _id: "fu-6",
-    leadId: "#L-12453",
-    name: "Neha Kumari",
-    phone: "+91 43210 98765",
-    nextFollowUpDate: "05 Jun 2025",
-    nextFollowUpTime: "03:00 PM",
-    dueLabel: "In 4 Days",
-    dueLabelColor: "bg-[#f3e8ff] text-[#7c3aed]",
-    lastInteractionDate: "28 May 2025",
-    lastInteractionTime: "05:20 PM",
-    counsellor: "Anjali Mehta",
-    status: "Upcoming",
-    priority: "Low"
-  },
-  {
-    _id: "fu-7",
-    leadId: "#L-12452",
-    name: "Arjun Singh",
-    phone: "+91 32109 87654",
-    nextFollowUpDate: "28 May 2025",
-    nextFollowUpTime: "06:00 PM",
-    dueLabel: "Overdue",
-    dueLabelColor: "bg-[#fee2e2] text-[#dc2626]",
-    lastInteractionDate: "26 May 2025",
-    lastInteractionTime: "03:10 PM",
-    counsellor: "Neha Sharma",
-    status: "Overdue",
-    priority: "High"
-  },
-  {
-    _id: "fu-8",
-    leadId: "#L-12451",
-    name: "Meera Patel",
-    phone: "+91 21098 76543",
-    nextFollowUpDate: "06 Jun 2025",
-    nextFollowUpTime: "11:00 AM",
-    dueLabel: "In 5 Days",
-    dueLabelColor: "bg-[#f3e8ff] text-[#7c3aed]",
-    lastInteractionDate: "28 May 2025",
-    lastInteractionTime: "04:00 PM",
-    counsellor: "Rohit Verma",
-    status: "Upcoming",
-    priority: "Low"
-  }
-];
+
 
 /* ──────── HELPERS ──────── */
 const fmt = (n: number) => n.toLocaleString("en-IN");
@@ -222,28 +100,29 @@ export default function AdminFollowUpsPage() {
     try {
       setLoading(true);
       const res: any = await api.get("/admissions");
-      if (res?.success && Array.isArray(res.leads) && res.leads.length > 0) {
+      if (res?.success && Array.isArray(res.leads)) {
         const mapped: FollowUpModel[] = res.leads.map((l: any, idx: number) => ({
           _id: l._id,
           leadId: `#L-${12458 - idx}`,
-          name: l.fullName,
-          phone: l.phone,
-          nextFollowUpDate: "01 Jun 2025",
+          name: l.fullName || "Student Lead",
+          phone: l.phone || "N/A",
+          nextFollowUpDate: new Date(l.createdAt || Date.now()).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }),
           nextFollowUpTime: "10:00 AM",
-          dueLabel: idx === 0 ? "Due Today" : idx === 1 ? "Tomorrow" : "In 2 Days",
-          dueLabelColor: idx === 0 ? "bg-[#fef3c7] text-[#d97706]" : idx === 1 ? "bg-[#d1fae5] text-[#059669]" : "bg-[#f3e8ff] text-[#7c3aed]",
-          lastInteractionDate: "31 May 2025",
+          dueLabel: l.status === "Pending" ? "Due Today" : l.status === "In Discussion" ? "In 2 Days" : "Completed",
+          dueLabelColor: l.status === "Pending" ? "bg-[#fef3c7] text-[#d97706]" : l.status === "In Discussion" ? "bg-[#f3e8ff] text-[#7c3aed]" : "bg-[#d1fae5] text-[#059669]",
+          lastInteractionDate: new Date(l.updatedAt || l.createdAt || Date.now()).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }),
           lastInteractionTime: "04:15 PM",
-          counsellor: "Neha Sharma",
-          status: l.status === "Pending" ? "Pending" : l.status === "Contacted" ? "Upcoming" : "Completed",
+          counsellor: l.assignedTo || "Senior Counsellor",
+          status: l.status === "Pending" ? "Pending" : l.status === "In Discussion" ? "Upcoming" : l.status === "Closed" ? "Overdue" : "Completed",
           priority: idx % 3 === 0 ? "High" : idx % 3 === 1 ? "Medium" : "Low"
         }));
         setFollowups(mapped);
       } else {
-        setFollowups(MOCK_FOLLOWUPS);
+        setFollowups([]);
       }
-    } catch {
-      setFollowups(MOCK_FOLLOWUPS);
+    } catch (err) {
+      console.error("Error loading followups:", err);
+      setFollowups([]);
     } finally {
       setLoading(false);
     }
@@ -251,12 +130,12 @@ export default function AdminFollowUpsPage() {
 
   useEffect(() => { loadData(); }, []);
 
-  // Stats matching screenshot numbers exactly
-  const totalNextFollowUps = 2845;
-  const dueToday = 542;
-  const dueThisWeek = 1245;
-  const overdue = 356;
-  const completed = 1987;
+  // Live Dynamic Stats calculated from database records
+  const totalNextFollowUps = followups.length;
+  const dueToday = followups.filter((f) => f.status === "Pending" || f.dueLabel === "Due Today").length;
+  const dueThisWeek = followups.filter((f) => f.status === "Upcoming").length;
+  const overdue = followups.filter((f) => f.status === "Overdue").length;
+  const completed = followups.filter((f) => f.status === "Completed").length;
 
   // KPI cards
   const kpis = [

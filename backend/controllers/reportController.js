@@ -16,16 +16,19 @@ export const getReportsData = async (req, res, next) => {
     const totalAppsCount = await Student.countDocuments();
     const joinedAdmissionsCount = await Student.countDocuments({ status: 'Joined' });
 
-    // Fallbacks if database is brand new with few records
-    const leads = totalLeadsCount > 0 ? totalLeadsCount : 12458;
-    const apps = totalAppsCount > 0 ? totalAppsCount : 1987;
-    const admissions = joinedAdmissionsCount > 0 ? joinedAdmissionsCount : 876;
+    const leads = totalLeadsCount;
+    const apps = totalAppsCount;
+    const admissions = joinedAdmissionsCount;
 
     // 2. Calculated Revenue & Success Rate
     const avgFee = 550000; // Estimated revenue per joined student in INR
     const totalRevenueAmount = admissions * avgFee;
-    const totalRevenueStr = `₹ ${(totalRevenueAmount / 10000000).toFixed(2)} Cr`;
-    const successRate = apps > 0 ? parseFloat(((admissions / apps) * 100).toFixed(1)) : 75.6;
+    const totalRevenueStr = totalRevenueAmount >= 10000000 
+      ? `₹ ${(totalRevenueAmount / 10000000).toFixed(2)} Cr`
+      : `₹ ${(totalRevenueAmount / 100000).toFixed(2)} Lakhs`;
+    const successRate = apps > 0 
+      ? parseFloat(((admissions / apps) * 100).toFixed(1)) 
+      : (leads > 0 ? parseFloat(((admissions / leads) * 100).toFixed(1)) : 0);
 
     // 3. Applications by Course
     let courseQuery = {};

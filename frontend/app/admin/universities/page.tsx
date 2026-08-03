@@ -66,31 +66,8 @@ export default function AdminUniversitiesPage() {
         setUnis(uniData.universities);
       }
     } catch (err: unknown) {
-      console.warn("Failed retrieving universities. Utilizing fallback database.");
-      setCountries([
-        { _id: "c-1", name: "Georgia", slug: "georgia" } as any,
-        { _id: "c-2", name: "Russia", slug: "russia" } as any,
-        { _id: "c-3", name: "Kazakhstan", slug: "kazakhstan" } as any,
-        { _id: "c-4", name: "Uzbekistan", slug: "uzbekistan" } as any,
-      ]);
-      setUnis([
-        {
-          _id: "uni-1",
-          name: "Tbilisi State Medical University",
-          slug: "tbilisi-state-medical-university",
-          country: { _id: "c-1", name: "Georgia", slug: "georgia" } as any,
-          tuitionFee: "$5,000 / Year",
-          hostelFee: "$1,000 / Year",
-          ranking: "Country Rank: 4",
-          established: "1918",
-          mediumOfInstruction: "English",
-          courseDuration: "6 Years",
-          keyHighlights: ["WHO listed", "NMC approved"],
-          description: "Oldest medical university in Georgia.",
-          status: "Active",
-          createdAt: new Date().toISOString(),
-        }
-      ]);
+      console.error("Failed retrieving universities:", err);
+      setUnis([]);
     } finally {
       setLoading(false);
     }
@@ -141,29 +118,9 @@ export default function AdminUniversitiesPage() {
       resetAddForm();
       setShowAddForm(false);
       loadData();
-    } catch (err: unknown) {
-      console.error(err);
-      // Local fallback creation
-      const chosenCountry = countries.find(c => c._id === countryId);
-      const mockUni: University = {
-        _id: "mock-uni-" + Date.now(),
-        name,
-        slug: name.toLowerCase().replace(/\s+/g, "-"),
-        country: { _id: chosenCountry?._id || countryId, name: chosenCountry?.name || "Abroad" } as any,
-        tuitionFee,
-        hostelFee,
-        ranking,
-        established,
-        mediumOfInstruction: lang,
-        courseDuration: duration,
-        keyHighlights: highlightsArray,
-        description: desc,
-        status: status as "Active" | "Inactive",
-        createdAt: new Date().toISOString(),
-      };
-      setUnis(prev => [...prev, mockUni]);
-      setShowAddForm(false);
-      resetAddForm();
+    } catch (err: any) {
+      console.error("Failed to add university:", err);
+      alert(err.message || "Failed to add university to database.");
     }
   };
 

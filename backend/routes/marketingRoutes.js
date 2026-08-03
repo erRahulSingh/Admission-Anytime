@@ -4,6 +4,7 @@ import {
   createCampaign,
   updateCampaign,
   deleteCampaign,
+  addChannelBudget,
 } from '../controllers/marketingController.js';
 import { protect } from '../middlewares/authMiddleware.js';
 
@@ -12,6 +13,9 @@ const router = express.Router();
 router.route('/')
   .get(protect, getMarketingData)
   .post(protect, createCampaign);
+
+router.route('/budget')
+  .post(protect, addChannelBudget);
 
 router.route('/:id')
   .put(protect, updateCampaign)

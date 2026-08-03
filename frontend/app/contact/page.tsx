@@ -34,6 +34,8 @@ export default function ContactPage() {
   const [success, setSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
+  const [submittedData, setSubmittedData] = useState<ContactFormValues | null>(null);
+
   const {
     register,
     handleSubmit,
@@ -48,8 +50,18 @@ export default function ContactPage() {
     setErrorMsg("");
     try {
       await api.post("/contacts", data);
+      setSubmittedData(data);
       setSuccess(true);
       reset();
+
+      // Formatted WhatsApp message with contact details
+      const waMsg = `Hello Admission Anytime,%0A%0AI have submitted an inquiry message on the website.%0A%0A*My Submitted Details:*%0A👤 *Name:* ${encodeURIComponent(data.name)}%0A📞 *Phone:* ${encodeURIComponent(data.phone)}%0A📧 *Email:* ${encodeURIComponent(data.email)}%0A📌 *Subject:* ${encodeURIComponent(data.subject)}%0A💬 *Message:* ${encodeURIComponent(data.message)}%0A%0APlease respond to my inquiry.`;
+      const whatsappUrl = `https://wa.me/916284063840?text=${waMsg}`;
+
+      // Auto-redirect to WhatsApp after 1 sec delay
+      setTimeout(() => {
+        window.open(whatsappUrl, "_blank");
+      }, 1000);
     } catch (error: any) {
       console.error(error);
       setErrorMsg(error.message || "Failed to submit query. Please try again.");
@@ -100,16 +112,37 @@ export default function ContactPage() {
                 <div className="w-16 h-16 bg-[#16a34a]/10 text-[#16a34a] rounded-full flex items-center justify-center mx-auto shadow-sm">
                   <FaCheckCircle size={28} />
                 </div>
-                <h3 className="text-lg sm:text-xl font-black text-[#0c2e60]">Inquiry Sent Successfully!</h3>
+                <h3 className="text-lg sm:text-xl font-black text-[#0c2e60]">Inquiry Sent Successfully! 🎉</h3>
                 <p className="text-xs sm:text-sm text-slate-500 font-semibold max-w-sm mx-auto leading-relaxed">
-                  Thank you for writing to us. Our senior counseling board will review your NEET details and get back to you shortly.
+                  Your details have been saved in Database! Redirecting you to WhatsApp to chat with our Senior Counselor...
                 </p>
-                <button
-                  onClick={() => setSuccess(false)}
-                  className="bg-[#0c2e60] hover:bg-[#0a2550] text-white font-extrabold py-2.5 px-6 rounded-lg text-xs tracking-wider"
-                >
-                  Write Another Message
-                </button>
+                <div className="flex flex-col sm:flex-row justify-center gap-3 pt-2">
+                  {(() => {
+                    const waMsg = submittedData
+                      ? `Hello Admission Anytime,%0A%0AI have submitted an inquiry message on the website.%0A%0A*My Submitted Details:*%0A👤 *Name:* ${encodeURIComponent(submittedData.name)}%0A📞 *Phone:* ${encodeURIComponent(submittedData.phone)}%0A📧 *Email:* ${encodeURIComponent(submittedData.email)}%0A📌 *Subject:* ${encodeURIComponent(submittedData.subject)}%0A💬 *Message:* ${encodeURIComponent(submittedData.message)}%0A%0APlease respond to my inquiry.`
+                      : `Hello Admission Anytime,%0A%0AI want to connect with a counselor.`;
+                    const whatsappUrl = `https://wa.me/916284063840?text=${waMsg}`;
+                    return (
+                      <a
+                        href={whatsappUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#128C7E] text-white font-black py-2.5 px-6 rounded-lg text-xs shadow-md transition-all cursor-pointer"
+                      >
+                        <FaWhatsapp className="text-base" /> Chat on WhatsApp Now
+                      </a>
+                    );
+                  })()}
+                  <button
+                    onClick={() => {
+                      setSuccess(false);
+                      setSubmittedData(null);
+                    }}
+                    className="bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold py-2.5 px-6 rounded-lg text-xs tracking-wider transition-colors cursor-pointer"
+                  >
+                    Write Another Message
+                  </button>
+                </div>
               </div>
             ) : (
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

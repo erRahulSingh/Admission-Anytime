@@ -48,31 +48,8 @@ export default function AdminBlogsPage() {
         setBlogs(data.blogs);
       }
     } catch (err: unknown) {
-      console.warn("Failed retrieving blogs. Utilizing fallback database.");
-      setBlogs([
-        {
-          _id: "blog-1",
-          title: "NMC New Guidelines for MBBS Abroad",
-          slug: "nmc-new-guidelines-for-mbbs-abroad",
-          excerpt: "Detailed analysis of the latest guidelines issued by the National Medical Commission (NMC).",
-          content: "The National Medical Commission (NMC) has set strict regulations for Indian students...",
-          featuredImage: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=600&auto=format&fit=crop",
-          author: "Chief Education Advisor",
-          status: "Published",
-          createdAt: new Date().toISOString(),
-        },
-        {
-          _id: "blog-2",
-          title: "MBBS Admission Abroad in 2026",
-          slug: "mbbs-admission-abroad-in-2026",
-          excerpt: "Confused about choosing the best destination? Here are the top countries.",
-          content: "Studying MBBS abroad is a dream for many medical aspirants in India...",
-          featuredImage: "https://images.unsplash.com/photo-1584515901367-f134981d40e1?q=80&w=600&auto=format&fit=crop",
-          author: "Counselor Neha Verma",
-          status: "Draft",
-          createdAt: new Date().toISOString(),
-        }
-      ]);
+      console.error("Failed retrieving blogs:", err);
+      setBlogs([]);
     } finally {
       setLoading(false);
     }
@@ -110,22 +87,9 @@ export default function AdminBlogsPage() {
       resetAddForm();
       setShowAddForm(false);
       loadBlogs();
-    } catch (err: unknown) {
-      console.error(err);
-      const mockBlog: BlogModel = {
-        _id: "mock-blog-" + Date.now(),
-        title,
-        slug: title.toLowerCase().replace(/\s+/g, "-"),
-        excerpt,
-        content,
-        featuredImage,
-        author,
-        status,
-        createdAt: new Date().toISOString(),
-      };
-      setBlogs(prev => [mockBlog, ...prev]);
-      setShowAddForm(false);
-      resetAddForm();
+    } catch (err: any) {
+      console.error("Failed to add blog:", err);
+      alert(err.message || "Failed to add blog post to database.");
     }
   };
 

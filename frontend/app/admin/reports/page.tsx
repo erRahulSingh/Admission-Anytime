@@ -93,54 +93,21 @@ export default function AdminReportsPage() {
     showToast("Reports exported to CSV successfully!");
   };
 
-  // Dynamic Data extractors with fallbacks
-  const revenue = reportData?.revenue || "₹ 4.82 Cr";
-  const successRate = reportData?.successRate || 75.6;
-  const aiSummary = reportData?.aiSummary || "Admissions have grown consistently this month. Google Ads and Website inquiries lead with the highest ROI.";
-  const courseData = reportData?.courseData || [
-    { name: "MBBS", percent: 42, count: "2,654", color: "#2563eb", bg: "border-[#2563eb]" },
-    { name: "BDS", percent: 18, count: "1,134", color: "#8b5cf6", bg: "border-[#8b5cf6]" },
-    { name: "BAMS", percent: 12, count: "756", color: "#10b981", bg: "border-[#10b981]" },
-    { name: "Nursing", percent: 10, count: "632", color: "#f97316", bg: "border-[#f97316]" },
-    { name: "Paramedical", percent: 8, count: "489", color: "#ec4899", bg: "border-[#ec4899]" },
-  ];
-  const collegeTiles = reportData?.collegeTiles || [
-    { name: "KMC Manipal", count: 156, color: "bg-[#2563eb]", flex: "col-span-3 row-span-2" },
-    { name: "DY Patil", count: 128, color: "bg-[#8b5cf6]", flex: "col-span-2 row-span-2" },
-    { name: "Amrita", count: 98, color: "bg-[#0d9488]", flex: "col-span-2 row-span-2" },
-    { name: "AIIMS", count: 87, color: "bg-[#f97316]", flex: "col-span-3 row-span-2" },
-    { name: "JIPMER", count: 76, color: "bg-[#ec4899]", flex: "col-span-2 row-span-2" },
-    { name: "SGT", count: 65, color: "bg-[#0284c7]", flex: "col-span-2 row-span-2" },
-    { name: "BHU", count: 54, color: "bg-[#06b6d4]", flex: "col-span-1 row-span-2" },
-    { name: "Others", count: 169, color: "bg-[#64748b]", flex: "col-span-2 row-span-2" },
-  ];
-  const counsellors = reportData?.counsellors || [
-    { name: "Neha Sharma", role: "Senior Counsellor", rating: "4.8", apps: "186", admissions: "86", revenue: "₹48.6L", avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&h=100&fit=crop&crop=face" },
-    { name: "Rohit Verma", role: "Counsellor", rating: "4.6", apps: "152", admissions: "71", revenue: "₹39.2L", avatar: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=100&h=100&fit=crop&crop=face" },
-    { name: "Anjali Mehta", role: "Counsellor", rating: "4.5", apps: "142", admissions: "64", revenue: "₹36.8L", avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100&h=100&fit=crop&crop=face" },
-    { name: "Vikram Singh", role: "Counsellor", rating: "4.3", apps: "118", admissions: "52", revenue: "₹28.6L", avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=face" },
-  ];
-  const stackedBarData = reportData?.stackedBarData || [
-    { week: "Week 1", gads: 320, fb: 280, ig: 200, web: 180, ref: 120, yt: 80 },
-    { week: "Week 2", gads: 450, fb: 340, ig: 260, web: 220, ref: 150, yt: 100 },
-    { week: "Week 3", gads: 510, fb: 390, ig: 310, web: 250, ref: 180, yt: 110 },
-    { week: "Week 4", gads: 580, fb: 420, ig: 350, web: 290, ref: 210, yt: 130 },
-    { week: "Week 5", gads: 620, fb: 450, ig: 380, web: 310, ref: 230, yt: 140 },
-  ];
-  const stateData = reportData?.stateData || [
-    { state: "Maharashtra", count: 1245 },
-    { state: "Karnataka", count: 1021 },
-    { state: "Tamil Nadu", count: 834 },
-    { state: "Kerala", count: 612 },
-    { state: "Uttar Pradesh", count: 498 },
-    { state: "Delhi", count: 412 },
-  ];
+  // Dynamic Data extractors from DB with zero fallbacks
+  const revenue = reportData?.revenue || "₹ 0 Lakhs";
+  const successRate = reportData?.successRate || 0;
+  const aiSummary = reportData?.aiSummary || "Admissions overview updated based on active database records.";
+  const courseData = reportData?.courseData || [];
+  const collegeTiles = reportData?.collegeTiles || [];
+  const counsellors = reportData?.counsellors || [];
+  const stackedBarData = reportData?.stackedBarData || [];
+  const stateData = reportData?.stateData || [];
   const journeyFlow = reportData?.journeyFlow || {
-    leads: "12,458",
-    counselling: "6,245",
-    applications: "1,987",
-    admissions: "876",
-    rates: { counsellingRate: "50.1%", applicationRate: "31.8%", admissionRate: "44.1%" },
+    leads: "0",
+    counselling: "0",
+    applications: "0",
+    admissions: "0",
+    rates: { counsellingRate: "0%", applicationRate: "0%", admissionRate: "0%" },
   };
 
   return (
@@ -326,49 +293,58 @@ export default function AdminReportsPage() {
           </div>
 
           {/* Speedometer Gauge SVG */}
-          <div className="relative w-full h-[130px] flex items-center justify-center my-auto">
-            <svg className="w-[180px] h-[100px]" viewBox="0 0 100 60">
-              <path
-                d="M 10 50 A 40 40 0 0 1 90 50"
-                fill="none"
-                stroke="#f1f5f9"
-                strokeWidth="10"
-                strokeLinecap="round"
-              />
-              <path
-                d="M 10 50 A 40 40 0 0 1 82 25"
-                fill="none"
-                stroke="url(#gauge-grad)"
-                strokeWidth="10"
-                strokeLinecap="round"
-              />
-              <defs>
-                <linearGradient id="gauge-grad" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stopColor="#f59e0b" />
-                  <stop offset="50%" stopColor="#10b981" />
-                  <stop offset="100%" stopColor="#0284c7" />
-                </linearGradient>
-              </defs>
+          <div className="flex flex-col items-center justify-center my-auto py-1">
+            <div className="relative w-[190px] h-[105px] flex items-center justify-center">
+              <svg className="w-full h-full overflow-visible" viewBox="0 0 200 110">
+                <defs>
+                  <linearGradient id="gauge-grad" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stopColor="#f59e0b" />
+                    <stop offset="50%" stopColor="#10b981" />
+                    <stop offset="100%" stopColor="#0284c7" />
+                  </linearGradient>
+                </defs>
+                {/* Background Arc */}
+                <path
+                  d="M 20 95 A 80 80 0 0 1 180 95"
+                  fill="none"
+                  stroke="#f1f5f9"
+                  strokeWidth="12"
+                  strokeLinecap="round"
+                />
+                {/* Active Colored Arc */}
+                <path
+                  d="M 20 95 A 80 80 0 0 1 180 95"
+                  fill="none"
+                  stroke="url(#gauge-grad)"
+                  strokeWidth="12"
+                  strokeDasharray="251.3"
+                  strokeDashoffset={251.3 - (251.3 * (Math.min(Math.max(Number(successRate) || 0, 0), 100) / 100))}
+                  strokeLinecap="round"
+                  className="transition-all duration-1000"
+                />
 
-              <text x="10" y="58" fontSize="6" fill="#94a3b8" textAnchor="middle">0%</text>
-              <text x="25" y="32" fontSize="6" fill="#94a3b8" textAnchor="middle">25%</text>
-              <text x="50" y="14" fontSize="6" fill="#94a3b8" textAnchor="middle">50%</text>
-              <text x="75" y="32" fontSize="6" fill="#94a3b8" textAnchor="middle">75%</text>
-              <text x="90" y="58" fontSize="6" fill="#94a3b8" textAnchor="middle">100%</text>
+                {/* Outer Labels */}
+                <text x="15" y="110" fontSize="10" fontWeight="bold" fill="#94a3b8" textAnchor="middle">0%</text>
+                <text x="185" y="110" fontSize="10" fontWeight="bold" fill="#94a3b8" textAnchor="middle">100%</text>
 
-              <line x1="50" y1="50" x2="72" y2="28" stroke="#0f172a" strokeWidth="2.5" strokeLinecap="round" />
-              <circle cx="50" cy="50" r="4" fill="#0f172a" />
-            </svg>
+                {/* Rotating Needle */}
+                <g transform={`rotate(${-90 + (Math.min(Math.max(Number(successRate) || 0, 0), 100) / 100) * 180}, 100, 95)`}>
+                  <line x1="100" y1="95" x2="100" y2="30" stroke="#0f172a" strokeWidth="3" strokeLinecap="round" />
+                  <circle cx="100" cy="95" r="5" fill="#0f172a" />
+                </g>
+              </svg>
+            </div>
 
-            <div className="absolute bottom-1 text-center">
-              <span className="text-[20px] font-black text-[#0f172a] block leading-none">{successRate}%</span>
-              <span className="text-[10px] text-[#64748b] font-semibold block">Success Rate</span>
+            {/* Clean Center Percentage Display below Needle Pivot */}
+            <div className="text-center mt-2">
+              <span className="text-[24px] font-black text-[#0f172a] block leading-none">{successRate}%</span>
+              <span className="text-[11px] text-[#64748b] font-semibold block mt-1">Success Rate</span>
             </div>
           </div>
 
           <div className="text-center pt-2 border-t border-[#f1f5f9]">
             <span className="text-[11px] font-bold text-[#10b981] inline-flex items-center gap-1">
-              <FaArrowUp className="text-[9px]" /> 8.6% vs last month
+              <FaArrowUp className="text-[9px]" /> Live DB Calculated Rate
             </span>
           </div>
         </div>
