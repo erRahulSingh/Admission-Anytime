@@ -3,12 +3,14 @@ import dns from 'dns';
 import fs from 'fs';
 import path from 'path';
 
-// Fix Node.js DNS SRV resolution issues on Windows & Vercel serverless environments
-try {
-  dns.setDefaultResultOrder('ipv4first');
-  dns.setServers(['8.8.8.8', '1.1.1.1', '8.8.4.4']);
-} catch (e) {
-  /* Ignore if custom DNS set is restricted */
+// Fix Node.js DNS SRV resolution issues on local Windows without breaking Vercel serverless DNS
+if (!process.env.VERCEL) {
+  try {
+    dns.setDefaultResultOrder('ipv4first');
+    dns.setServers(['8.8.8.8', '1.1.1.1', '8.8.4.4']);
+  } catch (e) {
+    /* Ignore if custom DNS set is restricted */
+  }
 }
 
 let cached = global.mongoose;
@@ -17,7 +19,12 @@ if (!cached) {
   cached = global.mongoose = { conn: null, promise: null };
 }
 
-const getErrorFilePath = () => path.join(process.cwd(), 'db_error.txt');
+const getErrorFilePath = () => {
+  if (process.env.VERCEL) {
+    return path.join('/tmp', 'db_error.txt');
+  }
+  return path.join(process.cwd(), 'db_error.txt');
+};
 
 const clearErrorLog = () => {
   try {
