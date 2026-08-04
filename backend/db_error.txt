@@ -1,0 +1,2 @@
+Failed to connect: connection 1 to 159.41.192.73:27017 closed
+Failed to connect: querySrv ENOTFOUND _mongodb._tcp.cluster0.gvjfwww.mongodb.net
