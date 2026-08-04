@@ -75,7 +75,13 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           // If offline or network error, fallback to cached user
           setAuthorized(true);
           const cachedUser = localStorage.getItem("adminUser");
-          if (cachedUser) setAdminUser(JSON.parse(cachedUser));
+          if (cachedUser) {
+            try {
+              setAdminUser(JSON.parse(cachedUser));
+            } catch {
+              localStorage.removeItem("adminUser");
+            }
+          }
         }
       });
   }, [router, pathname, isLoginPage]);

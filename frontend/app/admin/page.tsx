@@ -226,7 +226,7 @@ export default function AdminDashboardPage() {
   /* Line chart math */
   const W = 460, H = 160, PAD_L = 35, PAD_B = 22, PAD_T = 10;
   const maxY = 1000;
-  const colW = (W - PAD_L) / (d.trends.length - 1);
+  const colW = d.trends && d.trends.length > 1 ? (W - PAD_L) / (d.trends.length - 1) : W - PAD_L;
 
   const toXY = (key: keyof TrendPoint) =>
     d.trends.map((t, i) => ({
@@ -238,10 +238,16 @@ export default function AdminDashboardPage() {
   const ptsAdm = toXY("admissions");
 
   const line = (pts: { x: number; y: number }[]) =>
-    pts.map((p, i) => `${i === 0 ? "M" : "L"}${p.x},${p.y}`).join(" ");
+    pts.length > 0
+      ? pts.map((p, i) => `${i === 0 ? "M" : "L"}${p.x},${p.y}`).join(" ")
+      : "";
   const area = (pts: { x: number; y: number }[]) => {
+    if (!pts || pts.length === 0) return "";
     const bottom = H - PAD_B;
-    return `${line(pts)} L${pts[pts.length - 1].x},${bottom} L${pts[0].x},${bottom} Z`;
+    const lastPt = pts[pts.length - 1];
+    const firstPt = pts[0];
+    if (!lastPt || !firstPt) return "";
+    return `${line(pts)} L${lastPt.x},${bottom} L${firstPt.x},${bottom} Z`;
   };
 
   /* Funnel layers */

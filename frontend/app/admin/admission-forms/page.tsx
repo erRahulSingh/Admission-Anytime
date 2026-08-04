@@ -291,11 +291,15 @@ export default function AdminLeadsPage() {
   const admissions = apiStats?.admissions ?? leads.filter(l => l.status === "Admitted").length;
 
   // Filter
-  const filtered = leads.filter(l => {
-    const matchSearch = !searchTerm || l.fullName.toLowerCase().includes(searchTerm.toLowerCase()) || l.email.toLowerCase().includes(searchTerm.toLowerCase()) || l.phone.includes(searchTerm) || (l._id || "").includes(searchTerm);
+  const filtered = (leads || []).filter(l => {
+    if (!l) return false;
+    const name = l.fullName || "";
+    const email = l.email || "";
+    const phone = l.phone || "";
+    const matchSearch = !searchTerm || name.toLowerCase().includes(searchTerm.toLowerCase()) || email.toLowerCase().includes(searchTerm.toLowerCase()) || phone.includes(searchTerm) || (l._id || "").includes(searchTerm);
     const matchStatus = !statusFilter || l.status === statusFilter;
     const matchSource = !sourceFilter || (l.source || "").toLowerCase().includes(sourceFilter.toLowerCase());
-    const matchCourse = !courseFilter || getCourse(l.interestedIn).toLowerCase().includes(courseFilter.toLowerCase());
+    const matchCourse = !courseFilter || getCourse(l.interestedIn || "").toLowerCase().includes(courseFilter.toLowerCase());
     return matchSearch && matchStatus && matchSource && matchCourse;
   });
 
