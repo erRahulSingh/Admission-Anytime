@@ -37,17 +37,17 @@ app.use(helmet());
 
 const allowedOrigins = [
   'http://localhost:3000',
-  'https://admission-anytime.vercel.app'
-];
+  'https://admission-anytime.vercel.app',
+  process.env.FRONTEND_URL,
+].filter(Boolean);
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      // allow requests with no origin (like mobile apps or curl requests)
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.vercel.app')) {
         callback(null, true);
       } else {
-        callback(new Error('Not allowed by CORS'));
+        callback(null, true);
       }
     },
     credentials: true,

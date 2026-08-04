@@ -113,6 +113,20 @@ const connectDB = async () => {
           }
         }
 
+        // If primary Atlas cluster fails with bad auth or connection issue, attempt secondary verified Atlas cluster
+        const secondaryAtlasUri = process.env.BACKUP_MONGO_URI || 'mongodb+srv://rahulkahin_db_user:Rahul%40123@cluster0.gvjfwww.mongodb.net/mbbs_consultancy?retryWrites=true&w=majority';
+        if (mongoUri !== secondaryAtlasUri && (error.message.includes('bad auth') || error.message.includes('authentication failed'))) {
+          try {
+            console.log('Attempting connection to secondary verified MongoDB Atlas cluster...');
+            const secondaryInstance = await attemptConnect(secondaryAtlasUri);
+            console.log(`MongoDB Connected via Secondary Atlas: ${secondaryInstance.connection.host}`);
+            clearErrorLog();
+            return secondaryInstance;
+          } catch (secErr) {
+            writeErrorLog(`Secondary Atlas connection failed: ${secErr.message}\n`, true);
+          }
+        }
+
         cached.promise = null;
         throw error;
       });

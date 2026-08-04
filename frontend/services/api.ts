@@ -1,7 +1,10 @@
 import axios from "axios";
 
-const API_BASE_URL = 
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL ||
+  (typeof window !== "undefined" && window.location.hostname.includes("vercel.app")
+    ? "https://admission-anytime-backend.vercel.app/api"
+    : "http://localhost:5000/api");
 
 const api = axios.create({
   baseURL: API_BASE_URL,
