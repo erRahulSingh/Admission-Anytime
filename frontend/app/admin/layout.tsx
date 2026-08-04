@@ -22,6 +22,7 @@ import {
   FaSearch,
   FaBars,
   FaTimes,
+  FaGlobe,
 } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import api from "@/services/api";
@@ -109,6 +110,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
   const sidebarLinks = [
     { label: "Dashboard", href: "/admin", icon: <FaThLarge />, exact: true },
+    { label: "Universities", href: "/admin/universities", icon: <FaGraduationCap /> },
     { label: "Leads", href: "/admin/admission-forms", icon: <FaUserFriends /> },
     { label: "Applications", href: "/admin/students", icon: <FaFileAlt /> },
     { label: "Marketing", href: "/admin/marketing", icon: <FaBullhorn /> },
@@ -122,7 +124,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     l.exact ? pathname === l.href : pathname.startsWith(l.href) && l.href !== "/admin"
   );
   const pageTitle =
-    pathname === "/admin/reports"
+    pathname === "/admin/universities"
+      ? "Universities & Colleges"
+      : pathname === "/admin/reports"
       ? "Reports & Analytics"
       : pathname === "/admin/users"
       ? "Users Management"

@@ -63,8 +63,8 @@ const connectDB = async () => {
   }
 
   if (!cached.promise) {
-    const mongoUri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/mbbs_consultancy';
-    const localUri = 'mongodb://127.0.0.1:27017/mbbs_consultancy';
+    const mongoUri = process.env.MONGODB_URI || process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/school_mgmnt';
+    const localUri = 'mongodb://127.0.0.1:27017/school_mgmnt';
 
     cached.promise = attemptConnect(mongoUri)
       .then((mongooseInstance) => {

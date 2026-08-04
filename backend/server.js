@@ -126,7 +126,7 @@ app.get('/api/seed-database-direct-link', async (req, res) => {
         name: 'Georgia',
         slug: 'georgia',
         flagImage: 'https://images.unsplash.com/photo-1568515045052-f9a854d70bfd?q=80&w=200&auto=format&fit=crop',
-        coverImage: 'https://images.unsplash.com/photo-1568515045052-f9a854d70bfd?q=80&w=1200&auto=format&fit=crop',
+        coverImage: 'https://images.unsplash.com/photo-1541829070764-84a7d30dd3f3?auto=format&fit=crop&w=800&q=80',
         description: 'Georgia has emerged as one of the top destinations for MBBS. The medical degrees are globally recognized by WHO, NMC (MCI), and FAIMER, and programs are offered 100% in English.',
         benefits: [
           '100% English Medium Curriculum',
@@ -204,7 +204,7 @@ app.get('/api/seed-database-direct-link', async (req, res) => {
         ],
         description: 'Tbilisi State Medical University is the leading medical school in Georgia. It holds historical prestige, featuring research partnerships with European universities and high clinical success rates for Indian graduates.',
         logo: 'https://images.unsplash.com/photo-1592280771190-3e2e4d571952?q=80&w=150&auto=format&fit=crop',
-        coverImage: 'https://images.unsplash.com/photo-1568515045052-f9a854d70bfd?q=80&w=800&auto=format&fit=crop',
+        coverImage: 'https://images.unsplash.com/photo-1541829070764-84a7d30dd3f3?auto=format&fit=crop&w=800&q=80',
         status: 'Active'
       },
       {
@@ -223,7 +223,7 @@ app.get('/api/seed-database-direct-link', async (req, res) => {
         ],
         description: 'Shota Rustaveli State University offers a modern infrastructure and experienced teaching faculty. The degree is globally recognized, allowing students to pursue internships worldwide.',
         logo: 'https://images.unsplash.com/photo-1592280771190-3e2e4d571952?q=80&w=150&auto=format&fit=crop',
-        coverImage: 'https://images.unsplash.com/photo-1568515045052-f9a854d70bfd?q=80&w=800&auto=format&fit=crop',
+        coverImage: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80',
         status: 'Active'
       },
       {
