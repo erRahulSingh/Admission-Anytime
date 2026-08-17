@@ -28,6 +28,20 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: "/admin/leads",
+        destination: "/admin/admission-forms",
+        permanent: true,
+      },
+      {
+        source: "/admin/applications",
+        destination: "/admin/students",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

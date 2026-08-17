@@ -72,13 +72,13 @@ const connectDB = async () => {
   }
 
   const primaryUri = process.env.MONGODB_URI || process.env.MONGO_URI;
-  const verifiedCloudAtlasUri = 'mongodb+srv://rahulkahin_db_user:Rahul%40123@cluster0.gvjfwww.mongodb.net/mbbs_consultancy?retryWrites=true&w=majority';
   const secondaryAtlasUri = process.env.BACKUP_MONGO_URI;
+  const localUri = 'mongodb://127.0.0.1:27017/mbbs_consultancy';
 
   const urisToTry = [
     primaryUri,
-    verifiedCloudAtlasUri,
     secondaryAtlasUri,
+    localUri,
   ].filter(Boolean);
 
   let lastError = null;
