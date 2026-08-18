@@ -3,8 +3,8 @@ import dns from 'dns';
 import fs from 'fs';
 import path from 'path';
 
-// Fix Node.js DNS SRV resolution issues on local Windows without breaking Vercel serverless DNS
-if (!process.env.VERCEL) {
+// Fix Node.js DNS SRV resolution issues on local Windows only
+if (process.platform === 'win32' && !process.env.RENDER && !process.env.VERCEL) {
   try {
     dns.setDefaultResultOrder('ipv4first');
     dns.setServers(['8.8.8.8', '1.1.1.1', '8.8.4.4']);
@@ -73,7 +73,8 @@ const connectDB = async () => {
 
   const primaryUri = process.env.MONGODB_URI || process.env.MONGO_URI;
   const secondaryAtlasUri = process.env.BACKUP_MONGO_URI;
-  const localUri = 'mongodb://127.0.0.1:27017/mbbs_consultancy';
+  const isCloud = Boolean(process.env.RENDER || process.env.VERCEL || process.env.NODE_ENV === 'production');
+  const localUri = !isCloud ? 'mongodb://127.0.0.1:27017/mbbs_consultancy' : null;
 
   const urisToTry = [
     primaryUri,
