@@ -178,7 +178,7 @@ export default function TermsAndConditionsPage() {
                   </a>
                   <a
                     href="tel:+916284063840"
-                    className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 font-black px-5 py-2.5 rounded-xl text-xs transition-colors"
+                    className="inline-flex items-center gap-2 text-slate-600 hover:text-[#0c2e60] font-bold text-xs bg-slate-50 hover:bg-slate-100 px-3.5 py-2 rounded-xl border border-slate-200/60 transition-all"
                   >
                     <FaPhoneAlt /> +91 62840 63840
                   </a>

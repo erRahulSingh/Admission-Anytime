@@ -290,7 +290,7 @@ export default function ContactPage() {
                   </h3>
                   <p className="text-[10px] sm:text-[11px] text-slate-500 font-semibold leading-relaxed mt-1">
                     Direct Line: <a href="tel:+916284063840" className="hover:underline font-extrabold text-[#0c2e60]">+91 62840 63840</a> <br />
-                    Landline: <a href="tel:012026111110" className="hover:underline font-extrabold text-[#0c2e60]">0120-26111110</a>
+                    Landline: <a href="tel:012026111111" className="hover:underline font-extrabold text-[#0c2e60]">0120-26111111</a>
                   </p>
                 </div>
                 <a

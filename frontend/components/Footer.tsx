@@ -163,8 +163,8 @@ export default function Footer() {
             <p className="flex items-center gap-2.5">
               <FaPhoneAlt className="text-[#c39b34] flex-shrink-0" />
               <span>Landline: </span>
-              <a href="tel:012026111110" className="hover:text-[#c39b34] hover:underline transition-colors">
-                0120-26111110
+              <a href="tel:012026111111" className="hover:text-[#c39b34] hover:underline transition-colors">
+                0120-26111111
               </a>
             </p>
             <p className="flex items-center gap-2.5">
