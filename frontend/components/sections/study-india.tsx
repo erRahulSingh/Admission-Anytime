@@ -242,7 +242,7 @@ export default function StudyIndiaSection() {
               <FaGlobe className="text-base" />
             </div>
             <h3 className="text-[16px] sm:text-[18px] font-black text-[#0c2e60] tracking-wide uppercase">
-              STUDY MBBS ABROAD
+              Popular Countries for MBBS Abroad
             </h3>
           </div>
 

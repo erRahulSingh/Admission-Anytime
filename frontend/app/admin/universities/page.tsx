@@ -105,15 +105,28 @@ export default function AdminUniversitiesPage() {
   async function loadData() {
     try {
       setLoading(true);
-      // Load countries
-      const countryData: any = await api.get("/countries/all");
-      if (countryData && countryData.success) {
-        setCountries(countryData.countries || []);
+      
+      const [countriesRes, unisRes] = await Promise.allSettled([
+        api.get("/countries/all"),
+        api.get("/universities/all")
+      ]);
+
+      if (countriesRes.status === "fulfilled") {
+        const countryData: any = countriesRes.value;
+        if (countryData && countryData.success) {
+          setCountries(countryData.countries || []);
+        }
+      } else {
+        console.error("Failed loading countries:", countriesRes.reason);
       }
-      // Load universities
-      const uniData: any = await api.get("/universities/all");
-      if (uniData && uniData.success) {
-        setUnis(uniData.universities || []);
+
+      if (unisRes.status === "fulfilled") {
+        const uniData: any = unisRes.value;
+        if (uniData && uniData.success) {
+          setUnis(uniData.universities || []);
+        }
+      } else {
+        console.error("Failed loading universities:", unisRes.reason);
       }
     } catch (err: any) {
       console.error("Failed retrieving universities:", err);
