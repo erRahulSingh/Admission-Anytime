@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import AdmissionForm from '../models/AdmissionForm.js';
 import Student from '../models/Student.js';
+import connectDB from '../config/db.js';
 import { sendNotificationEmails } from '../utils/mailer.js';
 
 // @desc    Submit new admission form (Lead)
@@ -16,9 +17,9 @@ export const createLead = async (req, res, next) => {
     }
 
     const leadData = {
-      fullName,
-      phone,
-      email: email || '',
+      fullName: fullName.trim(),
+      phone: phone.trim(),
+      email: (email || '').trim(),
       neetScore: neetScore !== undefined && neetScore !== null ? Number(neetScore) : 0,
       interestedIn: interestedIn || 'Both',
       country: country || 'India & Abroad',
@@ -27,13 +28,8 @@ export const createLead = async (req, res, next) => {
       notes: notes || '',
     };
 
-    let lead = null;
-    try {
-      lead = await AdmissionForm.create(leadData);
-    } catch (dbErr) {
-      console.warn('Direct MongoDB write fallback:', dbErr.message);
-      lead = { ...leadData, _id: new mongoose.Types.ObjectId().toString(), createdAt: new Date() };
-    }
+    await connectDB();
+    const lead = await AdmissionForm.create(leadData);
 
     // Send async notification email
     sendNotificationEmails(lead).catch((err) =>
@@ -46,6 +42,7 @@ export const createLead = async (req, res, next) => {
       lead,
     });
   } catch (error) {
+    console.error('Error creating lead:', error);
     next(error);
   }
 };
