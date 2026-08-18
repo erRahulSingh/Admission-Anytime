@@ -160,7 +160,7 @@ export default function MBBSAbroadListingPage() {
         {/* ═══ 3. Popular Countries section ═══ */}
         <section className="space-y-8">
           <div className="text-center space-y-2">
-            <h2 className="text-2xl sm:text-3xl font-black text-[#0c2e60] uppercase tracking-wider">
+            <h2 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-wider">
               Popular Countries for MBBS Abroad
             </h2>
             <p className="text-xs sm:text-sm font-semibold text-slate-500 max-w-2xl mx-auto">
