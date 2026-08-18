@@ -72,7 +72,7 @@ const connectDB = async () => {
     }
   }
 
-  const ATLAS_DEFAULT_URI = 'mongodb+srv://info_db_user:CN83HDFuCBhbqDq7@cluster0.6nigza9.mongodb.net/mbbs_consultancy?retryWrites=true&w=majority';
+  const ATLAS_DEFAULT_URI = 'mongodb+srv://info_db_user:TdwoM3RaRwJJJzyB@cluster0.d1f4yq1.mongodb.net/mbbs_consultancy?retryWrites=true&w=majority';
   const primaryUri = process.env.MONGODB_URI || process.env.MONGO_URI || ATLAS_DEFAULT_URI;
   const secondaryAtlasUri = process.env.BACKUP_MONGO_URI;
   const isCloud = Boolean(process.env.RENDER || process.env.VERCEL || process.env.NODE_ENV === 'production');
