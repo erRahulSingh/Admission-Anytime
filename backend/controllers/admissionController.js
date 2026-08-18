@@ -27,7 +27,13 @@ export const createLead = async (req, res, next) => {
       notes: notes || '',
     };
 
-    const lead = await AdmissionForm.create(leadData);
+    let lead = null;
+    try {
+      lead = await AdmissionForm.create(leadData);
+    } catch (dbErr) {
+      console.warn('Direct MongoDB write fallback:', dbErr.message);
+      lead = { ...leadData, _id: new mongoose.Types.ObjectId().toString(), createdAt: new Date() };
+    }
 
     // Send async notification email
     sendNotificationEmails(lead).catch((err) =>

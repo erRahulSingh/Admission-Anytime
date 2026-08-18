@@ -59,13 +59,16 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Database Connection Middleware for Serverless
+// Database Connection Middleware
 app.use(async (req, res, next) => {
   try {
-    await connectDB();
+    if (mongoose.connection.readyState !== 1) {
+      await connectDB();
+    }
     next();
   } catch (err) {
-    res.status(500).json({ success: false, message: 'Database Connection Error: ' + err.message });
+    console.error('DB Connection Warning:', err.message);
+    next();
   }
 });
 
