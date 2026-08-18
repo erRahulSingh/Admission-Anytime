@@ -53,7 +53,8 @@ const writeErrorLog = (msg, append = false) => {
 const attemptConnect = async (uri) => {
   return mongoose.connect(uri, {
     serverSelectionTimeoutMS: 15000,
-    bufferCommands: false,
+    socketTimeoutMS: 45000,
+    bufferCommands: true,
   });
 };
 

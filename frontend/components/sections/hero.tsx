@@ -37,6 +37,7 @@ import api from "@/services/api";
 const leadSchema = z.object({
   fullName: z.string().min(2, "Full Name required"),
   phone: z.string().min(10, "Valid phone required"),
+  email: z.string().optional(),
   course: z.string().optional(),
 });
 type LeadFormValues = z.infer<typeof leadSchema>;
@@ -76,6 +77,7 @@ export default function HeroSection() {
     defaultValues: {
       fullName: "",
       phone: "",
+      email: "",
       course: "",
     },
   });
@@ -87,7 +89,7 @@ export default function HeroSection() {
       await api.post("/admissions", {
         fullName: data.fullName,
         phone: data.phone,
-        email: `${data.phone}@admissionanytime.com`,
+        email: data.email || `${data.phone}@admissionanytime.com`,
         neetScore: 0,
         interestedIn: data.course || "MBBS India & Abroad",
         country: "India & Abroad",
