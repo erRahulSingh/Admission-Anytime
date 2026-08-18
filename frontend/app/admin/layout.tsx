@@ -229,29 +229,30 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       </aside>
 
       {/* ═══════════════════ RIGHT CONTENT AREA ═══════════════════ */}
-      <div className="flex-1 flex flex-col min-w-0 w-full">
+      <div className="flex-1 flex flex-col min-w-0 w-full max-w-full overflow-hidden">
         {/* Top Header Bar */}
-        <header className="bg-[#ffffff] border-b border-[#e8ecf1] h-[56px] lg:h-[64px] px-4 lg:px-7 flex items-center justify-between flex-shrink-0 sticky top-0 z-30">
+        <header className="bg-[#ffffff] border-b border-[#e8ecf1] h-[56px] lg:h-[64px] px-3 sm:px-4 lg:px-7 flex items-center justify-between flex-shrink-0 sticky top-0 z-30">
           {/* Left: Hamburger + Title */}
-          <div className="flex items-center gap-3 min-w-0">
+          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
             {/* Hamburger Menu (Mobile) */}
             <button
               onClick={() => setSidebarOpen(true)}
               className="lg:hidden w-9 h-9 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors text-[#3d4555] flex-shrink-0"
+              aria-label="Open Sidebar"
             >
               <FaBars className="text-[18px]" />
             </button>
 
             <div className="min-w-0">
               <div className="flex items-center gap-2">
-                <h1 className="text-[16px] lg:text-[20px] font-bold text-[#1a1f36] leading-tight truncate">{pageTitle}</h1>
+                <h1 className="text-[15px] sm:text-[17px] lg:text-[20px] font-bold text-[#1a1f36] leading-tight truncate">{pageTitle}</h1>
                 {pathname === "/admin/marketing" && (
                   <span className="px-1.5 py-0.5 bg-blue-50 text-[#1a6de1] rounded-md text-[13px] font-bold flex items-center gap-1 flex-shrink-0">
                     📈
                   </span>
                 )}
               </div>
-              <p className="text-[11px] lg:text-[12px] text-[#8c95a6] mt-0 truncate hidden sm:block">
+              <p className="text-[11px] lg:text-[12px] text-[#8c95a6] mt-0 truncate hidden md:block">
                 {pathname === "/admin/marketing"
                   ? "Track your marketing performance and lead generation across all channels."
                   : pathname === "/admin/contact-requests"
@@ -270,7 +271,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           </div>
 
           {/* Right: Search & Actions */}
-          <div className="flex items-center gap-2 lg:gap-3 flex-shrink-0">
+          <div className="flex items-center gap-1.5 sm:gap-2 lg:gap-3 flex-shrink-0">
             {/* Header Search Input for Settings */}
             {pathname === "/admin/settings" && (
               <div className="relative hidden lg:block w-52 mr-2">
@@ -283,11 +284,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
               </div>
             )}
 
-            {/* Date Range - hidden on small mobile */}
-            <div className="hidden sm:flex items-center gap-2 px-3 py-[7px] bg-white border border-[#e0e5ec] rounded-lg text-[12px] text-[#3d4555] font-medium cursor-pointer hover:border-[#c5cdd8] transition-colors">
+            {/* Date Range - hidden on mobile/tablet */}
+            <div className="hidden md:flex items-center gap-2 px-3 py-[7px] bg-white border border-[#e0e5ec] rounded-lg text-[12px] text-[#3d4555] font-medium cursor-pointer hover:border-[#c5cdd8] transition-colors">
               <FaCalendarAlt className="text-[#8c95a6] text-[12px]" />
-              <span className="hidden md:inline">01 May 2025 - 31 May 2025</span>
-              <span className="md:hidden">May 2025</span>
+              <span className="hidden xl:inline">01 May 2025 - 31 May 2025</span>
+              <span className="xl:hidden">May 2025</span>
               <FaChevronDown className="text-[#8c95a6] text-[9px] ml-0.5" />
             </div>
 
@@ -298,7 +299,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             </div>
 
             {/* Separator - hidden on mobile */}
-            <div className="w-px h-7 bg-[#e8ecf1] mx-1 hidden sm:block" />
+            <div className="w-px h-7 bg-[#e8ecf1] mx-0.5 sm:mx-1 hidden sm:block" />
 
             {/* User Profile Dropdown */}
             <div className="relative">
@@ -306,8 +307,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                 onClick={() => setUserDropdownOpen(!userDropdownOpen)}
                 className="flex items-center gap-2 cursor-pointer p-1 rounded-lg hover:bg-slate-100/80 transition-colors select-none"
               >
-                <div className="w-[34px] h-[34px] lg:w-[38px] lg:h-[38px] rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center overflow-hidden border-2 border-white shadow-sm flex-shrink-0">
-                  <span className="text-white font-bold text-[13px] lg:text-[14px]">
+                <div className="w-[32px] h-[32px] sm:w-[34px] sm:h-[34px] lg:w-[38px] lg:h-[38px] rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center overflow-hidden border-2 border-white shadow-sm flex-shrink-0">
+                  <span className="text-white font-bold text-[12px] sm:text-[13px] lg:text-[14px]">
                     {(adminUser?.name || "Admin").charAt(0).toUpperCase()}
                   </span>
                 </div>
@@ -392,7 +393,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-x-hidden overflow-y-auto p-3 sm:p-4 lg:p-6">
+        <main className="flex-1 overflow-y-auto p-3 sm:p-4 lg:p-6 w-full max-w-full min-w-0">
           <AnimatePresence mode="wait">
             <motion.div
               key={pathname}

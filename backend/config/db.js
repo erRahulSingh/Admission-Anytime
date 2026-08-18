@@ -71,13 +71,15 @@ const connectDB = async () => {
     }
   }
 
-  const primaryUri = process.env.MONGODB_URI || process.env.MONGO_URI;
+  const ATLAS_DEFAULT_URI = 'mongodb+srv://info_db_user:CN83HDFuCBhbqDq7@cluster0.d1f4yq1.mongodb.net/mbbs_consultancy?retryWrites=true&w=majority';
+  const primaryUri = process.env.MONGODB_URI || process.env.MONGO_URI || ATLAS_DEFAULT_URI;
   const secondaryAtlasUri = process.env.BACKUP_MONGO_URI;
   const isCloud = Boolean(process.env.RENDER || process.env.VERCEL || process.env.NODE_ENV === 'production');
   const localUri = !isCloud ? 'mongodb://127.0.0.1:27017/mbbs_consultancy' : null;
 
   const urisToTry = [
     primaryUri,
+    ATLAS_DEFAULT_URI,
     secondaryAtlasUri,
     localUri,
   ].filter(Boolean);
