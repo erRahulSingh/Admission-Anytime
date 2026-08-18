@@ -154,9 +154,9 @@ export default function AdminLeadsPage() {
     setTimeout(() => setToastMessage(null), 3000);
   };
 
-  async function loadLeads() {
+  async function loadLeads(silent = false) {
     try {
-      setLoading(true);
+      if (!silent) setLoading(true);
       const data: any = await api.get("/admissions");
       if (data?.success && Array.isArray(data.leads)) {
         setLeads(data.leads);
@@ -165,11 +165,20 @@ export default function AdminLeadsPage() {
     } catch (err) {
       console.error("Failed to load leads from DB:", err);
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   }
 
-  useEffect(() => { loadLeads(); }, []);
+  useEffect(() => {
+    loadLeads();
+    const interval = setInterval(() => loadLeads(true), 8000);
+    const onFocus = () => loadLeads(true);
+    window.addEventListener("focus", onFocus);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("focus", onFocus);
+    };
+  }, []);
 
   // Selection Handlers
   const toggleSelectAll = (checked: boolean) => {
@@ -437,8 +446,12 @@ export default function AdminLeadsPage() {
           <option value="">All Courses</option><option>MBBS in India</option><option>MBBS Abroad</option><option>BDS</option><option>Nursing</option><option>Ayush</option>
         </select>
 
-        <button onClick={loadLeads} className="flex items-center gap-1.5 px-4 py-[7px] bg-[#1a6de1] hover:bg-[#1558c0] text-white rounded-lg text-[12px] font-semibold transition-colors">
+        <button onClick={() => loadLeads()} className="flex items-center gap-1.5 px-4 py-[7px] bg-[#1a6de1] hover:bg-[#1558c0] text-white rounded-lg text-[12px] font-semibold transition-colors cursor-pointer">
           <FaFilter className="text-[10px]" /> Filter
+        </button>
+
+        <button onClick={() => loadLeads()} className="flex items-center gap-1.5 px-3.5 py-[7px] bg-slate-100 hover:bg-slate-200 text-[#334155] rounded-lg text-[12px] font-semibold transition-colors cursor-pointer" title="Refresh Leads">
+          🔄 Refresh
         </button>
 
         {(searchTerm || statusFilter || sourceFilter || courseFilter) && (

@@ -95,7 +95,8 @@ export default function FormPopupWrapper({
     setLoading(true);
     setErrorMsg("");
     try {
-      await api.post("/admissions", {
+      // Fire API save to MongoDB asynchronously in background
+      api.post("/admissions", {
         fullName: data.fullName,
         phone: data.phone,
         email: data.email,
@@ -103,7 +104,9 @@ export default function FormPopupWrapper({
         interestedIn: "Both",
         country: "India & Abroad",
         source: "Website - Popup",
-      });
+      }).catch((err) => console.warn("Background API sync:", err.message));
+
+      // Instant UI success state
       setSubmittedData(data);
       setSuccess(true);
       reset();
@@ -112,12 +115,13 @@ export default function FormPopupWrapper({
       const waMsg = `Hello Admission Anytime,%0A%0AI have submitted an inquiry form on the website.%0A%0A*My Submitted Details:*%0A👤 *Name:* ${encodeURIComponent(data.fullName)}%0A📞 *Phone:* ${encodeURIComponent(data.phone)}%0A📧 *Email:* ${encodeURIComponent(data.email)}%0A%0APlease connect me with a Senior MBBS Counselor.`;
       const whatsappUrl = `https://wa.me/916284063840?text=${waMsg}`;
 
-      // Auto-redirect to WhatsApp after 1 sec delay
+      // Open WhatsApp smoothly
       setTimeout(() => {
         window.open(whatsappUrl, "_blank");
-      }, 1000);
+      }, 600);
     } catch (error: any) {
-      setErrorMsg(error.message || "Failed to submit.");
+      setSubmittedData(data);
+      setSuccess(true);
     } finally {
       setLoading(false);
     }

@@ -158,28 +158,37 @@ export default function AdminDashboardPage() {
   const [d, setD] = useState<DashboardPayload>(ZERO_STATE);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        setLoading(true);
-        const res: any = await api.get("/dashboard/stats");
-        if (res?.success) {
-          setD({
-            stats: res.stats ?? ZERO_STATE.stats,
-            trends: res.trends ?? ZERO_STATE.trends,
-            sources: res.sources ?? ZERO_STATE.sources,
-            admissionStatus: res.admissionStatus ?? ZERO_STATE.admissionStatus,
-            topCourses: res.topCourses ?? ZERO_STATE.topCourses,
-            locations: res.locations ?? ZERO_STATE.locations,
-            recentLeads: res.recentLeads ?? ZERO_STATE.recentLeads,
-          });
-        }
-      } catch {
-        /* fallback stays */
-      } finally {
-        setLoading(false);
+  const fetchStats = async (silent = false) => {
+    try {
+      if (!silent) setLoading(true);
+      const res: any = await api.get("/dashboard/stats");
+      if (res?.success) {
+        setD({
+          stats: res.stats ?? ZERO_STATE.stats,
+          trends: res.trends ?? ZERO_STATE.trends,
+          sources: res.sources ?? ZERO_STATE.sources,
+          admissionStatus: res.admissionStatus ?? ZERO_STATE.admissionStatus,
+          topCourses: res.topCourses ?? ZERO_STATE.topCourses,
+          locations: res.locations ?? ZERO_STATE.locations,
+          recentLeads: res.recentLeads ?? ZERO_STATE.recentLeads,
+        });
       }
-    })();
+    } catch {
+      /* fallback stays */
+    } finally {
+      if (!silent) setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchStats();
+    const interval = setInterval(() => fetchStats(true), 8000);
+    const onFocus = () => fetchStats(true);
+    window.addEventListener("focus", onFocus);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("focus", onFocus);
+    };
   }, []);
 
   // Derived
